@@ -19,21 +19,21 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-import Log4swift
+@testable import Log4swift
 
 /**
 This test appender will store logs in memory for latter validation.
 */
 class MemoryAppender: Appender {
   
-  var logMessages = [(message: String, level: LogLevel)]();
+  var logMessages = [String]();
   
-  override init() {
-    super.init();
+  init() {
+    super.init(identifier: "test.memoryAppender");
   }
   
-  override func performLog(log: String, level: LogLevel) {
-    logMessages.append(message: log, level: level);
+  override func performLog(log: String) {
+    logMessages.append(log);
   }
   
 }

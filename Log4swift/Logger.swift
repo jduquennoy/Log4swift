@@ -34,16 +34,15 @@ public class Logger {
   var appenders: [Appender];
   
   convenience init() {
-    self.init(identifier: "", level: LogLevel.debug, appenders: [NSLoggerAppender()]);
+    self.init(identifier: "", level: LogLevel.debug, appenders: Logger.createDefaultAppenders());
   }
   
   convenience init(configurationDictionary: Dictionary<String, AnyObject>)
   {
     let identifier = "";
     let level = LogLevel.debug;
-    let appender = NSLoggerAppender();
     
-    self.init(identifier: identifier,level: level, appenders: [appender]);
+    self.init(identifier: identifier,level: level, appenders: Logger.createDefaultAppenders());
   }
   
   init(identifier: String, level: LogLevel, appenders: [Appender]) {
@@ -76,6 +75,10 @@ public class Logger {
         currentAppender.log(message, level:level);
       }
     }
+  }
+  
+  private final class func createDefaultAppenders() -> [Appender] {
+    return [NSLoggerAppender(identifier: "defaultAppender")];
   }
   
 }

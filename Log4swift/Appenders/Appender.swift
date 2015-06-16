@@ -24,17 +24,20 @@ Appenders are responsible for sending logs to heir destination.
 This class is the base class, from which all appenders should inherit.
 */
 public class Appender {
+  let identifier: String;
   var thresholdLevel = LogLevel.debug;
   
-  public init() {}
+  public init(identifier: String) {
+    self.identifier = identifier;
+  }
   
-  func performLog(log: String, level: LogLevel) {
+  func performLog(log: String) {
     // To be overriden by subclasses
   }
   
   final func log(log: String, level: LogLevel) {
     if(level.rawValue >= self.thresholdLevel.rawValue) {
-      self.performLog(log, level: level);
+      self.performLog("\(log)");
     }
   }
 }

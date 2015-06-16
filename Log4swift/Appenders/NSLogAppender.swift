@@ -23,7 +23,7 @@
 NSLoggerAppender will simply issue logs to stdout using NSLog.
 */
 class NSLoggerAppender: Appender {
-  override func performLog(log: String, level: LogLevel) {
-    NSLog("\(level.description) - \(log)");
+  override func performLog(log: String) {
+    NSLog(log);
   }
 }

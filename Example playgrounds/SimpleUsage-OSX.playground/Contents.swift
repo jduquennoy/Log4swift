@@ -2,6 +2,10 @@
 
 import Log4swift
 
+// This playground demonstrates the simplest possible use of Log4Swift.
+// This approach is only interesting if you are working on a project that is not meant to grow big :
+// logs cannot be sorted by categories, which might make them much less usefull if you have lots of them.
+
 // You can issue a log in one simple line.
 // This uses the default root logger, that will print your log message to the standard output using NSLog.
 Logger.info("Hello world !")

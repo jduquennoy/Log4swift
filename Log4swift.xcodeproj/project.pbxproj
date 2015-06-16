@@ -19,6 +19,8 @@
 		02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C341B2DB25C00B695DE /* LoggerTests.swift */; };
 		02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C361B2DBC5C00B695DE /* Logger+convenience.swift */; };
 		02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */; };
+		02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */; };
+		02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		02664C341B2DB25C00B695DE /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		02664C361B2DBC5C00B695DE /* Logger+convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+convenience.swift"; sourceTree = "<group>"; };
 		02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactoryTests.swift; sourceTree = "<group>"; };
+		02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppender.swift; sourceTree = "<group>"; };
+		02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileAppenderTests.swift; path = Appenders/FileAppenderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,7 @@
 				02664C1B1B2CE96500B695DE /* Info.plist */,
 				02664C341B2DB25C00B695DE /* LoggerTests.swift */,
 				02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */,
+				02B8F6211B30B21B0077A8A6 /* Appenders */,
 			);
 			path = Log4swiftTests;
 			sourceTree = "<group>";
@@ -144,8 +149,17 @@
 			children = (
 				02664C301B2DA6A200B695DE /* Appender.swift */,
 				02664C321B2DA70C00B695DE /* NSLogAppender.swift */,
+				02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */,
 			);
 			path = Appenders;
+			sourceTree = "<group>";
+		};
+		02B8F6211B30B21B0077A8A6 /* Appenders */ = {
+			isa = PBXGroup;
+			children = (
+				02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */,
+			);
+			name = Appenders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +274,7 @@
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
 				02664C331B2DA70C00B695DE /* NSLogAppender.swift in Sources */,
+				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
 				02664C2B1B2D97DE00B695DE /* LogLevel.swift in Sources */,
 				02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */,
@@ -270,6 +285,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
 				024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */,
 				02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */,
 				02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */,

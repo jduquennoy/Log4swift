@@ -53,8 +53,8 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testFactoryProvidesLoggerThatExactlyMatchesTheRequestedIdentifier() {
-    let logger = Logger(identifier: "test.logger.identifier", level: .info, appenders: [NSLoggerAppender()]);
-    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .info, appenders: [NSLoggerAppender()]);
+    let logger = Logger(identifier: "test.logger.identifier", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger);
     self.factory.registerLogger(logger2);
@@ -67,8 +67,8 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testFactoryProvidesLoggerThatMatchesTheRequestedIdentifierTheBest() {
-    let logger1 = Logger(identifier: "test.logger", level:.info, appenders: [NSLoggerAppender()]);
-    let logger2 = Logger(identifier: "test.logger.identifier", level: .info, appenders: [NSLoggerAppender()]);
+    let logger1 = Logger(identifier: "test.logger", level:.info, appenders: [NSLoggerAppender(identifier: "test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.identifier", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger1);
     self.factory.registerLogger(logger2);
@@ -81,7 +81,7 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
-    let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .info, appenders: [NSLoggerAppender()]);
+    let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger);
     
@@ -131,7 +131,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForSamedIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .info, appenders: [NSLoggerAppender()]));
+      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {
@@ -143,7 +143,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForDifferentIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .info, appenders: [NSLoggerAppender()]));
+      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .info, appenders: [NSLoggerAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {
