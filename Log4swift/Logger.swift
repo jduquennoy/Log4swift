@@ -31,7 +31,7 @@ public class Logger {
   /// The threshold under which log messages will be ignored.
   public var thresholdLevel: LogLevel;
   
-  var appenders: [Appender];
+  public var appenders: [Appender];
   
   convenience init() {
     self.init(identifier: "", level: LogLevel.debug, appenders: Logger.createDefaultAppenders());
@@ -68,6 +68,28 @@ public class Logger {
   public func fatal(message: String) {
     self.log(message, level: LogLevel.fatal);
   }
+
+  public func debug(closure: () -> String) {
+    self.log(closure, level: LogLevel.debug);
+  }
+  public func info(closure: () -> String) {
+    self.log(closure, level: LogLevel.info);
+  }
+  public func warn(closure: () -> String) {
+    self.log(closure, level: LogLevel.warning);
+  }
+  public func error(closure: () -> String) {
+    self.log(closure, level: LogLevel.error);
+  }
+  public func fatal(closure: () -> String) {
+    self.log(closure, level: LogLevel.fatal);
+  }
+
+  private func willIssueLogForLevel(level: LogLevel) -> Bool {
+    return level.rawValue >= self.thresholdLevel.rawValue && self.appenders.reduce(false) { (shouldLog, currentAppender) in
+      shouldLog || level.rawValue >= currentAppender.thresholdLevel.rawValue
+    }
+  }
   
   private func log(message: String, level: LogLevel) {
     if(level.rawValue >= self.thresholdLevel.rawValue) {
@@ -76,9 +98,18 @@ public class Logger {
       }
     }
   }
-  
+
+  private func log(closure: () -> (String), level: LogLevel) {
+    if(self.willIssueLogForLevel(level)) {
+      let logMessage = closure();
+      for currentAppender in self.appenders {
+        currentAppender.log(logMessage, level:level);
+      }
+    }
+  }
+
   private final class func createDefaultAppenders() -> [Appender] {
-    return [NSLoggerAppender(identifier: "defaultAppender")];
+    return [ConsoleAppender(identifier: "defaultAppender")];
   }
   
 }

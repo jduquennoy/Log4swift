@@ -29,11 +29,11 @@ enum FileAppenderError : ErrorType {
 This appender will write logs to a file.
 If file does not exist, it will be created on the first log, or re-created if deleted or moved (compatible with log rotate systems).
 */
-class FileAppender : Appender {
+public class FileAppender : Appender {
   private let filePath : String;
   private var fileHandler: NSFileHandle?;
 
-  init(identifier: String, filePath: String) throws {
+  public init(identifier: String, filePath: String) throws {
     self.fileHandler = nil;
     self.filePath = filePath;
 

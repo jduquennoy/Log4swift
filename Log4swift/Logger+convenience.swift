@@ -24,8 +24,8 @@ This extension of the Logger class provides several convenience class methods to
 */
 extension Logger {
   
-  class func loggerForId(loggerId: String) -> Logger {
-    return LoggerFactory.sharedInstance.loggerForIdentifier(loggerId);
+  public class func getLogger(loggerId: String) -> Logger {
+    return LoggerFactory.sharedInstance.getLogger(loggerId);
   }
   
   // MARK: Logging class methods
@@ -44,6 +44,22 @@ extension Logger {
   }
   public class func fatal(message: String) {
     LoggerFactory.sharedInstance.rootLogger.fatal(message);
+  }
+  
+  public class func debug(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.debug(closure);
+  }
+  public class func info(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.info(closure);
+  }
+  public class func warn(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.warn(closure);
+  }
+  public class func error(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.error(closure);
+  }
+  public class func fatal(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.fatal(closure);
   }
   
 }

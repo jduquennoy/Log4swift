@@ -14,3 +14,12 @@ Logger.info("Hello world !")
 LoggerFactory.sharedInstance.rootLogger.thresholdLevel = LogLevel.warning;
 Logger.info("This log will be ignored")
 Logger.warn("This log will be issued")
+
+// Log with closures allow you to avoid running message composition code if log is blocked by thresholds
+LoggerFactory.sharedInstance.rootLogger.thresholdLevel = LogLevel.warning;
+Logger.info {
+  return "This closure will not be executed";
+}
+Logger.warn {
+  return "This closure will be executed";
+}

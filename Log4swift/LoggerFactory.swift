@@ -51,7 +51,7 @@ public class LoggerFactory {
   // MARK: Acccessing loggers
 
   /// Returns the declared logger with the longest maching identifier. If none is found, the root logger will be returned
-  public func loggerForIdentifier(var identifierToFind: String) -> Logger {
+  public func getLogger(var identifierToFind: String) -> Logger {
     var foundLogger = self.rootLogger;
     
     while (foundLogger === self.rootLogger && !identifierToFind.isEmpty) {

@@ -1,5 +1,5 @@
 //
-//  NSLoggerAppender.swift
+//  ConsoleAppender.swift
 //  log4swift
 //
 //  Created by Jérôme Duquennoy on 14/06/2015.
@@ -20,10 +20,10 @@
 //
 
 /**
-NSLoggerAppender will simply issue logs to stdout using NSLog.
+ConsoleAppender will simply issue logs to stdout.
 */
-class NSLoggerAppender: Appender {
+public class ConsoleAppender: Appender {
   override func performLog(log: String) {
-    NSLog(log);
+    print(log);
   }
 }

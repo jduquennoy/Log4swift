@@ -25,7 +25,7 @@ This class is the base class, from which all appenders should inherit.
 */
 public class Appender {
   let identifier: String;
-  var thresholdLevel = LogLevel.debug;
+  public var thresholdLevel = LogLevel.debug;
   
   public init(identifier: String) {
     self.identifier = identifier;

@@ -24,11 +24,11 @@ Log level defines the importance of the log : is it just a debug log, an informa
 */
 public enum LogLevel: Int, CustomStringConvertible {
   
-  case debug
-  case info
-  case warning
-  case error
-  case fatal
+  case debug = 0
+  case info = 1
+  case warning = 2
+  case error = 3
+  case fatal = 4
   
   public var description : String {
     get {

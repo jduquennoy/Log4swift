@@ -38,8 +38,60 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(logger.thresholdLevel , LogLevel.debug, "Default log level for loggers should be Debug");
   }
 
-  func testNSLoggerLogs() {
-    Logger.info("ping");
+  func testLogWithClosureWillNotCallClosureIfLoggerThresholdsPreventsLogging() {
+    var closureCalled = false;
+    let logger = Logger();
+    
+    logger.thresholdLevel = .info;
+    
+    // Execute
+    logger.debug({
+      closureCalled = true;
+      return "";
+    });
+    
+    // Validate
+    XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached")
+  }
+
+  func testLogWithClosureWillNotCallClosureIfAppendersThresholdsPreventsLogging() {
+    var closureCalled = false;
+    let logger = Logger();
+    let appender1 = MemoryAppender();
+    let appender2 = MemoryAppender();
+    
+    appender1.thresholdLevel = .info
+    appender2.thresholdLevel = .info
+    logger.appenders = [appender1, appender2];
+    
+    // Execute
+    logger.debug({
+      closureCalled = true;
+      return "";
+    });
+    
+    // Validate
+    XCTAssertFalse(closureCalled, "Closure should not be call if no appender threshold is reached")
   }
   
+  func testLogWithClosureWillCallClosureIfLogWillBeIssuedByAtLeastOneAppender() {
+    var closureCalled = false;
+    let logger = Logger();
+    let appender1 = MemoryAppender();
+    let appender2 = MemoryAppender();
+    
+    appender1.thresholdLevel = .info
+    appender2.thresholdLevel = .debug
+    logger.appenders = [appender1, appender2];
+    
+    // Execute
+    logger.debug({
+      closureCalled = true;
+      return "";
+    });
+    
+    // Validate
+    XCTAssertTrue(closureCalled, "Closure should  have been called")
+  }
+
 }
