@@ -1,5 +1,5 @@
 # Log4Swift
-Log4Swift2 is a logging library written in swift 2. Therefore, **it requires xCode 7**.
+Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7**.
 
 **Note that is still a work in progress. It is by no mean full featured as of today.**
 
@@ -20,7 +20,7 @@ The goal of this project is to propose a logging library with (at least) those c
 As stated above, the work is in progress, not all those goals are acheived, or even started.
 
 ## Concepts
-The two main concepts of this library are borrowed from log4j :
+The three main concepts of this library are borrowed from log4j :
 
 ### Loggers
 Loggers are the objects to which logs are send at the first place.
@@ -30,7 +30,12 @@ A root logger will deal with logs that matches no specific logger.
 A logger defines a threshold level. Logs bellow this level will be ignored. Non ignored levels are sent to the appenders associated to the logger.
 
 ### Appenders
-Appenders are responsible for writing the logs to their destination. They also have a threshold to filter out messages.
+Appenders are attached to loggers. They are responsible for writing the logs to their destination. They are identified by an identifier, that is used when loading configuration to attache appenders to their loggers. One appender might be attached to multiple loggers.
+
+Appenders also have a threshold to filter out messages.
+
+### Formatters
+Formatters are attached to appenders. Their job is to modify the message to apply it a specific formatting before it is sent to its final destination. One formatter might be attached to multiple appenders.
 
 ## Features
 ### Mutliple appenders per logger
@@ -53,11 +58,11 @@ logger.error ("This message will go to the console and the error log file");
 Formatters allows you to apply a specific formatting to your log message, either modifying the message to have it complying to some constraintes or adding information to the logged message.  
 The PatternFormatter provided with Log4swift uses a simple textual pattern with marker identified by a '%' prefix to render the log messages. it provides those markers :
 
-* l : The name of the log level
+* l : The log level (identified by its name)
 * n : The name of the logger
 * d : The date of the log
-* m : the message
-* % : the '%' character
+* m : The message
+* % : The '%' character
 
 This pattern :  
 ```
