@@ -25,7 +25,7 @@ class FunctionalTests: XCTestCase {
     appender2.thresholdLevel = .Error;
     appender2.formatter = formatter2;
     
-    factory.registerLogger(logger);
+    try! factory.registerLogger(logger);
     
     // Execute
     Logger.getLogger("test.identifier").debug("This log should not be printed");

@@ -44,6 +44,20 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssert(sharedFactory1 === sharedFactory2, "Shared factory should always be the same object");
   }
   
+  func testFactoryThrowsErrorWhenTryingToRegisterALoggerWithEmptyIdentifier() {
+    do {
+      let logger = Logger(identifier: "", level: .Info, appenders: []);
+
+      // Execute
+      try self.factory.registerLogger(logger);
+      
+      // Validate (we should not reach that point
+      XCTFail("Registering a logger with empty identifier should raise an error");
+    } catch {
+      // nothing, this is expected
+    }
+  }
+  
   func testFactoryProvidesCopyOfRootLoggerByDefault() {
     // Execute
     let foundLogger = self.factory.getLogger("undefined.identifer");
@@ -59,8 +73,8 @@ class LoggerFactoryTests: XCTestCase {
     let logger = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
-    self.factory.registerLogger(logger);
-    self.factory.registerLogger(logger2);
+    try! self.factory.registerLogger(logger);
+    try! self.factory.registerLogger(logger2);
     
     // Execute
     let foundLogger = self.factory.getLogger("test.logger.identifier");
@@ -73,8 +87,8 @@ class LoggerFactoryTests: XCTestCase {
     let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
-    self.factory.registerLogger(logger1);
-    self.factory.registerLogger(logger2);
+    try! self.factory.registerLogger(logger1);
+    try! self.factory.registerLogger(logger2);
     
     // Execute
     let foundLogger = self.factory.getLogger("test.logger.identifier.plus.some.more");
@@ -90,8 +104,8 @@ class LoggerFactoryTests: XCTestCase {
     let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
-    self.factory.registerLogger(logger1);
-    self.factory.registerLogger(logger2);
+    try! self.factory.registerLogger(logger1);
+    try! self.factory.registerLogger(logger2);
     
     // Execute
     let foundLogger1 = self.factory.getLogger("test.logger.identifier.plus.some.more");
@@ -104,7 +118,7 @@ class LoggerFactoryTests: XCTestCase {
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
     let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
-    self.factory.registerLogger(logger);
+    try! self.factory.registerLogger(logger);
     
     // Execute
     let foundLogger = self.factory.getLogger("test.logger.identifier.plus.some.more");
@@ -155,7 +169,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForSamedIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {
@@ -167,7 +181,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForDifferentIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {

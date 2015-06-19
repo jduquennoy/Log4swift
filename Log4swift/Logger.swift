@@ -37,7 +37,7 @@ public class Logger {
     self.init(identifier: "", level: LogLevel.Debug, appenders: Logger.createDefaultAppenders());
   }
   
-  convenience init(configurationDictionary: Dictionary<String, AnyObject>)
+  public convenience init(configurationDictionary: Dictionary<String, AnyObject>)
   {
     let identifier = "";
     let level = LogLevel.Debug;
@@ -49,7 +49,7 @@ public class Logger {
     self.init(identifier: newIdentifier, level: loggerToCopy.thresholdLevel, appenders: [Appender]() + loggerToCopy.appenders);
   }
   
-  init(identifier: String, level: LogLevel, appenders: [Appender]) {
+  public init(identifier: String, level: LogLevel, appenders: [Appender]) {
     self.identifier = identifier;
     self.thresholdLevel = level;
     self.appenders = appenders;

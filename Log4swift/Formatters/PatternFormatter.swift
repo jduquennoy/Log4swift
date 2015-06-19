@@ -65,11 +65,11 @@ public class PatternFormatter : Formatter {
     "%": {(parameters, message, infos) in return "%" }
   ];
   
-  init(pattern: String) throws {
+  public init(pattern: String) throws {
     try self.parsePattern(pattern);
   }
   
-  func format(message: String, info: FormatterInfoDictionary) -> String {
+  public func format(message: String, info: FormatterInfoDictionary) -> String {
     return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) };
   }
 

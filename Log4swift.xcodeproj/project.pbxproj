@@ -56,10 +56,11 @@
 		02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactoryTests.swift; sourceTree = "<group>"; };
 		02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppender.swift; sourceTree = "<group>"; };
 		02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileAppenderTests.swift; path = Appenders/FileAppenderTests.swift; sourceTree = "<group>"; };
+		02D87E431B34BBCC0089A222 /* SoftwareConfiguration-OSX.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "SoftwareConfiguration-OSX.playground"; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
 		5ED244E01B343A0400453B31 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
-		5ED244E41B34408600453B31 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
+		5ED244E41B34408600453B31 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Formatter.swift; path = ../Formatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				0237CF351B2E220F004D5B9F /* SimpleUsage-OSX.playground */,
+				02D87E431B34BBCC0089A222 /* SoftwareConfiguration-OSX.playground */,
 			);
 			path = "Example playgrounds";
 			sourceTree = "<group>";
@@ -134,7 +136,6 @@
 				02664C241B2CEB2900B695DE /* Logger.swift */,
 				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
-				5ED244E41B34408600453B31 /* Formatter.swift */,
 				02664C2F1B2DA69A00B695DE /* Appenders */,
 				5E17F3231B3328BA00E262F5 /* Formatters */,
 				024FD79A1B2DD3D700A8609C /* Utilities */,
@@ -177,6 +178,7 @@
 		5E17F3231B3328BA00E262F5 /* Formatters */ = {
 			isa = PBXGroup;
 			children = (
+				5ED244E41B34408600453B31 /* Formatter.swift */,
 				5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */,
 			);
 			path = Formatters;

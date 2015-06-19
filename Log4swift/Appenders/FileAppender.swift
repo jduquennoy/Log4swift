@@ -33,7 +33,7 @@ public class FileAppender : Appender {
   private let filePath : String;
   private var fileHandler: NSFileHandle?;
 
-  public init(identifier: String, filePath: String) throws {
+  public init(identifier: String, filePath: String) {
     self.fileHandler = nil;
     self.filePath = filePath;
 

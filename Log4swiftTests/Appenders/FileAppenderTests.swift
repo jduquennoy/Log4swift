@@ -41,7 +41,7 @@ class FileAppenderTests: XCTestCase {
   func testFileAppenderCreatesFileIfItDoesNotExist()  {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
-      let fileAppender = try FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
         unlink(tempFilePath.fileSystemRepresentation());
@@ -62,7 +62,7 @@ class FileAppenderTests: XCTestCase {
   func testFileAppenderReCreatesFileIfItDeletedAfterFirstLog()  {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
-      let fileAppender = try FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
         unlink(tempFilePath.fileSystemRepresentation());
@@ -85,7 +85,7 @@ class FileAppenderTests: XCTestCase {
   func testFileAppenderAddsEndOfLineToLogsIfNotPresentAtEndOfMessage()  {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
-      let fileAppender = try FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
         unlink(tempFilePath.fileSystemRepresentation());
@@ -108,7 +108,7 @@ class FileAppenderTests: XCTestCase {
   func testFileAppenderDoesNotAddEndOfLineToLogsIfAlreadyPresent()  {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
-      let fileAppender = try FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping\n";
       defer {
         unlink(tempFilePath.fileSystemRepresentation());
@@ -131,7 +131,7 @@ class FileAppenderTests: XCTestCase {
   func testFileAppenderPerformanceWhenFileIsNotDeleted() {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
-      let fileAppender = try FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       defer {
         unlink(tempFilePath.fileSystemRepresentation());
       }

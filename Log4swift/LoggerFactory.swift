@@ -19,6 +19,10 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+public enum LoggerFactoryErrors : ErrorType {
+  case InvalidLoggerIdentifier
+};
+
 /**
 The logger factory is responsible for
 * loading configuration from files or dictionaries
@@ -40,7 +44,11 @@ public class LoggerFactory {
   }
   
   /// Adds the given logger to the list of available loggers. If a logger with the same identifier already exists, it will be replaced by the new one.
-  public func registerLogger(newLogger: Logger) {
+  public func registerLogger(newLogger: Logger) throws {
+    if(newLogger.identifier.isEmpty) {
+      throw LoggerFactoryErrors.InvalidLoggerIdentifier;
+    }
+    
     self.loggers[newLogger.identifier] = newLogger;
   }
   
