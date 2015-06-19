@@ -27,8 +27,10 @@ The pattern is a regular string, with markers prefixed by '%', that might be pas
 Use '%%' to print a '%' character in the formatted message.
 Available markers are :
 * l : The name of the log level
+* n : The name of the logger
 * d : The date of the log
 * m : the message
+* % : the '%' character
 
 **Exemples**  
 "[%p] %m" -> "[Debug] log message"

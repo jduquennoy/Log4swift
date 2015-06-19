@@ -49,6 +49,27 @@ logger.debug ("This message will go to the console");
 logger.error ("This message will go to the console and the error log file");
 ```
 
+### Formatters associated to loggers
+Formatters allows you to apply a specific formatting to your log message, either modifying the message to have it complying to some constraintes or adding information to the logged message.  
+The PatternFormatter provided with Log4swift uses a simple textual pattern with marker identified by a '%' prefix to render the log messages. it provides those markers :
+
+* l : The name of the log level
+* n : The name of the logger
+* d : The date of the log
+* m : the message
+* % : the '%' character
+
+This pattern :  
+```
+[%d][%l][%n] %m
+```  
+will produce this kind of log:  
+```
+[2015-02-02 12:45:23 +0000][Debug][logger.name] The message that was sent to the logger
+```
+
+Each appender can receive a different formatter.
+
 ### Log with closures
 Providing a closure instead of a string is pretty handy if the code that generates the message is heavy : the closure will only be executed if the logs are to be issued. No need to encapsulate the code in an if structure.
 
