@@ -48,7 +48,7 @@ class FileAppenderTests: XCTestCase {
       }
       
       // Execute
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
@@ -68,11 +68,11 @@ class FileAppenderTests: XCTestCase {
         unlink(tempFilePath.fileSystemRepresentation());
       }
       
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       unlink(tempFilePath.fileSystemRepresentation());
       
       // Execute
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
@@ -91,11 +91,11 @@ class FileAppenderTests: XCTestCase {
         unlink(tempFilePath.fileSystemRepresentation());
       }
       
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       unlink(tempFilePath.fileSystemRepresentation());
       
       // Execute
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
@@ -114,11 +114,11 @@ class FileAppenderTests: XCTestCase {
         unlink(tempFilePath.fileSystemRepresentation());
       }
       
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       unlink(tempFilePath.fileSystemRepresentation());
       
       // Execute
-      fileAppender.log(logContent, level: LogLevel.debug);
+      fileAppender.log(logContent, level: LogLevel.debug, info: FormatterInfoDictionary());
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
@@ -138,7 +138,7 @@ class FileAppenderTests: XCTestCase {
       
       measureBlock { () -> Void in
         for _ in 1...1000 {
-          fileAppender.log("This is a test log", level: LogLevel.debug);
+          fileAppender.log("This is a test log", level: LogLevel.debug, info: FormatterInfoDictionary());
         }
       }
     } catch let error {

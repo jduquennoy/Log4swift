@@ -1,8 +1,8 @@
 //
-//  ConsoleAppender.swift
-//  log4swift
+//  Formatter.swift
+//  Log4swift
 //
-//  Created by Jérôme Duquennoy on 14/06/2015.
+//  Created by Jérôme Duquennoy on 18/06/2015.
 //  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
@@ -20,10 +20,21 @@
 //
 
 /**
-ConsoleAppender will simply issue logs to stdout.
+The definition of the type used to pass informations to the formatters
 */
-public class ConsoleAppender: Appender {
-  override func performLog(log: String) {
-    print(log);
-  }
+typealias FormatterInfoDictionary = Dictionary<FormatterInfoKeys, CustomStringConvertible>;
+
+/**
+This protocol defines a formatter, that will format log messages on the fly.
+*/
+protocol Formatter {
+  func format(message: String, info: FormatterInfoDictionary) -> String;
+}
+
+/**
+Keys used in the information dictionary passed to the formatters
+*/
+enum FormatterInfoKeys {
+  case LogLevel
+  case LoggerName
 }

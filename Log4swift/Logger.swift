@@ -3,7 +3,7 @@
 //  log4swift
 //
 //  Created by Jérôme Duquennoy on 14/06/2015.
-//  Copyright © 2015 jerome. All rights reserved.
+//  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -92,9 +92,13 @@ public class Logger {
   }
   
   private func log(message: String, level: LogLevel) {
-    if(level.rawValue >= self.thresholdLevel.rawValue) {
+    if(self.willIssueLogForLevel(level)) {
+      let info: FormatterInfoDictionary = [
+        FormatterInfoKeys.LoggerName: self.identifier,
+        FormatterInfoKeys.LogLevel: level,
+      ];
       for currentAppender in self.appenders {
-        currentAppender.log(message, level:level);
+        currentAppender.log(message, level:level, info: info);
       }
     }
   }
@@ -102,8 +106,12 @@ public class Logger {
   private func log(closure: () -> (String), level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
       let logMessage = closure();
+      let info: FormatterInfoDictionary = [
+        FormatterInfoKeys.LoggerName: self.identifier,
+        FormatterInfoKeys.LogLevel: level,
+      ];
       for currentAppender in self.appenders {
-        currentAppender.log(logMessage, level:level);
+        currentAppender.log(logMessage, level:level, info: info);
       }
     }
   }

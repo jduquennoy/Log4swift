@@ -33,3 +33,9 @@ extension String {
     
   }
 }
+
+extension String : CustomStringConvertible {
+  public var description: String {
+    get {return self;}
+  }
+}

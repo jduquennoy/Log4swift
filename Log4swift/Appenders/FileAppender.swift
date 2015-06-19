@@ -3,7 +3,7 @@
 //  Log4swift
 //
 //  Created by Jérôme Duquennoy on 16/06/2015.
-//  Copyright © 2015 jerome. All rights reserved.
+//  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by

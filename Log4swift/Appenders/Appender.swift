@@ -3,7 +3,7 @@
 //  log4swift
 //
 //  Created by Jérôme Duquennoy on 14/06/2015.
-//  Copyright © 2015 jerome. All rights reserved.
+//  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +26,7 @@ This class is the base class, from which all appenders should inherit.
 public class Appender {
   let identifier: String;
   public var thresholdLevel = LogLevel.debug;
+  var formatter: Formatter?;
   
   public init(identifier: String) {
     self.identifier = identifier;
@@ -35,9 +36,17 @@ public class Appender {
     // To be overriden by subclasses
   }
   
-  final func log(log: String, level: LogLevel) {
+  final func log(log: String, level: LogLevel, info: FormatterInfoDictionary) {
     if(level.rawValue >= self.thresholdLevel.rawValue) {
-      self.performLog("\(log)");
+      let logMessage: String;
+      
+      if let formatter = self.formatter {
+        logMessage = formatter.format(log, info: info)
+      } else {
+        logMessage = log;
+      }
+      
+      self.performLog(logMessage);
     }
   }
 }
