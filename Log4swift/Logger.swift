@@ -34,13 +34,13 @@ public class Logger {
   public var appenders: [Appender];
   
   convenience init() {
-    self.init(identifier: "", level: LogLevel.debug, appenders: Logger.createDefaultAppenders());
+    self.init(identifier: "", level: LogLevel.Debug, appenders: Logger.createDefaultAppenders());
   }
   
   convenience init(configurationDictionary: Dictionary<String, AnyObject>)
   {
     let identifier = "";
-    let level = LogLevel.debug;
+    let level = LogLevel.Debug;
     
     self.init(identifier: identifier,level: level, appenders: Logger.createDefaultAppenders());
   }
@@ -54,35 +54,35 @@ public class Logger {
   // MARK: Logging methods
   
   public func debug(message: String) {
-    self.log(message, level: LogLevel.debug);
+    self.log(message, level: LogLevel.Debug);
   }
   public func info(message: String) {
-    self.log(message, level: LogLevel.info);
+    self.log(message, level: LogLevel.Info);
   }
   public func warn(message: String) {
-    self.log(message, level: LogLevel.warning);
+    self.log(message, level: LogLevel.Warning);
   }
   public func error(message: String) {
-    self.log(message, level: LogLevel.error);
+    self.log(message, level: LogLevel.Error);
   }
   public func fatal(message: String) {
-    self.log(message, level: LogLevel.fatal);
+    self.log(message, level: LogLevel.Fatal);
   }
 
   public func debug(closure: () -> String) {
-    self.log(closure, level: LogLevel.debug);
+    self.log(closure, level: LogLevel.Debug);
   }
   public func info(closure: () -> String) {
-    self.log(closure, level: LogLevel.info);
+    self.log(closure, level: LogLevel.Info);
   }
   public func warn(closure: () -> String) {
-    self.log(closure, level: LogLevel.warning);
+    self.log(closure, level: LogLevel.Warning);
   }
   public func error(closure: () -> String) {
-    self.log(closure, level: LogLevel.error);
+    self.log(closure, level: LogLevel.Error);
   }
   public func fatal(closure: () -> String) {
-    self.log(closure, level: LogLevel.fatal);
+    self.log(closure, level: LogLevel.Fatal);
   }
 
   private func willIssueLogForLevel(level: LogLevel) -> Bool {

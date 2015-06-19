@@ -53,8 +53,8 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testFactoryProvidesLoggerThatExactlyMatchesTheRequestedIdentifier() {
-    let logger = Logger(identifier: "test.logger.identifier", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]);
-    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger);
     self.factory.registerLogger(logger2);
@@ -67,8 +67,8 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testFactoryProvidesLoggerThatMatchesTheRequestedIdentifierTheBest() {
-    let logger1 = Logger(identifier: "test.logger", level:.info, appenders: [ConsoleAppender(identifier: "test.appender")]);
-    let logger2 = Logger(identifier: "test.logger.identifier", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger1);
     self.factory.registerLogger(logger2);
@@ -81,7 +81,7 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
-    let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
     self.factory.registerLogger(logger);
     
@@ -95,7 +95,7 @@ class LoggerFactoryTests: XCTestCase {
   func testLoggerSendsLogToAllAppenders() {
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.debug, appenders: [appender1, appender2]);
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender1, appender2]);
     
     // Execute
     logger.info("ping");
@@ -107,7 +107,7 @@ class LoggerFactoryTests: XCTestCase {
 
   func testLoggerDoNotSendMessagesToAppendersIfLevelIsEqualToThreshold() {
     let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.warning, appenders: [appender]);
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
     
     // Execute
     logger.warn("Info message");
@@ -118,7 +118,7 @@ class LoggerFactoryTests: XCTestCase {
 
   func testLoggerDoNotSendMessagesToAppendersIfThresholdLevelIsNotReached() {
     let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.warning, appenders: [appender]);
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
     
     // Execute
     logger.info("Info message");
@@ -131,7 +131,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForSamedIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]));
+      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {
@@ -143,7 +143,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForDifferentIdentifierPerformance() {
     for index in 1...10 {
-      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .info, appenders: [ConsoleAppender(identifier: "test.appender")]));
+      self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]));
     }
     
     self.measureBlock() {

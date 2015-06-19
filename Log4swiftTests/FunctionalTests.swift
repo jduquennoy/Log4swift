@@ -16,12 +16,12 @@ class FunctionalTests: XCTestCase {
     let formatter2 = try! PatternFormatter(pattern: "[%n][%l] %m");
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
-    let logger = Logger(identifier: "test.identifier", level: .info, appenders: [appender1, appender2]);
+    let logger = Logger(identifier: "test.identifier", level: .Info, appenders: [appender1, appender2]);
 
-    appender1.thresholdLevel = .warning;
+    appender1.thresholdLevel = .Warning;
     appender1.formatter = formatter1;
 
-    appender2.thresholdLevel = .error;
+    appender2.thresholdLevel = .Error;
     appender2.formatter = formatter2;
     
     // Execute
@@ -33,9 +33,9 @@ class FunctionalTests: XCTestCase {
     XCTAssertEqual(appender1.logMessages.count, 2, "Appender1 should have received two messages");
     XCTAssertEqual(appender2.logMessages.count, 1, "Appender2 should have received one messages");
     
-    XCTAssertEqual(appender1.logMessages[0], "[\(LogLevel.warning)][test.identifier] This log should be printed to appender1 only");
-    XCTAssertEqual(appender1.logMessages[1], "[\(LogLevel.error)][test.identifier] this log should be printed to both appenders");
-    XCTAssertEqual(appender2.logMessages[0], "[test.identifier][\(LogLevel.error)] this log should be printed to both appenders");
+    XCTAssertEqual(appender1.logMessages[0], "[\(LogLevel.Warning)][test.identifier] This log should be printed to appender1 only");
+    XCTAssertEqual(appender1.logMessages[1], "[\(LogLevel.Error)][test.identifier] this log should be printed to both appenders");
+    XCTAssertEqual(appender2.logMessages[0], "[test.identifier][\(LogLevel.Error)] this log should be printed to both appenders");
   }
 
 }

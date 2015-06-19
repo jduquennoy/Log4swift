@@ -47,10 +47,10 @@ class PatternFormatterTests: XCTestCase {
     let formatter = try! PatternFormatter(pattern: "%l");
 
     // Execute
-    let formattedMessage = formatter.format("", info: [FormatterInfoKeys.LogLevel: LogLevel.error]);
+    let formattedMessage = formatter.format("", info: [FormatterInfoKeys.LogLevel: LogLevel.Error]);
     
     // validate
-    XCTAssertEqual(formattedMessage, LogLevel.error.description);
+    XCTAssertEqual(formattedMessage, LogLevel.Error.description);
   }
   
   func testFormatterAppliesLoggerNameMarker() {
@@ -93,21 +93,21 @@ class PatternFormatterTests: XCTestCase {
     let formatter = try! PatternFormatter(pattern: "[%l][%n] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
-      FormatterInfoKeys.LogLevel: LogLevel.warning
+      FormatterInfoKeys.LogLevel: LogLevel.Warning
     ];
     
     // Execute
     let formattedMessage = formatter.format("Log message", info: info);
     
     // Validate
-    XCTAssertEqual(formattedMessage, "[\(LogLevel.warning)][nameOfTheLogger] Log message");
+    XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message");
   }
   
   func testPerformanceExample() {
     let formatter = try! PatternFormatter(pattern: "[%l][%n][%d] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
-      FormatterInfoKeys.LogLevel: LogLevel.warning
+      FormatterInfoKeys.LogLevel: LogLevel.Warning
     ];
     
     self.measureBlock() {

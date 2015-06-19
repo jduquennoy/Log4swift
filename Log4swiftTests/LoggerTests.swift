@@ -35,14 +35,14 @@ class LoggerTests: XCTestCase {
   func testLoggerDefaultLevelIsDebug() {
     let logger = Logger();
     
-    XCTAssertEqual(logger.thresholdLevel , LogLevel.debug, "Default log level for loggers should be Debug");
+    XCTAssertEqual(logger.thresholdLevel , LogLevel.Debug, "Default log level for loggers should be Debug");
   }
 
   func testLogWithClosureWillNotCallClosureIfLoggerThresholdsPreventsLogging() {
     var closureCalled = false;
     let logger = Logger();
     
-    logger.thresholdLevel = .info;
+    logger.thresholdLevel = .Info;
     
     // Execute
     logger.debug({
@@ -60,8 +60,8 @@ class LoggerTests: XCTestCase {
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
     
-    appender1.thresholdLevel = .info
-    appender2.thresholdLevel = .info
+    appender1.thresholdLevel = .Info
+    appender2.thresholdLevel = .Info
     logger.appenders = [appender1, appender2];
     
     // Execute
@@ -80,8 +80,8 @@ class LoggerTests: XCTestCase {
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
     
-    appender1.thresholdLevel = .info
-    appender2.thresholdLevel = .debug
+    appender1.thresholdLevel = .Info
+    appender2.thresholdLevel = .Debug
     logger.appenders = [appender1, appender2];
     
     // Execute
