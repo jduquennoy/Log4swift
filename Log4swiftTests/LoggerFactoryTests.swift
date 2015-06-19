@@ -44,12 +44,15 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssert(sharedFactory1 === sharedFactory2, "Shared factory should always be the same object");
   }
   
-  func testFactoryProvidesRootLoggerByDefault() {
+  func testFactoryProvidesCopyOfRootLoggerByDefault() {
     // Execute
-    let logger = self.factory.getLogger("undefined.identifer");
+    let foundLogger = self.factory.getLogger("undefined.identifer");
     
     // Validate
-    XCTAssert(logger === self.factory.rootLogger, "Root logger should be returned for unknown identifier.");
+    let rootLogger = self.factory.rootLogger;
+    XCTAssertEqual(foundLogger.thresholdLevel, rootLogger.thresholdLevel, "The obtained logger should have the same threshold as the root logger");
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one");
+    XCTAssertEqual(foundLogger.identifier, "undefined.identifer", "The created logger should have the requested identifier");
   }
 
   func testFactoryProvidesLoggerThatExactlyMatchesTheRequestedIdentifier() {
@@ -66,7 +69,7 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssert(foundLogger === logger, "Factory should return registered logger that exactly matches the requested identifier");
   }
   
-  func testFactoryProvidesLoggerThatMatchesTheRequestedIdentifierTheBest() {
+  func testFactoryCreatesLoggerBasedOnTheClosestOneIfNoExactMatch() {
     let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
@@ -77,9 +80,27 @@ class LoggerFactoryTests: XCTestCase {
     let foundLogger = self.factory.getLogger("test.logger.identifier.plus.some.more");
     
     // Validate
-    XCTAssert(foundLogger === logger2, "Factory should return closest matching logger");
+    XCTAssertFalse(foundLogger === logger2, "The factory should have created a new logger");
+    XCTAssertEqual(foundLogger.identifier, "test.logger.identifier.plus.some.more", "The created logger should have the requested identifier");
+    XCTAssertEqual(foundLogger.thresholdLevel, logger2.thresholdLevel, "The created logger should have the same threshold as the closest one");
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(logger2.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one");
   }
-  
+
+  func testRequestingTwiceTheSameNonDefinedLoggerShouldReturnTheSameObject() {
+    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
+    
+    self.factory.registerLogger(logger1);
+    self.factory.registerLogger(logger2);
+    
+    // Execute
+    let foundLogger1 = self.factory.getLogger("test.logger.identifier.plus.some.more");
+    let foundLogger2 = self.factory.getLogger("test.logger.identifier.plus.some.more");
+    
+    // Validate
+    XCTAssertTrue(foundLogger1 === foundLogger2, "The two found loggers should be the same object");
+  }
+
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
     let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .Info, appenders: [ConsoleAppender(identifier: "test.appender")]);
     
@@ -89,7 +110,10 @@ class LoggerFactoryTests: XCTestCase {
     let foundLogger = self.factory.getLogger("test.logger.identifier.plus.some.more");
     
     // Validate
-    XCTAssert(foundLogger === self.factory.rootLogger, "Factory should not return a logger with a more detailed identifier");
+    let rootLogger = self.factory.rootLogger;
+    XCTAssertEqual(foundLogger.thresholdLevel, rootLogger.thresholdLevel, "The obtained logger should have the same threshold as the root logger");
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one");
+    XCTAssertEqual(foundLogger.identifier, "test.logger.identifier.plus.some.more", "The created logger should have the requested identifier");
   }
   
   func testLoggerSendsLogToAllAppenders() {

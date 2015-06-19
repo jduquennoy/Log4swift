@@ -42,7 +42,11 @@ public class Logger {
     let identifier = "";
     let level = LogLevel.Debug;
     
-    self.init(identifier: identifier,level: level, appenders: Logger.createDefaultAppenders());
+    self.init(identifier: identifier, level: level, appenders: Logger.createDefaultAppenders());
+  }
+  
+  convenience init(loggerToCopy: Logger, newIdentifier: String) {
+    self.init(identifier: newIdentifier, level: loggerToCopy.thresholdLevel, appenders: [Appender]() + loggerToCopy.appenders);
   }
   
   init(identifier: String, level: LogLevel, appenders: [Appender]) {

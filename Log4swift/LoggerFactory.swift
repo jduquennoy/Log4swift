@@ -29,7 +29,7 @@ public class LoggerFactory {
   static public let sharedInstance = LoggerFactory();
   
   public let rootLogger = Logger();
-  private var loggers = [Logger]();
+  private var loggers = Dictionary<String, Logger>();
   
   // MARK: Configuration
   
@@ -41,25 +41,29 @@ public class LoggerFactory {
   
   /// Adds the given logger to the list of available loggers. If a logger with the same identifier already exists, it will be replaced by the new one.
   public func registerLogger(newLogger: Logger) {
-    if let existingLoggerIndex = self.loggers.indexOf({$0.identifier == newLogger.identifier}) {
-      self.loggers.removeAtIndex(existingLoggerIndex);
-    }
-    
-    self.loggers.append(newLogger);
+    self.loggers[newLogger.identifier] = newLogger;
   }
   
   // MARK: Acccessing loggers
 
   /// Returns the declared logger with the longest maching identifier. If none is found, the root logger will be returned
-  public func getLogger(var identifierToFind: String) -> Logger {
-    var foundLogger = self.rootLogger;
+  public func getLogger(identifierToFind: String) -> Logger {
+    let foundLogger: Logger;
     
-    while (foundLogger === self.rootLogger && !identifierToFind.isEmpty) {
-      if let foundLoggerIndex = self.loggers.indexOf({$0.identifier == identifierToFind}) {
-        foundLogger = self.loggers[foundLoggerIndex];
+    if let loggerFromCache = self.loggers[identifierToFind] {
+      foundLogger = loggerFromCache;
+    } else {
+      var reducedIdentifier = identifierToFind.stringByRemovingLastComponentWithDelimiter(".");
+      var loggerToCopy = self.rootLogger;
+      while (loggerToCopy === self.rootLogger && !reducedIdentifier.isEmpty) {
+        if let loggerFromCache = self.loggers[reducedIdentifier] {
+          loggerToCopy = loggerFromCache;
+        }
+        reducedIdentifier = reducedIdentifier.stringByRemovingLastComponentWithDelimiter(".");
       }
       
-      identifierToFind = identifierToFind.stringByRemovingLastComponentWithDelimiter(".");
+      foundLogger = Logger(loggerToCopy: loggerToCopy, newIdentifier: identifierToFind);
+      self.loggers[identifierToFind] = foundLogger;
     }
     
     return foundLogger;
