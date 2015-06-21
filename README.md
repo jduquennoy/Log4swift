@@ -7,17 +7,16 @@ As long as it is not ready for use, no binary version will be available. You wil
 
 
 ## Goal
-The goal of this project is to propose a logging library with (at least) those caracteristics :
+The goal of this project is to propose a logging library with those caracteristics :
 
-* straitforward to use for simple cases : default configuration should just work.
-* powerful for more complexe cases, with multi-destination logging for exemple.
-* configurable in multiple ways
-    * by file : configuration can be stored in a plist file
-    * by software : at init time or while running the program
-* asynchronous by default to avoid slowing down the application, but with the ability to request a synchronous behavior if needed.
-* it should be useable on linux once Apple releases Swift for that OS.
+* straitforward to use for simple cases : default configuration should just work
+* powerful for more complexe cases, with multi-destination logging for exemple
+* dynamically configurable by code
 
-As stated above, the work is in progress, not all those goals are acheived, or even started.
+### Not yet achieved goals
+* configurable by file
+* synchronous by default, but with the ability to request asynchronous behavior
+* should be useable on linux once Apple releases Swift for that OS
 
 ## Concepts
 The three main concepts of this library are borrowed from log4j :
@@ -54,9 +53,35 @@ logger.debug ("This message will go to the console");
 logger.error ("This message will go to the console and the error log file");
 ```
 
-### Formatters associated to loggers
+### Formatters associated to appenders
 Formatters allows you to apply a specific formatting to your log message, either modifying the message to have it complying to some constraintes or adding information to the logged message.  
-The PatternFormatter provided with Log4swift uses a simple textual pattern with marker identified by a '%' prefix to render the log messages. it provides those markers :
+
+### Log with closures
+Providing a closure instead of a string is pretty handy if the code that generates the message is heavy : the closure will only be executed if the logs are to be issued. No need to encapsulate the code in an if structure.
+
+```
+Logger.debug { someHeavyCodeThatGeneratesTheLogMessage() }
+```
+
+## Provided appenders
+
+### The console appender
+This appender will write log messages to stdout or stderr. It has two thresholds : the regular threshold, available on all appenders, and an error threshold.
+
+* If the log level is bellow the general threshold, the message is ignored
+* If the log level is above the general threshold but bellow the error threshold, the message is issued on stdout
+* If the log level is above both the general and the error threshold, the message is issued on stderr
+
+By default, the console appender is configured to send Error and Fatal messages to stderr, and all other levers to stdout. This is a good configuration for good citizen CLI tools.
+
+### The file appender
+This appender will write log messages to a file, specified by its path. It will create the file if needed (and possible), and will re-create it if it disapears. This allows log rotation scripts to avoid having to restart the process to ensure logs are recorded in a new file after rotation.
+
+## Provided formatters
+
+### The PatternFormatter
+
+The PatternFormatter uses a simple textual pattern with marker identified by a '%' prefix to render the log messages. it provides those markers :
 
 * l : The log level (identified by its name)
 * n : The name of the logger
@@ -71,13 +96,4 @@ This pattern :
 will produce this kind of log:  
 ```
 [2015-02-02 12:45:23 +0000][Debug][logger.name] The message that was sent to the logger
-```
-
-Each appender can receive a different formatter.
-
-### Log with closures
-Providing a closure instead of a string is pretty handy if the code that generates the message is heavy : the closure will only be executed if the logs are to be issued. No need to encapsulate the code in an if structure.
-
-```
-Logger.debug { someHeavyCodeThatGeneratesTheLogMessage() }
 ```
