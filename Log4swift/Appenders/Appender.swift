@@ -32,7 +32,7 @@ public class Appender {
     self.identifier = identifier;
   }
   
-  func performLog(log: String) {
+  func performLog(log: String, level: LogLevel) {
     // To be overriden by subclasses
   }
   
@@ -46,7 +46,7 @@ public class Appender {
         logMessage = log;
       }
       
-      self.performLog(logMessage);
+      self.performLog(logMessage, level: level);
     }
   }
 }

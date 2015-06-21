@@ -32,7 +32,7 @@ class MemoryAppender: Appender {
     super.init(identifier: "test.memoryAppender");
   }
   
-  override func performLog(log: String) {
+  override func performLog(log: String, level: LogLevel) {
     logMessages.append(log);
   }
   

@@ -11,12 +11,13 @@ import Log4swift
 Logger.info("Hello world !")
 
 // You can change the threshold level when using this simple method by accessing the root logger :
-LoggerFactory.sharedInstance.rootLogger.thresholdLevel = LogLevel.warning;
+LoggerFactory.sharedInstance.rootLogger.thresholdLevel = .Warning;
 Logger.info("This log will be ignored")
-Logger.warn("This log will be issued")
+Logger.warn("This log will be issued to stdout")
+Logger.error("This log will be issued to stderr")
 
 // Log with closures allow you to avoid running message composition code if log is blocked by thresholds
-LoggerFactory.sharedInstance.rootLogger.thresholdLevel = LogLevel.warning;
+LoggerFactory.sharedInstance.rootLogger.thresholdLevel = .Warning;
 Logger.info {
   return "This closure will not be executed";
 }

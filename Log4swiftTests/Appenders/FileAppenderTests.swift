@@ -2,8 +2,8 @@
 //  FileAppenderTests.swift
 //  Log4swift
 //
-//  Created by jerome on 16/06/2015.
-//  Copyright © 2015 jerome. All rights reserved.
+//  Created by Jérôme Duquennoy on 16/06/2015.
+//  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -119,7 +119,7 @@ class FileAppenderTests: XCTestCase {
       
       // Execute
       fileAppender.log(logContent, level: LogLevel.Debug, info: FormatterInfoDictionary());
-      
+
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
       XCTAssertEqual(fileContent, logContent, "Content of log file does not match expectation")

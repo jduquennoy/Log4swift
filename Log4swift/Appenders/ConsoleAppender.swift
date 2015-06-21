@@ -20,10 +20,21 @@
 //
 
 /**
-ConsoleAppender will simply issue logs to stdout.
+ConsoleAppender will print the log to stdout or stderr depending on thresholds and levels.  
+* If general threshold is reached but error threshold is undefined or not reached, log will be printed to stdout
+* If both general and error threshold are reached, log will be printed to stderr
 */
 public class ConsoleAppender: Appender {
-  override func performLog(log: String) {
-    print(log);
+  var errorThresholdLevel: LogLevel? = .Error;
+  
+  override func performLog(log: String, level: LogLevel) {
+    var destinationFile = stdout;
+    
+    if let errorThresholdLevel = self.errorThresholdLevel {
+      if(level.rawValue >= errorThresholdLevel.rawValue) {
+        destinationFile  = stderr;
+      }
+    }
+    fputs(strdup(log + "\n"), destinationFile);
   }
 }
