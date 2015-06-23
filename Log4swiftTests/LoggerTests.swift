@@ -93,5 +93,134 @@ class LoggerTests: XCTestCase {
     // Validate
     XCTAssertTrue(closureCalled, "Closure should  have been called")
   }
-
+  
+  func testStaticLogDebugMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.debug("ping");
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Debug);
+  }
+  
+  func testStaticLogInfoMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.info("ping");
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Info);
+  }
+  
+  func testStaticLogWarningMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.warn("ping");
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Warning);
+  }
+  
+  func testStaticLogErrorMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.error("ping");
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Error);
+  }
+  
+  func testStaticLogFatalMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.fatal("ping");
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
+  }
+  
+  func testStaticLogDebugClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.debug{ return "ping"; };
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Debug);
+  }
+  
+  func testStaticLogInfoClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.info{ return "ping"; };
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Info);
+  }
+  
+  func testStaticLogWarningClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.warn{ return "ping"; };
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Warning);
+  }
+  
+  func testStaticLogErrorClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.error{ return "ping"; };
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Error);
+  }
+  
+  func testStaticLogFatalClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    
+    //Execute
+    Logger.fatal{ return "ping"; };
+    
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
+  }
 }

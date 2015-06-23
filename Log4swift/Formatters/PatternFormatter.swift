@@ -85,6 +85,7 @@ public class PatternFormatter : Formatter {
     case Marker
     case PostMarker(String)
     case Parameters(String)
+    case End
   };
 
   struct ParserStatus {
@@ -100,38 +101,31 @@ public class PatternFormatter : Formatter {
     {
       switch(parserStatus.machineState) {
       case .Text where currentCharacter == "%":
-        setParserState(.Marker);
+        try setParserState(.Marker);
       case .Text:
         parserStatus.charactersAccumulator.append(currentCharacter);
         
       case .Marker:
-        setParserState(.PostMarker(String(currentCharacter)));
+        try setParserState(.PostMarker(String(currentCharacter)));
         
       case .PostMarker(let markerName) where currentCharacter == "{":
-        setParserState(.Parameters(markerName));
+        try setParserState(.Parameters(markerName));
       case .PostMarker:
-          setParserState(.Text);
+          try setParserState(.Text);
           parserStatus.charactersAccumulator.append(currentCharacter);
         
       case .Parameters where currentCharacter == "}":
-        setParserState(.Text);
+        try setParserState(.Text);
       case .Parameters:
         parserStatus.charactersAccumulator.append(currentCharacter);
+      case .End:
+        throw FormatterError.InvalidFormatSyntax;
       }
     }
-    switch(parserStatus.machineState) {
-    case .PostMarker:
-      setParserState(.Text); // to validated the last marker if any
-    case .Text:
-      break;
-    case .Parameters:
-      throw FormatterError.NotClosedMarkerParameter;
-    default:
-      throw FormatterError.InvalidFormatSyntax;
-    }
+    try setParserState(.End);
   }
   
-  private func setParserState(newState: ParserState) {
+  private func setParserState(newState: ParserState) throws {
     switch(parserStatus.machineState) {
     case .Text where parserStatus.charactersAccumulator.count > 0:
       let parsedString = String(parserStatus.charactersAccumulator);
@@ -141,7 +135,7 @@ public class PatternFormatter : Formatter {
       }
     case .PostMarker(let markerName):
       switch(newState) {
-      case .Text:
+      case .Text, .End:
         parserStatus.charactersAccumulator.removeAll();
         processMarker(markerName);
       case .Parameters:
@@ -149,9 +143,15 @@ public class PatternFormatter : Formatter {
       default:
         break;
       }
+      
     case .Parameters(let markerName):
-      processMarker(markerName);
-      parserStatus.charactersAccumulator.removeAll();
+      switch(newState) {
+      case .End:
+        throw FormatterError.NotClosedMarkerParameter;
+      default:
+        processMarker(markerName);
+        parserStatus.charactersAccumulator.removeAll();
+      }
     default:
       break;
     }

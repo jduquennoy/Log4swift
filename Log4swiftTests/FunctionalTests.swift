@@ -37,11 +37,11 @@ class FunctionalTests: XCTestCase {
     XCTAssertEqual(appender1.logMessages.count, 3, "Appender1 should have received two messages");
     XCTAssertEqual(appender2.logMessages.count, 1, "Appender2 should have received one messages");
     
-    XCTAssertEqual(appender1.logMessages[0], "[\(LogLevel.Warning)][test.identifier] This log should be printed to appender1 only");
-    XCTAssertEqual(appender1.logMessages[1], "[\(LogLevel.Error)][test.identifier] this log should be printed to both appenders");
-    XCTAssertEqual(appender1.logMessages[2], "[\(LogLevel.Warning)][test.identifier.sublogger] this log should be printed to appender1 too");
+    XCTAssertEqual(appender1.logMessages[0].message, "[\(LogLevel.Warning)][test.identifier] This log should be printed to appender1 only");
+    XCTAssertEqual(appender1.logMessages[1].message, "[\(LogLevel.Error)][test.identifier] this log should be printed to both appenders");
+    XCTAssertEqual(appender1.logMessages[2].message, "[\(LogLevel.Warning)][test.identifier.sublogger] this log should be printed to appender1 too");
 
-    XCTAssertEqual(appender2.logMessages[0], "[test.identifier][\(LogLevel.Error)] this log should be printed to both appenders");
+    XCTAssertEqual(appender2.logMessages[0].message, "[test.identifier][\(LogLevel.Error)] this log should be printed to both appenders");
   }
 
 }

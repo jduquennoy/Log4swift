@@ -89,6 +89,17 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "test %");
   }
   
+  func testFormatterDoesNotReplaceUnknownMarkers() {
+    let formatter = try! PatternFormatter(pattern: "%x %y %z are unknown markers");
+    let info = FormatterInfoDictionary();
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "%x %y %z are unknown markers");
+  }
+  
   func testFormatterWithComplexFormatting() {
     let formatter = try! PatternFormatter(pattern: "[%l][%n] %m");
     let info: FormatterInfoDictionary = [
@@ -103,7 +114,19 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message");
   }
   
-  func testPerformanceExample() {
+  func testFormatterReturnsDashIfDataUnavailableForMarkers() {
+    let formatter = try! PatternFormatter(pattern: "[%l][%n] %m");
+    let info = FormatterInfoDictionary();
+    
+    // Execute
+    let formattedMessage = formatter.format("Log message", info: info);
+    
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "[-][-] Log message");
+  }
+  
+  func testFormatterPerformance() {
     let formatter = try! PatternFormatter(pattern: "[%l][%n][%d] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
@@ -116,5 +139,4 @@ class PatternFormatterTests: XCTestCase {
       }
     }
   }
-  
 }

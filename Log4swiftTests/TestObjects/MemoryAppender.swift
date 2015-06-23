@@ -26,14 +26,14 @@ This test appender will store logs in memory for latter validation.
 */
 class MemoryAppender: Appender {
   
-  var logMessages = [String]();
+  var logMessages = [(message: String, level: LogLevel)]();
   
   init() {
     super.init(identifier: "test.memoryAppender");
   }
   
   override func performLog(log: String, level: LogLevel) {
-    logMessages.append(log);
+    logMessages.append((message: log, level: level));
   }
   
 }
