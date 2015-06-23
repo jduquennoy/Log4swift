@@ -30,34 +30,49 @@ extension Logger {
   
   // MARK: Logging class methods
   
+  /// Logs the provided message with a debug level using the root logger of the shared logger factory
   public class func debug(message: String) {
     LoggerFactory.sharedInstance.rootLogger.debug(message);
   }
+  /// Logs the provided message with a info level using the root logger of the shared logger factory
   public class func info(message: String) {
     LoggerFactory.sharedInstance.rootLogger.info(message);
   }
+  /// Logs the provided message with a warning level using the root logger of the shared logger factory
   public class func warn(message: String) {
     LoggerFactory.sharedInstance.rootLogger.warn(message);
   }
+  /// Logs the provided message with a error level using the root logger of the shared logger factory
   public class func error(message: String) {
     LoggerFactory.sharedInstance.rootLogger.error(message);
   }
+  /// Logs the provided message with a fatal level using the root logger of the shared logger factory
   public class func fatal(message: String) {
     LoggerFactory.sharedInstance.rootLogger.fatal(message);
   }
   
+  /// Logs a the message returned by the closer with a debug level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public class func debug(closure: () -> (String)) {
     LoggerFactory.sharedInstance.rootLogger.debug(closure);
   }
+  /// Logs a the message returned by the closer with an info level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public class func info(closure: () -> (String)) {
     LoggerFactory.sharedInstance.rootLogger.info(closure);
   }
+  /// Logs a the message returned by the closer with a warning level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public class func warn(closure: () -> (String)) {
     LoggerFactory.sharedInstance.rootLogger.warn(closure);
   }
+  /// Logs a the message returned by the closer with an error level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public class func error(closure: () -> (String)) {
     LoggerFactory.sharedInstance.rootLogger.error(closure);
   }
+  /// Logs a the message returned by the closer with a fatal level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public class func fatal(closure: () -> (String)) {
     LoggerFactory.sharedInstance.rootLogger.fatal(closure);
   }

@@ -21,6 +21,9 @@
 
 /**
 Log level defines the importance of the log : is it just a debug log, an informational notice, or an error.
+Order of the levels is :
+
+Debug < Info < Warning < Error < Fatal
 */
 public enum LogLevel: Int, CustomStringConvertible {
   
@@ -30,6 +33,7 @@ public enum LogLevel: Int, CustomStringConvertible {
   case Error = 3
   case Fatal = 4
   
+  /// Returns a human readable representation of the log level.
   public var description : String {
     get {
       switch(self) {

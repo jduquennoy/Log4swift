@@ -28,15 +28,21 @@ public class Logger {
   /// Exemple : product.module.feature
   public let identifier: String;
   
-  /// The threshold under which log messages will be ignored.
+  /// The threshold under which log messages will be ignored.  
+  /// For exemple, if the threshold is Warning:
+  /// * logs issued with a Debug or Info will be ignored
+  /// * logs issued wiht a Warning, Error or Fatal level will be processed
   public var thresholdLevel: LogLevel;
   
+  /// The list of destination appenders for the log messages.
   public var appenders: [Appender];
   
   convenience init() {
     self.init(identifier: "", level: LogLevel.Debug, appenders: Logger.createDefaultAppenders());
   }
   
+  /// Will init a Logger using a dictionary.  
+  /// This initializer is mostly meant to be used to load a configuration from a file.
   public convenience init(configurationDictionary: Dictionary<String, AnyObject>)
   {
     let identifier = "";
@@ -49,6 +55,8 @@ public class Logger {
     self.init(identifier: newIdentifier, level: loggerToCopy.thresholdLevel, appenders: [Appender]() + loggerToCopy.appenders);
   }
   
+  /// Creates a new logger with the given identifier, log level and appenders.
+  /// The identifier will not be modifiable, and should not be an empty string.
   public init(identifier: String, level: LogLevel, appenders: [Appender]) {
     self.identifier = identifier;
     self.thresholdLevel = level;
@@ -57,34 +65,49 @@ public class Logger {
   
   // MARK: Logging methods
   
+  /// Logs the provided message with a debug level
   public func debug(message: String) {
     self.log(message, level: LogLevel.Debug);
   }
+  /// Logs the provided message with an info level
   public func info(message: String) {
     self.log(message, level: LogLevel.Info);
   }
+  /// Logs the provided message with a warning level
   public func warn(message: String) {
     self.log(message, level: LogLevel.Warning);
   }
+  /// Logs the provided message with an error level
   public func error(message: String) {
     self.log(message, level: LogLevel.Error);
   }
+  /// Logs the provided message with a fatal level
   public func fatal(message: String) {
     self.log(message, level: LogLevel.Fatal);
   }
 
+  /// Logs a the message returned by the closer with a debug level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func debug(closure: () -> String) {
     self.log(closure, level: LogLevel.Debug);
   }
+  /// Logs a the message returned by the closer with an info level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func info(closure: () -> String) {
     self.log(closure, level: LogLevel.Info);
   }
+  /// Logs a the message returned by the closer with a warning level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func warn(closure: () -> String) {
     self.log(closure, level: LogLevel.Warning);
   }
+  /// Logs a the message returned by the closer with an error level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func error(closure: () -> String) {
     self.log(closure, level: LogLevel.Error);
   }
+  /// Logs a the message returned by the closer with a fatal level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func fatal(closure: () -> String) {
     self.log(closure, level: LogLevel.Fatal);
   }

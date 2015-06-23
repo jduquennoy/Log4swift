@@ -42,10 +42,12 @@ public class PatternFormatter : Formatter {
   };
   
   typealias FormattingClosure = (message: String, infos: FormatterInfoDictionary) -> String;
-  var formattingClosuresSequence = [FormattingClosure]();
+  private var formattingClosuresSequence = [FormattingClosure]();
 
   typealias MarkerClosure = (parameters: String?, message: String, info: FormatterInfoDictionary) -> String;
-  let markerClosures : Dictionary<String, MarkerClosure> = [
+  /// This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
+  /// Add an entry to this array to declare a new marker.
+  private let markerClosures : Dictionary<String, MarkerClosure> = [
     "d": {(parameters, message, info) in NSDate().description },
     "l": {(parameters, message, info) in
       if let logLevel = info[.LogLevel] {
@@ -64,7 +66,8 @@ public class PatternFormatter : Formatter {
     "m": {(parameters, message, infos) in message },
     "%": {(parameters, message, infos) in return "%" }
   ];
-  
+
+  /// This initialiser will throw an error if the pattern is not valid.
   public init(pattern: String) throws {
     try self.parsePattern(pattern);
   }
@@ -74,6 +77,9 @@ public class PatternFormatter : Formatter {
   }
 
   // MARK: Formater parser state machine
+  // This machine has two main methods :
+  // - parsePattern : the main loop, that iterates on the characters of the pattern
+  // - setParserState : the method that applies the logic when switching from one state to another.
   enum ParserState {
     case Text
     case Marker
@@ -88,7 +94,7 @@ public class PatternFormatter : Formatter {
   
   var parserStatus = ParserStatus();
   
-  
+  /// Converts a textual pattern into a sequence of closure that can be executed to render a messaage.
   private func parsePattern(pattern: String) throws {
     for currentCharacter in pattern.characters
     {

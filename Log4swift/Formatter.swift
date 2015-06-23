@@ -36,5 +36,7 @@ public typealias FormatterInfoDictionary = Dictionary<FormatterInfoKeys, CustomS
 This protocol defines a formatter, that will format log messages on the fly.
 */
 public protocol Formatter {
-   func format(message: String, info: FormatterInfoDictionary) -> String;
+  /// Applies the pattern to the given message.  
+  /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.   
+  func format(message: String, info: FormatterInfoDictionary) -> String;
 }
