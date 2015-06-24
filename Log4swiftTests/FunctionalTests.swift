@@ -28,9 +28,9 @@ class FunctionalTests: XCTestCase {
     try! factory.registerLogger(logger);
     
     // Execute
-    Logger.getLogger("test.identifier").debug("This log should not be printed");
+    Logger.getLogger("test.identifier").debug("This log to \(LogLevel.Debug) should not be printed");
     Logger.getLogger("test.identifier").warn{ return "This log should be printed to appender1 only"}
-    Logger.getLogger("test.identifier").error("this log should be printed to both appenders");
+    Logger.getLogger("test.identifier").fatal("this log should be printed to both appenders");
     Logger.getLogger("test.identifier.sublogger").warn("this log should be printed to appender1 too");
     
     // Validate
@@ -38,10 +38,10 @@ class FunctionalTests: XCTestCase {
     XCTAssertEqual(appender2.logMessages.count, 1, "Appender2 should have received one messages");
     
     XCTAssertEqual(appender1.logMessages[0].message, "[\(LogLevel.Warning)][test.identifier] This log should be printed to appender1 only");
-    XCTAssertEqual(appender1.logMessages[1].message, "[\(LogLevel.Error)][test.identifier] this log should be printed to both appenders");
+    XCTAssertEqual(appender1.logMessages[1].message, "[\(LogLevel.Fatal)][test.identifier] this log should be printed to both appenders");
     XCTAssertEqual(appender1.logMessages[2].message, "[\(LogLevel.Warning)][test.identifier.sublogger] this log should be printed to appender1 too");
 
-    XCTAssertEqual(appender2.logMessages[0].message, "[test.identifier][\(LogLevel.Error)] this log should be printed to both appenders");
+    XCTAssertEqual(appender2.logMessages[0].message, "[test.identifier][\(LogLevel.Fatal)] this log should be printed to both appenders");
   }
 
 }

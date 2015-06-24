@@ -1,10 +1,9 @@
 //
-//  log4swift.h
-//  log4swift
+//  CocoaBrdigingHeader.h
+//  Log4swift
 //
 //  Created by Jérôme Duquennoy on 14/06/2015.
 //  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
-//
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -20,16 +19,10 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-#import <Cocoa/Cocoa.h>
+#ifndef CocoaBrdigingHeader_h
+#define CocoaBrdigingHeader_h
 
-//! Project version number for log4swift.
-FOUNDATION_EXPORT double log4swift2VersionNumber;
+#import "loggerCommong.h"
+#import "LoggerClient.h"
 
-//! Project version string for log4swift.
-FOUNDATION_EXPORT const unsigned char log4swift2VersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <log4swift/PublicHeader.h>
-
-#import <Log4swift/NSLogger.h>
-#import <Log4swift/LoggerClient.h>
-#import <Log4swift/LoggerCommon.h>
+#endif /* CocoaBrdigingHeader_h */

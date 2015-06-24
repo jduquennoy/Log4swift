@@ -24,13 +24,13 @@ extension String {
   /// If the marker is not found, an empty string is returned.
   public func stringByRemovingLastComponentWithDelimiter(delimiter: String) -> String {
     let markerIndex = self.rangeOfString(delimiter, options: NSStringCompareOptions.BackwardsSearch, range: nil);
-    
+    let result: String;
     if let markerIndex = markerIndex {
-      return self.substringToIndex(markerIndex.startIndex);
+      result = self.substringToIndex(markerIndex.startIndex);
     } else {
-      return "";
+      result = "";
     }
-    
+    return result;
   }
 }
 

@@ -77,6 +77,17 @@ class PatternFormatterTests: XCTestCase {
     let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
+
+  func testMarkerParametersAreInterpreted() {
+    let formatter = try! PatternFormatter(pattern: "test %l{param}");
+    let info: FormatterInfoDictionary = [FormatterInfoKeys.LogLevel: LogLevel.Debug];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test \(LogLevel.Debug)");
+  }
   
   func testFormatterAppliesPercentageMarker() {
     let formatter = try! PatternFormatter(pattern: "test %%");
@@ -130,7 +141,7 @@ class PatternFormatterTests: XCTestCase {
     let formatter = try! PatternFormatter(pattern: "[%l][%n][%d] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
-      FormatterInfoKeys.LogLevel: LogLevel.Warning
+      FormatterInfoKeys.LogLevel: LogLevel.Info
     ];
     
     self.measureBlock() {

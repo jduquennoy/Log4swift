@@ -22,6 +22,12 @@
 		02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */; };
 		02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */; };
 		02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */; };
+		02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */; };
+		02F4E86E1B3A0454004AB9EA /* LoggerClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86A1B3A0454004AB9EA /* LoggerClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E86B1B3A0454004AB9EA /* LoggerClient.m */; };
+		02F4E8701B3A0454004AB9EA /* LoggerCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02F4E8711B3A0454004AB9EA /* NSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86D1B3A0454004AB9EA /* NSLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
 		5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */; };
 		5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E01B343A0400453B31 /* FunctionalTests.swift */; };
@@ -59,6 +65,13 @@
 		02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppender.swift; sourceTree = "<group>"; };
 		02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppenderTests.swift; sourceTree = "<group>"; };
 		02D87E431B34BBCC0089A222 /* SoftwareConfiguration-OSX.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "SoftwareConfiguration-OSX.playground"; sourceTree = "<group>"; };
+		02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppender.swift; sourceTree = "<group>"; };
+		02F4E86A1B3A0454004AB9EA /* LoggerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerClient.h; sourceTree = "<group>"; };
+		02F4E86B1B3A0454004AB9EA /* LoggerClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoggerClient.m; sourceTree = "<group>"; };
+		02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerCommon.h; sourceTree = "<group>"; };
+		02F4E86D1B3A0454004AB9EA /* NSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogger.h; sourceTree = "<group>"; };
+		02F4E8721B3A060C004AB9EA /* CocoaBrdigingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaBrdigingHeader.h; sourceTree = "<group>"; };
+		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
 		5ED244E01B343A0400453B31 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
@@ -112,6 +125,7 @@
 		02664C001B2CE96500B695DE = {
 			isa = PBXGroup;
 			children = (
+				02F4E85E1B3A02EC004AB9EA /* Third parties */,
 				02664C0C1B2CE96500B695DE /* Log4swift */,
 				02664C181B2CE96500B695DE /* Log4swiftTests */,
 				0237CF341B2E220F004D5B9F /* Example playgrounds */,
@@ -165,6 +179,7 @@
 				02664C301B2DA6A200B695DE /* Appender.swift */,
 				02664C321B2DA70C00B695DE /* ConsoleAppender.swift */,
 				02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */,
+				02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */,
 			);
 			path = Appenders;
 			sourceTree = "<group>";
@@ -174,8 +189,29 @@
 			children = (
 				02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */,
 				02568DAD1B3631FD00EDDFFE /* ConsoleAppenderTests.swift */,
+				02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */,
 			);
 			path = Appenders;
+			sourceTree = "<group>";
+		};
+		02F4E85E1B3A02EC004AB9EA /* Third parties */ = {
+			isa = PBXGroup;
+			children = (
+				02F4E85F1B3A02F7004AB9EA /* NSLogger */,
+				02F4E8721B3A060C004AB9EA /* CocoaBrdigingHeader.h */,
+			);
+			path = "Third parties";
+			sourceTree = "<group>";
+		};
+		02F4E85F1B3A02F7004AB9EA /* NSLogger */ = {
+			isa = PBXGroup;
+			children = (
+				02F4E86A1B3A0454004AB9EA /* LoggerClient.h */,
+				02F4E86B1B3A0454004AB9EA /* LoggerClient.m */,
+				02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */,
+				02F4E86D1B3A0454004AB9EA /* NSLogger.h */,
+			);
+			path = NSLogger;
 			sourceTree = "<group>";
 		};
 		5E17F3231B3328BA00E262F5 /* Formatters */ = {
@@ -203,6 +239,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				02664C0E1B2CE96500B695DE /* log4swift.h in Headers */,
+				02F4E8711B3A0454004AB9EA /* NSLogger.h in Headers */,
+				02F4E86E1B3A0454004AB9EA /* LoggerClient.h in Headers */,
+				02F4E8701B3A0454004AB9EA /* LoggerCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,10 +342,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */,
 				02664C311B2DA6A200B695DE /* Appender.swift in Sources */,
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
 				5ED244E51B34408600453B31 /* Formatter.swift in Sources */,
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
+				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
 				02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
@@ -321,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
+				02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */,
 				024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */,
 				02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */,
 				5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */,
@@ -443,6 +485,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swift;
 				PRODUCT_NAME = Log4swift;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -465,6 +508,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swift;
 				PRODUCT_NAME = Log4swift;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
