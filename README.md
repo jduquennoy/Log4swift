@@ -4,7 +4,7 @@
              )](https://developer.apple.com/resources/) [![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
              )](https://developer.apple.com/swift) [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
 
-Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7**.
+Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
 
 **Note that is still a work in progress. It is not full featured as of today.**
 
@@ -15,12 +15,15 @@ The goal of this project is to propose a logging library with those caracteristi
 
 * straitforward to use for simple cases : default configuration should just work
 * powerful for more complexe cases, with multi-destination logging for exemple
+* capable to log locally or over the network
 * dynamically configurable by code
 
 ### Not yet achieved goals
 * configurable by file
 * synchronous by default, but with the ability to request asynchronous behavior
 * should be useable on linux once Apple releases Swift for that OS
+
+Another goal, that I think we all share, is to have readable and tested code. Feel free to send feedbacks if you have ideas to highen the quality of that code !
 
 ## Concepts
 The three main concepts of this library are borrowed from log4j :
@@ -80,6 +83,10 @@ By default, the console appender is configured to send Error and Fatal messages 
 
 ### The file appender
 This appender will write log messages to a file, specified by its path. It will create the file if needed (and possible), and will re-create it if it disapears. This allows log rotation scripts to avoid having to restart the process to ensure logs are recorded in a new file after rotation.
+
+### The NSLogger appender
+This appender uses NSLogger (https://github.com/fpillet/NSLogger) to send log messages over the network.
+Not all capabilities of NSLogger are accessibles yet : only text messages can be logged.
 
 ## Provided formatters
 
