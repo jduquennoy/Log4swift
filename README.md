@@ -15,7 +15,7 @@ The goal of this project is to propose a logging library with those caracteristi
 
 * straitforward to use for simple cases : default configuration should just work
 * powerful for more complexe cases, with multi-destination logging for exemple
-* capable to log locally or over the network
+* ability to log over the network, and notably to NSLogger.
 * dynamically configurable by code
 
 ### Not yet achieved goals
