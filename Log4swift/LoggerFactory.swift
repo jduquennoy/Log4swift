@@ -19,9 +19,10 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+/// Errors that can be thrown by logger factory
 public enum LoggerFactoryErrors : ErrorType {
   case InvalidLoggerIdentifier
-};
+}
 
 /**
 The logger factory is responsible for

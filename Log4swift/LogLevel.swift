@@ -50,5 +50,23 @@ public enum LogLevel: Int, CustomStringConvertible {
       }
     }
   }
-  
+}
+
+/// Will convert a string to a log level if possible.  
+/// This method is not case sensitive.
+public func LogLevelFromString(string: String) -> LogLevel? {
+  switch(string.lowercaseString) {
+    case LogLevel.Debug.description.lowercaseString:
+      return .Debug;
+    case LogLevel.Info.description.lowercaseString:
+      return .Info;
+    case LogLevel.Warning.description.lowercaseString:
+      return .Warning;
+    case LogLevel.Error.description.lowercaseString:
+      return .Error;
+    case LogLevel.Fatal.description.lowercaseString:
+      return .Fatal;
+    default:
+      return nil;
+  }
 }

@@ -36,7 +36,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
     do {
-      try PatternFormatter(pattern: "%d{ blablabla");
+      let _ = try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla");
       XCTFail("An error should have been thrown when initting with a pattern that contains an unclosed parameter.");
     } catch {
       // this is expected
@@ -44,7 +44,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterAppliesLogLevelMarker() {
-    let formatter = try! PatternFormatter(pattern: "%l");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%l");
 
     // Execute
     let formattedMessage = formatter.format("", info: [FormatterInfoKeys.LogLevel: LogLevel.Error]);
@@ -54,7 +54,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterAppliesLoggerNameMarker() {
-    let formatter = try! PatternFormatter(pattern: "%n");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n");
     let info: FormatterInfoDictionary = [FormatterInfoKeys.LoggerName: "loggername"];
     
     // Execute
@@ -65,7 +65,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterAppliesDateMarker() {
-    let formatter = try! PatternFormatter(pattern: "%d");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d");
     let info = FormatterInfoDictionary();
     
     // Execute
@@ -79,7 +79,7 @@ class PatternFormatterTests: XCTestCase {
   }
 
   func testMarkerParametersAreInterpreted() {
-    let formatter = try! PatternFormatter(pattern: "test %l{param}");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{param}");
     let info: FormatterInfoDictionary = [FormatterInfoKeys.LogLevel: LogLevel.Debug];
     
     // Execute
@@ -90,7 +90,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterAppliesPercentageMarker() {
-    let formatter = try! PatternFormatter(pattern: "test %%");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%");
     let info = FormatterInfoDictionary();
     
     // Execute
@@ -101,7 +101,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterDoesNotReplaceUnknownMarkers() {
-    let formatter = try! PatternFormatter(pattern: "%x %y %z are unknown markers");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%x %y %z are unknown markers");
     let info = FormatterInfoDictionary();
     
     // Execute
@@ -112,7 +112,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterWithComplexFormatting() {
-    let formatter = try! PatternFormatter(pattern: "[%l][%n] %m");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
       FormatterInfoKeys.LogLevel: LogLevel.Warning
@@ -126,7 +126,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
-    let formatter = try! PatternFormatter(pattern: "[%l][%n] %m");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m");
     let info = FormatterInfoDictionary();
     
     // Execute
@@ -137,8 +137,15 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "[-][-] Log message");
   }
   
+  func testCreatingFormatterFromDictionaryWithNoIdentifierThrowsError() {
+    do {
+      XCTAssertFalse(<#T##expression: BooleanType##BooleanType#>)
+    }
+  }
+
+  
   func testFormatterPerformance() {
-    let formatter = try! PatternFormatter(pattern: "[%l][%n][%d] %m");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m");
     let info: FormatterInfoDictionary = [
       FormatterInfoKeys.LoggerName: "nameOfTheLogger",
       FormatterInfoKeys.LogLevel: LogLevel.Info

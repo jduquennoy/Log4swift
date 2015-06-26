@@ -12,8 +12,8 @@ import XCTest
 class FunctionalTests: XCTestCase {
 
   func testLogToLoggerWithFormatterAndMultipleAppenders() {
-    let formatter1 = try! PatternFormatter(pattern: "[%l][%n] %m");
-    let formatter2 = try! PatternFormatter(pattern: "[%n][%l] %m");
+    let formatter1 = try! PatternFormatter(identifier:"testFormatter1", pattern: "[%l][%n] %m");
+    let formatter2 = try! PatternFormatter(identifier:"testFormatter2", pattern: "[%n][%l] %m");
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
     let logger = Logger(identifier: "test.identifier", level: .Info, appenders: [appender1, appender2]);

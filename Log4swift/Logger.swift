@@ -19,6 +19,17 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+public enum LoggerError : ErrorType {
+  case MissingParameter(parameterName: String)
+};
+
+public enum LoggerDictionaryKey: String {
+  case Identifier = "Identifier"
+  case Level = "Level"
+  case Appenders = "Appenders"
+  case AppenderIds = "AppenderIds"
+};
+
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
@@ -43,10 +54,22 @@ public class Logger {
   
   /// Will init a Logger using a dictionary.  
   /// This initializer is mostly meant to be used to load a configuration from a file.
-  public convenience init(configurationDictionary: Dictionary<String, AnyObject>)
+  public convenience init(configurationDictionary: Dictionary<String, AnyObject>) throws
   {
-    let identifier = "";
-    let level = LogLevel.Debug;
+    let identifier: String;
+    var level: LogLevel = LogLevel.Debug;
+//    var appenders: [Appender] = Logger.createDefaultAppenders();
+    
+    if let safeIdentifier = configurationDictionary[LoggerDictionaryKey.Identifier.rawValue] as? String {
+      identifier = safeIdentifier;
+    } else {
+      throw LoggerError.MissingParameter(parameterName: LoggerDictionaryKey.Identifier.rawValue);
+    }
+    
+    if let safeLevel = LogLevelFromString((configurationDictionary[LoggerDictionaryKey.Level.rawValue] as? String)!) {
+      
+      level = safeLevel;
+    }
     
     self.init(identifier: identifier, level: level, appenders: Logger.createDefaultAppenders());
   }

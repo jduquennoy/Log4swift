@@ -7,9 +7,9 @@ import Log4swift
 
 // Create formatters
 // PatternFormater init can throw an error if the pattern is not valid. Those errors are not handled in that exemple (but it should be in your code ;-) )
-let rootFormatter = try! PatternFormatter(pattern: "[Root formatter][%l] - %m");
-let consoleFormatter = try! PatternFormatter(pattern: "[%n][%l] - %m");
-let errorFileFormatter = try! PatternFormatter(pattern: "[%d][%n] - %m");
+let rootFormatter = try! PatternFormatter(identifier:"rootFormatter", pattern: "[Root formatter][%l] - %m");
+let consoleFormatter = try! PatternFormatter(identifier:"consoleFormatter", pattern: "[%n][%l] - %m");
+let errorFileFormatter = try! PatternFormatter(identifier:"errorFormatter", pattern: "[%d][%n] - %m");
 
 // Create appenders
 let consoleAppender = ConsoleAppender(identifier: "consoleAppender");
