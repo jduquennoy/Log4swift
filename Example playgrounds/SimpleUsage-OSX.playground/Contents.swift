@@ -24,3 +24,7 @@ Logger.info {
 Logger.warn {
   return "This closure will be executed";
 }
+
+let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert",
+  PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"];
+try! PatternFormatter(descriptionDictionary: dictionary);

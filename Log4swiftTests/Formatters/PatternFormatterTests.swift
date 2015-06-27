@@ -35,12 +35,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
-    do {
-      let _ = try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla");
-      XCTFail("An error should have been thrown when initting with a pattern that contains an unclosed parameter.");
-    } catch {
-      // this is expected
-    }
+    XCTAssertThrows({ try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla"); });
   }
   
   func testFormatterAppliesLogLevelMarker() {
