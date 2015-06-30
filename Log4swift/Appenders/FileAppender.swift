@@ -37,7 +37,7 @@ public class FileAppender : Appender {
     self.fileHandler = nil;
     self.filePath = filePath;
 
-    super.init(identifier: identifier);
+    super.init(identifier);
   }
   
   override func performLog(var log: String, level: LogLevel) {

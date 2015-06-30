@@ -31,10 +31,11 @@
 		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
 		5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */; };
+		5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F7691B42C959009395CE /* Bool+utilities.swift */; };
+		5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */; };
 		5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E01B343A0400453B31 /* FunctionalTests.swift */; };
 		5ED244E51B34408600453B31 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E41B34408600453B31 /* Formatter.swift */; };
 		5ED41A671B3D949900C39F6E /* LogLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED41A661B3D949900C39F6E /* LogLevelTests.swift */; };
-		5ED41A691B3DA48D00C39F6E /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED41A681B3DA48D00C39F6E /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,10 +79,11 @@
 		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
+		5E66F7691B42C959009395CE /* Bool+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilities.swift"; sourceTree = "<group>"; };
+		5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilitiesTests.swift"; sourceTree = "<group>"; };
 		5ED244E01B343A0400453B31 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
 		5ED244E41B34408600453B31 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Formatter.swift; path = ../Formatter.swift; sourceTree = "<group>"; };
 		5ED41A661B3D949900C39F6E /* LogLevelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevelTests.swift; sourceTree = "<group>"; };
-		5ED41A681B3DA48D00C39F6E /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				024E2E031B3F41D500457304 /* XCTestCase+noThrow.swift */,
+				5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -124,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				024FD79B1B2DD3FE00A8609C /* String+utilities.swift */,
+				5E66F7691B42C959009395CE /* Bool+utilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -185,7 +189,6 @@
 				5E17F3281B341B4900E262F5 /* Formatters */,
 				5ED244E01B343A0400453B31 /* FunctionalTests.swift */,
 				5ED41A661B3D949900C39F6E /* LogLevelTests.swift */,
-				5ED41A681B3DA48D00C39F6E /* Utilities.swift */,
 			);
 			path = Log4swiftTests;
 			sourceTree = "<group>";
@@ -361,9 +364,9 @@
 			files = (
 				02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */,
 				02664C311B2DA6A200B695DE /* Appender.swift in Sources */,
+				5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */,
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
 				5ED244E51B34408600453B31 /* Formatter.swift in Sources */,
-				5ED41A691B3DA48D00C39F6E /* Utilities.swift in Sources */,
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
 				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
 				02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */,
@@ -383,6 +386,7 @@
 				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
 				02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */,
 				5ED41A671B3D949900C39F6E /* LogLevelTests.swift in Sources */,
+				5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */,
 				024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */,
 				02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */,
 				5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */,

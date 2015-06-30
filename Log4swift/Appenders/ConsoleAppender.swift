@@ -25,7 +25,35 @@ ConsoleAppender will print the log to stdout or stderr depending on thresholds a
 * If both general and error threshold are reached, log will be printed to stderr
 */
 public class ConsoleAppender: Appender {
+  public enum DictionaryKey: String {
+    case ErrorThreshold = "ErrorThreshold"
+  };
+  
   var errorThresholdLevel: LogLevel? = .Error;
+  
+  public override init(_ identifier: String) {
+    super.init(identifier);
+  }
+  
+  public override init(_ dictionary: Dictionary<String, AnyObject>) throws {
+    var errorToThrow: Error? = nil;
+
+    try super.init(dictionary);
+
+    if let safeErrorThresholdString = (dictionary[DictionaryKey.ErrorThreshold.rawValue] as? String) {
+      if let safeErrorThreshold = LogLevelFromString(safeErrorThresholdString) {
+        errorThresholdLevel = safeErrorThreshold;
+      } else {
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ErrorThreshold.rawValue);
+      }
+    } else {
+      errorThresholdLevel = nil;
+    }
+    
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
+  }
   
   override func performLog(log: String, level: LogLevel) {
     var destinationFile = stdout;

@@ -12,7 +12,7 @@ let consoleFormatter = try! PatternFormatter(identifier:"consoleFormatter", patt
 let errorFileFormatter = try! PatternFormatter(identifier:"errorFormatter", pattern: "[%d][%n] - %m");
 
 // Create appenders
-let consoleAppender = ConsoleAppender(identifier: "consoleAppender");
+let consoleAppender = ConsoleAppender("consoleAppender");
 consoleAppender.formatter = consoleFormatter;
 
 let errorFileAppender = FileAppender(identifier: "errorFileAppender", filePath: NSTemporaryDirectory().stringByAppendingPathComponent("log4swiftDemoPlayground-error.log"))

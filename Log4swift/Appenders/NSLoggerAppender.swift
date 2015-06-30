@@ -25,6 +25,14 @@ import Foundation
 The NSLogger appender relies on the NSLogger project (see https://github.com/fpillet/NSLogger) to send log messages over the network.  
 */
 public class NSLoggerAppender : Appender {
+  public enum DictionaryKey: String {
+    case BonjourServiceName = "BonjourServiceName"
+    case UseLocalCache = "UseLocalCacke"
+    case UseSSL = "UseSSL"
+    case RemoteHost = "RemoteHost"
+    case RemotePort = "RemotePort"
+  }
+
   let logger: UnsafeMutablePointer<NSLogger>;
   
   /// This initializer will configure the NSLogger client to send the messages to a specific host, with a specific port.  
@@ -36,7 +44,7 @@ public class NSLoggerAppender : Appender {
   public init(identifier: String, remoteHost: String = "127.0.0.1", remotePort: UInt32 = 50000, useLocalCache: Bool = true, useSSL: Bool = true) {
     self.logger = LoggerGetDefaultLogger();
     LoggerSetDefaultLogger(self.logger);
-    super.init(identifier: identifier);
+    super.init(identifier);
 
     var options = UInt32(0);
     if(useLocalCache) {
@@ -57,7 +65,7 @@ public class NSLoggerAppender : Appender {
   public init(identifier: String, bonjourServiceName: String, useLocalCache: Bool = true, useSSL: Bool = true) {
     self.logger = LoggerGetDefaultLogger();
     LoggerSetDefaultLogger(self.logger);
-    super.init(identifier: identifier);
+    super.init(identifier);
     
     var options = UInt32(kLoggerOption_BrowseBonjour);
     if(useLocalCache) {
@@ -72,6 +80,85 @@ public class NSLoggerAppender : Appender {
     LoggerSetupBonjour(self.logger, nil, bonjourServiceName);
   }
 
+  public convenience override init(_ dictionary: Dictionary<String, AnyObject>) throws {
+    var errorToThrow: Error? = nil;
+    
+    let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil);
+
+    let identifier: String;
+    var threshold = LogLevel.Debug;
+    let useLocalCache: Bool;
+    let useSSL: Bool;
+    
+    if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
+      identifier = safeIdentifier;
+    } else {
+      identifier = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
+    }
+    
+    if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
+      if let safeThreshold = LogLevelFromString(safeThresholdString) {
+        threshold = safeThreshold;
+      } else {
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+      }
+    }
+    
+    if let safeUseLocalCache = (dictionary[DictionaryKey.UseLocalCache.rawValue] as? String) {
+      useLocalCache = Bool(safeUseLocalCache);
+    } else {
+      useLocalCache = true;
+    }
+    
+    if let safeUseSSLString = (dictionary[DictionaryKey.UseSSL.rawValue] as? String) {
+      useSSL = Bool(safeUseSSLString);
+    } else {
+      useSSL = true;
+    }
+    
+    if(bonjourMode) {
+      let serviceName: String;
+
+      if let safeServiceName = (dictionary[DictionaryKey.BonjourServiceName.rawValue] as? String) {
+        serviceName = safeServiceName;
+      } else {
+        serviceName = "placeholder";
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.BonjourServiceName.rawValue)
+      }
+
+      self.init(identifier: identifier, bonjourServiceName: serviceName, useLocalCache: useLocalCache, useSSL: useSSL);
+    } else {
+      let remoteHost: String;
+      let remotePort: UInt32;
+
+      if let safeRemoteHost = (dictionary[DictionaryKey.RemoteHost.rawValue] as? String) {
+        remoteHost = safeRemoteHost;
+      } else {
+        remoteHost = "placeholder";
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.RemoteHost.rawValue);
+      }
+
+      if let safeRemotePortString = (dictionary[DictionaryKey.RemotePort.rawValue] as? String) {
+        if let safeRemotePort = UInt32(safeRemotePortString) {
+          remotePort = safeRemotePort;
+        } else {
+          remotePort = 0;
+          errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.RemotePort.rawValue);
+        }
+      } else {
+        remotePort = 50000;
+      }
+      
+      self.init(identifier: identifier, remoteHost: remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL);
+    }
+    self.thresholdLevel = threshold;
+    
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
+  }
+  
   deinit {
     LoggerStop(nil);
   }

@@ -24,12 +24,45 @@ Appenders are responsible for sending logs to heir destination.
 This class is the base class, from which all appenders should inherit.
 */
 public class Appender {
+  public enum DictionaryKey: String {
+    case Identifier = "Identifier"
+    case Threshold = "Threshold"
+  }
+  
+  public enum Error : ErrorType {
+    // init with directory errors
+    case InvalidOrMissingParameterException(parameterName: String)
+  };
+  
   let identifier: String;
   public var thresholdLevel = LogLevel.Debug;
   public var formatter: Formatter?;
   
-  public init(identifier: String) {
+  init(_ identifier: String) {
     self.identifier = identifier;
+  }
+  
+  init(_ dictionary: Dictionary<String, AnyObject>) throws {
+    var errorToThrow: Error? = nil;
+    
+    if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
+      identifier = safeIdentifier;
+    } else {
+      identifier = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
+    }
+    
+    if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
+      if let safeThreshold = LogLevelFromString(safeThresholdString) {
+        thresholdLevel = safeThreshold;
+      } else {
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+      }
+    }
+    
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
   }
   
   func performLog(log: String, level: LogLevel) {

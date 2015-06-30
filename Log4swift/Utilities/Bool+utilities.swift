@@ -1,8 +1,8 @@
 //
-//  MemoryAppender.swift
+//  Bool.utilities.swift
 //  Log4swift
 //
-//  Created by jerome on 14/06/2015.
+//  Created by Jérôme Duquennoy on 14/06/2015.
 //  Copyright © 2015 jerome. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
@@ -19,21 +19,22 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-@testable import Log4swift
-
 /**
-This test appender will store logs in memory for latter validation.
+Extends Bool to add the ability to initialize with a string value.
 */
-class MemoryAppender: Appender {
-  
-  var logMessages = [(message: String, level: LogLevel)]();
-  
-  init() {
-    super.init("test.memoryAppender");
+extension Bool {
+  /// Returns true if the value is "true" or "yes" (case insensitive compare).  
+  /// This initializer accepts an optional string, and will return false if the optional is not set.
+  public init(_ stringValue: String?) {
+    if let stringValue = stringValue {
+      switch(stringValue.lowercaseString) {
+      case "true", "yes":
+        self = true;
+      default:
+        self = false;
+      }
+    } else {
+      self = false;
+    }
   }
-  
-  override func performLog(log: String, level: LogLevel) {
-    logMessages.append((message: log, level: level));
-  }
-  
 }

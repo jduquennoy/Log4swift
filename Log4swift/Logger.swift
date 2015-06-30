@@ -167,7 +167,7 @@ public class Logger {
   }
 
   private final class func createDefaultAppenders() -> [Appender] {
-    return [ConsoleAppender(identifier: "defaultAppender")];
+    return [ConsoleAppender("defaultAppender")];
   }
   
 }

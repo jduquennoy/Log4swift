@@ -48,7 +48,7 @@ class ConsoleAppenderTests: XCTestCase {
   }
   
   func testConsoleAppenderDefaultErrorThresholdIsError() {
-    let appender = ConsoleAppender(identifier: "appender");
+    let appender = ConsoleAppender("appender");
     
     // Validate
     if let errorThreshold = appender.errorThresholdLevel {
@@ -59,7 +59,7 @@ class ConsoleAppenderTests: XCTestCase {
   }
   
   func testConsoleAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotDefined() {
-    let appender = ConsoleAppender(identifier: "appender");
+    let appender = ConsoleAppender("appender");
     
     // Execute
     appender.log("log value", level: .Info, info: FormatterInfoDictionary());
@@ -71,7 +71,7 @@ class ConsoleAppenderTests: XCTestCase {
   }
   
   func testConsoleAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotReached() {
-    let appender = ConsoleAppender(identifier: "appender");
+    let appender = ConsoleAppender("appender");
     appender.errorThresholdLevel = .Warning;
     
     // Execute
@@ -84,7 +84,7 @@ class ConsoleAppenderTests: XCTestCase {
   }
   
   func testConsoleAppenderWritesLogToStderrWithALineFeedIfErrorThresholdIsReached() {
-    let appender = ConsoleAppender(identifier: "appender");
+    let appender = ConsoleAppender("appender");
     appender.errorThresholdLevel = .Warning;
     
     // Execute
@@ -94,6 +94,70 @@ class ConsoleAppenderTests: XCTestCase {
     if let stderrContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
       XCTAssertEqual(stderrContent, "log value\n");
     }
+  }
+  
+  func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
+    let dictionary = Dictionary<String, AnyObject>();
+    
+    XCTAssertThrows({ try ConsoleAppender(dictionary)});
+  }
+
+  func testCreatingAppenderFromDictionaryWithNoThresholdUsesDebugByDefault() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary);
+    
+    // Validate
+    XCTAssertEqual(appender.thresholdLevel, LogLevel.Debug);
+  }
+
+  func testCreatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      ConsoleAppender.DictionaryKey.Threshold.rawValue: "invalid level"];
+    
+    // Execute & validate
+    XCTAssertThrows({ try ConsoleAppender(dictionary) });
+  }
+  
+  func testCreatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      ConsoleAppender.DictionaryKey.Threshold.rawValue: LogLevel.Info.description];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary);
+    
+    // Validate
+    XCTAssertEqual(appender.thresholdLevel, LogLevel.Info);
+  }
+  
+  func testCreatingAppenderFromDictionaryWithNoErrorThresholdUsesNilErrorThresholdByDefault() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary);
+    
+    // Validate
+    XCTAssert(appender.errorThresholdLevel == nil);
+  }
+  
+  func testCreatingAppenderFromDictionaryWithInvalidErrorThresholdThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: "invalid level"];
+    
+    // Execute & validate
+    XCTAssertThrows({ try ConsoleAppender(dictionary) });
+  }
+  
+  func testCreatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: LogLevel.Info.description];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary);
+    
+    // Validate
+    XCTAssertEqual(appender.errorThresholdLevel!, LogLevel.Info);
   }
   
   private func getFileHandleContentAsString(fileHandle: NSFileHandle) -> String? {

@@ -37,11 +37,11 @@ Available markers are :
 */
 public class PatternFormatter : Formatter {
   /// Definition of errors the PatternFormatter can throw
-  public enum FormatterError : ErrorType {
+  public enum Error : ErrorType {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
     
-    // init with directory error
+    // init with directory errors
     case InvalidOrMissingParameterException(parameterName: DictionaryKey)
   };
   
@@ -65,24 +65,31 @@ public class PatternFormatter : Formatter {
 
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.  
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-  public convenience init(descriptionDictionary: Dictionary<String, AnyObject>) throws {
+  public convenience init(dictionary: Dictionary<String, AnyObject>) throws {
     
     let identifier: String;
     let pattern: String;
+    var errorToThrow: Error?;
     
-    if let safeIdentifier = (descriptionDictionary[DictionaryKey.Identifier.rawValue] as? String) {
+    if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
       identifier = safeIdentifier;
     } else {
-      throw FormatterError.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier)
+      identifier = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier);
     }
     
-    if let safePattern = (descriptionDictionary[DictionaryKey.Pattern.rawValue] as? String) {
+    if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
       pattern = safePattern;
     } else {
-      throw FormatterError.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern)
+      pattern = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern);
     }
 
     try self.init(identifier: identifier, pattern: pattern);
+    
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
   }
   
   public func format(message: String, info: FormatterInfoDictionary) -> String {
@@ -160,7 +167,7 @@ public class PatternFormatter : Formatter {
         case .Parameters:
           parserStatus.charactersAccumulator.append(currentCharacter);
         case .End:
-          throw FormatterError.InvalidFormatSyntax;
+          throw Error.InvalidFormatSyntax;
         }
       }
       try setParserState(.End);
@@ -190,7 +197,7 @@ public class PatternFormatter : Formatter {
       case .Parameters(let markerName):
         switch(newState) {
         case .End:
-          throw FormatterError.NotClosedMarkerParameter;
+          throw Error.NotClosedMarkerParameter;
         default:
           processMarker(markerName);
           parserStatus.charactersAccumulator.removeAll();
