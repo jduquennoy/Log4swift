@@ -223,4 +223,120 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
     XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
   }
+  
+  func testCreateLoggerFromDictionaryWithNoIdentifierThrowsError() {
+    let dictionary = Dictionary<String, AnyObject>();
+    
+    XCTAssertThrows({ try Logger(dictionary, availableAppenders: Array<Appender>()) });
+  }
+  
+  func testCreateLoggerFromDictionaryWithEmptyIdentifierThrowsError() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: ""];
+    
+    XCTAssertThrows({ try Logger(dictionary, availableAppenders: Array<Appender>()) });
+  }
+  
+  func testCreateLoggerFromDictionaryUsesProvidedIdentifier() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger"];    
+    
+    // Execute
+    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertEqual(logger.identifier, "test.logger");
+  }
+  
+  func testCreateLoggerFromDictionaryWithoutLevelUsesDebugAsDefaultValue() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger"];    
+    
+    // Execute
+    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertEqual(logger.thresholdLevel, LogLevel.Debug);
+  }
+  
+  func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+      Logger.DictionaryKey.Level.rawValue: "invalidLevel"];
+    
+    // Execute & Validate
+    XCTAssertThrows({ try Logger(dictionary, availableAppenders: Array<Appender>()) });
+  }
+  
+  func testCreateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+      Logger.DictionaryKey.Level.rawValue: "info"];    
+    
+    // Execute
+    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertEqual(logger.thresholdLevel, LogLevel.Info);
+  }
+
+  func testCreateLoggerFromDictionaryWithoutAppenderUsesOneDefaultAppender() {
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+      Logger.DictionaryKey.Level.rawValue: "info"];
+    
+    // Execute
+    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertEqual(logger.appenders.count, 1);
+    
+  }
+  
+  func testCreateLoggerWithNotAvailableAppenderIdThrowsError() {
+  let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+    Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
+  
+    // Execute
+    XCTAssertThrows({ try Logger(dictionary, availableAppenders: Array<Appender>()) });
+  }
+  
+  func testCreateLoggerWithExistingAppenderIdUsesThem() {
+    let appender1 = ConsoleAppender("id1");
+    let appender2 = ConsoleAppender("id2");
+    
+    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+    Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
+    
+    // Execute
+    let logger = try! Logger(dictionary, availableAppenders: [appender1, appender2]);
+  
+    // Validate
+    XCTAssertEqual(logger.appenders.count, 2);
+    XCTAssertTrue(logger.appenders[0] === appender1);
+    XCTAssertTrue(logger.appenders[1] === appender2);
+  }
+  
+  func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifier() {
+    let appender1 = ConsoleAppender("id1");
+    let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
+    
+    // Execute
+    let logger2 = Logger(loggerToCopy: logger1, newIdentifier: "test.logger2");
+    
+    // Validate
+    XCTAssertEqual(logger2.identifier, "test.logger2");
+    XCTAssertEqual(logger2.thresholdLevel, logger1.thresholdLevel);
+    XCTAssertEqual(logger2.appenders.count, logger1.appenders.count);
+    XCTAssertTrue(logger2.appenders[0] === logger1.appenders[0]);
+  }
+
+  func testCopyInitializerCreatesIndependentLoggers() {
+    let appender1 = ConsoleAppender("id1");
+    let appender2 = ConsoleAppender("id2");
+    let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
+    
+    // Execute
+    let logger2 = Logger(loggerToCopy: logger1, newIdentifier: "test.logger2");
+    
+    // Validate
+    logger2.appenders.removeAll();
+    logger2.appenders.append(appender2);
+    XCTAssertTrue(logger1.appenders[0] === appender1);
+    XCTAssertTrue(logger2.appenders[0] === appender2);
+  }
 }

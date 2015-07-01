@@ -128,6 +128,30 @@ class FileAppenderTests: XCTestCase {
     }
   }
   
+  func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
+    let dictionary = Dictionary<String, AnyObject>();
+    
+    XCTAssertThrows({ try FileAppender(dictionary)});
+  }
+  
+  func testCreatingAppenderFromDictionaryWithNoFilePathThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
+    
+    // Execute & Analyze
+    XCTAssertThrows({ try FileAppender(dictionary) });
+  }
+  
+  func testCreatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"];
+    
+    // Execute
+    let appender = try! FileAppender(dictionary);
+    
+    // Analyze
+    XCTAssertEqual(appender.filePath,  "/log/file/path.log");
+  }
+  
   func testFileAppenderPerformanceWhenFileIsNotDeleted() {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();

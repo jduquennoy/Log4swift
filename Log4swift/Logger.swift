@@ -19,21 +19,21 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-public enum LoggerError : ErrorType {
-  case MissingParameter(parameterName: String)
-};
-
-public enum LoggerDictionaryKey: String {
-  case Identifier = "Identifier"
-  case Level = "Level"
-  case Appenders = "Appenders"
-  case AppenderIds = "AppenderIds"
-};
-
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
 public class Logger {
+  public enum Error : ErrorType {
+    case InvalidOrMissingParameterException(parameterName: String)
+
+  };
+  
+  public enum DictionaryKey: String {
+    case Identifier = "Identifier"
+    case Level = "Level"
+    case AppenderIds = "AppenderIds"
+  }
+  
   
   /// The UTI string that identifies the logger.  
   /// Exemple : product.module.feature
@@ -54,24 +54,49 @@ public class Logger {
   
   /// Will init a Logger using a dictionary.  
   /// This initializer is mostly meant to be used to load a configuration from a file.
-  public convenience init(configurationDictionary: Dictionary<String, AnyObject>) throws
+  public convenience init(_ configurationDictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws
   {
+    var errorToThrow: Error?;
+    
     let identifier: String;
     var level: LogLevel = LogLevel.Debug;
-//    var appenders: [Appender] = Logger.createDefaultAppenders();
+    var appenders: [Appender] = Logger.createDefaultAppenders();
     
-    if let safeIdentifier = configurationDictionary[LoggerDictionaryKey.Identifier.rawValue] as? String {
+    if let safeIdentifier = configurationDictionary[DictionaryKey.Identifier.rawValue] as? String {
+      if(safeIdentifier.isEmpty) {
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
+      }
       identifier = safeIdentifier;
     } else {
-      throw LoggerError.MissingParameter(parameterName: LoggerDictionaryKey.Identifier.rawValue);
+      identifier = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
     }
     
-    if let safeLevel = LogLevelFromString((configurationDictionary[LoggerDictionaryKey.Level.rawValue] as? String)!) {
-      
-      level = safeLevel;
+    if let safeLevelString = configurationDictionary[DictionaryKey.Level.rawValue] as? String {
+      if let safeLevel = LogLevelFromString(safeLevelString) {
+        level = safeLevel;
+      } else {
+        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Level.rawValue);
+      }
     }
     
-    self.init(identifier: identifier, level: level, appenders: Logger.createDefaultAppenders());
+    if let appenderIds = configurationDictionary[DictionaryKey.AppenderIds.rawValue] as? Array<String> {
+      appenders.removeAll();
+      for currentAppenderId in appenderIds {
+        if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
+          appenders.append(foundAppender);
+        } else {
+          errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
+          break;
+        }
+      }
+    }
+    
+    self.init(identifier: identifier, level: level, appenders: appenders);
+    
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
   }
   
   convenience init(loggerToCopy: Logger, newIdentifier: String) {

@@ -30,7 +30,11 @@ This appender will write logs to a file.
 If file does not exist, it will be created on the first log, or re-created if deleted or moved (compatible with log rotate systems).
 */
 public class FileAppender : Appender {
-  private let filePath : String;
+  public enum DictionaryKey: String {
+    case FilePath = "FilePath"
+  };
+  
+  internal let filePath : String;
   private var fileHandler: NSFileHandle?;
 
   public init(identifier: String, filePath: String) {
@@ -38,6 +42,22 @@ public class FileAppender : Appender {
     self.filePath = filePath;
 
     super.init(identifier);
+  }
+  
+  public override init(_ dictionary: Dictionary<String, AnyObject>) throws {
+    var errorToThrow: Error? = nil;
+    if let safeFilePath = (dictionary[DictionaryKey.FilePath.rawValue] as? String) {
+      self.filePath = safeFilePath;
+    } else {
+      self.filePath = "placeholder";
+      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FilePath.rawValue);
+    }
+
+    try super.init(dictionary);
+
+    if let errorToThrow = errorToThrow {
+      throw errorToThrow;
+    }
   }
   
   override func performLog(var log: String, level: LogLevel) {
