@@ -27,6 +27,7 @@ public class Appender {
   public enum DictionaryKey: String {
     case Identifier = "Identifier"
     case Threshold = "Threshold"
+    case FormatterId = "FormatterId"
   }
   
   public enum Error : ErrorType {
@@ -42,7 +43,7 @@ public class Appender {
     self.identifier = identifier;
   }
   
-  init(_ dictionary: Dictionary<String, AnyObject>) throws {
+  init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
     
     if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
@@ -57,6 +58,14 @@ public class Appender {
         thresholdLevel = safeThreshold;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+      }
+    }
+    
+    if let safeFormatterId = (dictionary[DictionaryKey.FormatterId.rawValue] as? String) {
+      if let formatter = availableFormatters.find({ $0.identifier == safeFormatterId }) {
+        self.formatter = formatter;
+      } else {
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FormatterId.rawValue);
       }
     }
     

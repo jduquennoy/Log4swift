@@ -10,7 +10,7 @@ import XCTest
 
 extension XCTestCase {
 
-  func XCTAssertThrows(closure:() throws -> Void, file: String = __FILE__, line: UInt = __LINE__) {
+  func XCTAssertThrows(file: String = __FILE__, line: UInt = __LINE__, _ closure:() throws -> Void) {
     do {
       try closure();
       XCTFail("Closure did not throw an error", file: file, line: line);
@@ -19,7 +19,7 @@ extension XCTestCase {
     }
   }
   
-  func XCTAssertNoThrow<T>(closure:() throws -> T, file: String = __FILE__, line: UInt = __LINE__) -> T? {
+  func XCTAssertNoThrow<T>(file: String = __FILE__, line: UInt = __LINE__, _ closure:() throws -> T) -> T? {
     do {
       return try closure();
     } catch let error {

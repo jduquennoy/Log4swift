@@ -68,14 +68,14 @@ class NSLoggerAppenderTests: XCTestCase {
   }
   
   func testCreatingAppenderFromDictionaryWithNoIdentifierThrowError () {
-    XCTAssertThrows({ try NSLoggerAppender(Dictionary<String, AnyObject>()) });
+    XCTAssertThrows { try NSLoggerAppender(Dictionary<String, AnyObject>(), availableFormatters:[]) };
   }
 
   func testCreatingAppenderFromDictionaryWithIdentifierButNoRemoteHostNorServiceNameThrowsError () {
     let dictionary: Dictionary<String, AnyObject> = [Appender.DictionaryKey.Identifier.rawValue: "identifier"];
     
     // Execute
-    XCTAssertThrows({ try NSLoggerAppender(dictionary) });
+    XCTAssertThrows { try NSLoggerAppender(dictionary, availableFormatters:[]) };
   }
   
   func testCreatingAppenderFromDictionaryWithInvalidThresholdThrowsError () {
@@ -84,7 +84,7 @@ class NSLoggerAppenderTests: XCTestCase {
       Appender.DictionaryKey.Threshold.rawValue: "dummy level"];
     
     // Execute
-    XCTAssertThrows({ try NSLoggerAppender(dictionary) });
+    XCTAssertThrows { try NSLoggerAppender(dictionary, availableFormatters:[]) };
   }
   
   func testCreatingAppenderFromDictionaryWithThresholdUsesIt () {
@@ -93,7 +93,7 @@ class NSLoggerAppenderTests: XCTestCase {
       Appender.DictionaryKey.Threshold.rawValue: "Warning"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Warning);
@@ -104,7 +104,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.logger.memory.port, 50000);
@@ -116,7 +116,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "not a number"];
     
     // Execute & validate
-    XCTAssertThrows({ try NSLoggerAppender(dictionary) });
+    XCTAssertThrows { try NSLoggerAppender(dictionary, availableFormatters:[]) };
   }
   
   func testCreatingAppenderFromDictionaryWithRemoteHostAndPortUsesProvidedValue () {
@@ -125,7 +125,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "1234"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.logger.memory.port, 1234);
@@ -139,7 +139,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.UseSSL.rawValue: "no"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssert((appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) == 0);
@@ -152,7 +152,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.UseLocalCache.rawValue: "no"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssert((appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) == 0);
@@ -163,7 +163,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Debug);
@@ -174,7 +174,7 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.BonjourServiceName.rawValue: "bonjourService"];
     
     // Execute
-    let appender = try! NSLoggerAppender(dictionary);
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.logger.memory.bonjourServiceName.takeUnretainedValue() as String, "bonjourService");
@@ -185,7 +185,27 @@ class NSLoggerAppenderTests: XCTestCase {
       NSLoggerAppender.DictionaryKey.BonjourServiceName.rawValue: 123];
     
     // Execute & validate
-    XCTAssertThrows({ try NSLoggerAppender(dictionary) });
+    XCTAssertThrows { try NSLoggerAppender(dictionary, availableFormatters:[]) };
   }
 
+  func testCreatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
+    
+    XCTAssertThrows { try NSLoggerAppender(dictionary, availableFormatters: []) };
+  }
+  
+  func testCreatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+    let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      Appender.DictionaryKey.FormatterId.rawValue: "formatterId",
+      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"];
+    
+    // Execute
+    let appender = try! NSLoggerAppender(dictionary, availableFormatters: [formatter]);
+    
+    // Validate
+    XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);
+  }
+  
 }

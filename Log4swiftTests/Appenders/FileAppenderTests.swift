@@ -131,14 +131,14 @@ class FileAppenderTests: XCTestCase {
   func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
     let dictionary = Dictionary<String, AnyObject>();
     
-    XCTAssertThrows({ try FileAppender(dictionary)});
+    XCTAssertThrows { try FileAppender(dictionary, availableFormatters:[]) };
   }
   
   func testCreatingAppenderFromDictionaryWithNoFilePathThrowsError() {
     let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
     
     // Execute & Analyze
-    XCTAssertThrows({ try FileAppender(dictionary) });
+    XCTAssertThrows { try FileAppender(dictionary, availableFormatters:[]) };
   }
   
   func testCreatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
@@ -146,10 +146,31 @@ class FileAppenderTests: XCTestCase {
       FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"];
     
     // Execute
-    let appender = try! FileAppender(dictionary);
+    let appender = try! FileAppender(dictionary, availableFormatters:[]);
     
     // Analyze
     XCTAssertEqual(appender.filePath,  "/log/file/path.log");
+  }
+  
+  func testCreatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
+    
+    XCTAssertThrows { try FileAppender(dictionary, availableFormatters: []) };
+  }
+  
+  func testCreatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+    let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary, availableFormatters: [formatter]);
+    
+    // Validate
+    XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);
   }
   
   func testFileAppenderPerformanceWhenFileIsNotDeleted() {

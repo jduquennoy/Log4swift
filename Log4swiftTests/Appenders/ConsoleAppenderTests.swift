@@ -99,14 +99,14 @@ class ConsoleAppenderTests: XCTestCase {
   func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
     let dictionary = Dictionary<String, AnyObject>();
     
-    XCTAssertThrows({ try ConsoleAppender(dictionary)});
+    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
   }
 
   func testCreatingAppenderFromDictionaryWithNoThresholdUsesDebugByDefault() {
     let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary);
+    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Debug);
@@ -117,7 +117,7 @@ class ConsoleAppenderTests: XCTestCase {
       ConsoleAppender.DictionaryKey.Threshold.rawValue: "invalid level"];
     
     // Execute & validate
-    XCTAssertThrows({ try ConsoleAppender(dictionary) });
+    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
   }
   
   func testCreatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
@@ -125,7 +125,7 @@ class ConsoleAppenderTests: XCTestCase {
       ConsoleAppender.DictionaryKey.Threshold.rawValue: LogLevel.Info.description];
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary);
+    let appender = try! ConsoleAppender(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Info);
@@ -135,7 +135,7 @@ class ConsoleAppenderTests: XCTestCase {
     let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary);
+    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
     
     // Validate
     XCTAssert(appender.errorThresholdLevel == nil);
@@ -146,7 +146,7 @@ class ConsoleAppenderTests: XCTestCase {
       ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: "invalid level"];
     
     // Execute & validate
-    XCTAssertThrows({ try ConsoleAppender(dictionary) });
+    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
   }
   
   func testCreatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
@@ -154,10 +154,29 @@ class ConsoleAppenderTests: XCTestCase {
       ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: LogLevel.Info.description];
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary);
+    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
     
     // Validate
     XCTAssertEqual(appender.errorThresholdLevel!, LogLevel.Info);
+  }
+  
+  func testCreatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
+    
+    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
+  }
+  
+  func testCreatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+    let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
+    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+      Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
+    
+    // Execute
+    let appender = try! ConsoleAppender(dictionary, availableFormatters: [formatter]);
+    
+    // Validate
+    XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);
   }
   
   private func getFileHandleContentAsString(fileHandle: NSFileHandle) -> String? {

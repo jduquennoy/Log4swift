@@ -35,7 +35,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
-    XCTAssertThrows({ try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla"); });
+    XCTAssertThrows { try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") };
   }
   
   func testFormatterAppliesLogLevelMarker() {
@@ -134,27 +134,27 @@ class PatternFormatterTests: XCTestCase {
   func testCreatingFormatterFromDictionaryWithNoIdentifierThrowsError() {
     let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "azert"];
     
-    XCTAssertThrows({ try PatternFormatter(dictionary: dictionary)});
+    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
   }
   
   func testCreatingFormatterFromDictionaryWithNoPatternThrowsError() {
     let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert"];
     
-    XCTAssertThrows({ try PatternFormatter(dictionary: dictionary)});
+    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
   }
 
   func testCreatingFormatterFromDictionaryWithInvalidPatternThrowsError() {
     let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert",
       PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"];
     
-    XCTAssertThrows({ try PatternFormatter(dictionary: dictionary)});
+    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
   }
   
   func testCreatingFormatterFromDictionaryWithValidParametersCreatesFormatter() {
     let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert",
       PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"];
 
-    let formatter = XCTAssertNoThrow( { return try PatternFormatter(dictionary: dictionary); } );
+    let formatter = XCTAssertNoThrow { return try PatternFormatter(dictionary: dictionary); };
 
     let formattedMessage = formatter!.format("", info: FormatterInfoDictionary());
     XCTAssertEqual(formatter!.identifier, dictionary[PatternFormatter.DictionaryKey.Identifier.rawValue]!);

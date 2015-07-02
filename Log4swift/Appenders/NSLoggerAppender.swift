@@ -80,13 +80,14 @@ public class NSLoggerAppender : Appender {
     LoggerSetupBonjour(self.logger, nil, bonjourServiceName);
   }
 
-  public convenience override init(_ dictionary: Dictionary<String, AnyObject>) throws {
+  public convenience override init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
     
     let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil);
 
     let identifier: String;
     var threshold = LogLevel.Debug;
+    var formatter: Formatter? = nil;
     let useLocalCache: Bool;
     let useSSL: Bool;
     
@@ -102,6 +103,14 @@ public class NSLoggerAppender : Appender {
         threshold = safeThreshold;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+      }
+    }
+    
+    if let safeFormatterId = (dictionary[DictionaryKey.FormatterId.rawValue] as? String) {
+      if let safeFormatter = availableFormatters.find({ $0.identifier == safeFormatterId }) {
+        formatter = safeFormatter;
+      } else {
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FormatterId.rawValue);
       }
     }
     
@@ -153,7 +162,8 @@ public class NSLoggerAppender : Appender {
       self.init(identifier: identifier, remoteHost: remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL);
     }
     self.thresholdLevel = threshold;
-    
+    self.formatter = formatter;
+
     if let errorToThrow = errorToThrow {
       throw errorToThrow;
     }
