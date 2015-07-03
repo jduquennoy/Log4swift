@@ -80,7 +80,7 @@ public class NSLoggerAppender : Appender {
     LoggerSetupBonjour(self.logger, nil, bonjourServiceName);
   }
 
-  public convenience override init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public convenience required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
     
     let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil);
@@ -99,7 +99,7 @@ public class NSLoggerAppender : Appender {
     }
     
     if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
-      if let safeThreshold = LogLevelFromString(safeThresholdString) {
+      if let safeThreshold = LogLevel(safeThresholdString) {
         threshold = safeThreshold;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);

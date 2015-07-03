@@ -31,6 +31,9 @@
 		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
 		5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */; };
+		5E484E4F1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */; };
+		5E484E511B46843D00CA5C01 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E501B46843D00CA5C01 /* Errors.swift */; };
+		5E484E541B468E6600CA5C01 /* LoggerFactory+loadFromFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */; };
 		5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F7691B42C959009395CE /* Bool+utilities.swift */; };
 		5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */; };
 		5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E01B343A0400453B31 /* FunctionalTests.swift */; };
@@ -81,6 +84,9 @@
 		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
+		5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFile.swift"; sourceTree = "<group>"; };
+		5E484E501B46843D00CA5C01 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFileTests.swift"; sourceTree = "<group>"; };
 		5E66F7691B42C959009395CE /* Bool+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilities.swift"; sourceTree = "<group>"; };
 		5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilitiesTests.swift"; sourceTree = "<group>"; };
 		5ED244E01B343A0400453B31 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
@@ -175,7 +181,9 @@
 				02664C2A1B2D97DE00B695DE /* LogLevel.swift */,
 				02664C241B2CEB2900B695DE /* Logger.swift */,
 				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
+				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
 				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
+				5E484E501B46843D00CA5C01 /* Errors.swift */,
 				02664C2F1B2DA69A00B695DE /* Appenders */,
 				5E17F3231B3328BA00E262F5 /* Formatters */,
 				024FD79A1B2DD3D700A8609C /* Utilities */,
@@ -191,6 +199,7 @@
 				02664C1B1B2CE96500B695DE /* Info.plist */,
 				02664C341B2DB25C00B695DE /* LoggerTests.swift */,
 				02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */,
+				5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */,
 				02B8F6211B30B21B0077A8A6 /* Appenders */,
 				5E17F3281B341B4900E262F5 /* Formatters */,
 				5ED244E01B343A0400453B31 /* FunctionalTests.swift */,
@@ -372,6 +381,7 @@
 				02664C311B2DA6A200B695DE /* Appender.swift in Sources */,
 				5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */,
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
+				5E484E511B46843D00CA5C01 /* Errors.swift in Sources */,
 				5ED244E51B34408600453B31 /* Formatter.swift in Sources */,
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
 				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
@@ -381,6 +391,7 @@
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
 				02664C2B1B2D97DE00B695DE /* LogLevel.swift in Sources */,
 				02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */,
+				5E484E4F1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift in Sources */,
 				5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E484E541B468E6600CA5C01 /* LoggerFactory+loadFromFileTests.swift in Sources */,
 				024E2E051B3F470500457304 /* XCTestCase+noThrow.swift in Sources */,
 				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
 				D9B229E41B443B670001EE9A /* Array+utilitiesTests.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import XCTest
 
-class Array_utilitiesTests: XCTestCase {
+class ArrayUtilitiesTests: XCTestCase {
 
   func testFindReturnsFirstItemMatchingFilter() {
     let var1 = "ping1";

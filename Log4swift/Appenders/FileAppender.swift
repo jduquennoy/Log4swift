@@ -44,7 +44,7 @@ public class FileAppender : Appender {
     super.init(identifier);
   }
   
-  public override init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
     if let safeFilePath = (dictionary[DictionaryKey.FilePath.rawValue] as? String) {
       self.filePath = safeFilePath;

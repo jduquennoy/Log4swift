@@ -38,13 +38,7 @@ public class LoggerFactory {
   private var loggers = Dictionary<String, Logger>();
   
   // MARK: Configuration
-  
-  /// Reads a whole configuration from the given dictionary.  
-  /// **Warning:** This will destroy all current loggers and appenders, replacing them by those found in that configuration.
-  public func readConfiguration(configurationDictionary: Dictionary<String, AnyObject>) {
-    // TODO
-  }
-  
+
   /// Adds the given logger to the list of available loggers. If a logger with the same identifier already exists, it will be replaced by the new one.  
   /// Adding a logger with an empty identifier will cause an error. Use the root logger instead of defining a logger with an empty identifier.
   public func registerLogger(newLogger: Logger) throws {
@@ -82,4 +76,5 @@ public class LoggerFactory {
     
     return foundLogger;
   }
+  
 }

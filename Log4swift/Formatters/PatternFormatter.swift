@@ -40,9 +40,6 @@ public class PatternFormatter : Formatter {
   public enum Error : ErrorType {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
-    
-    // init with directory errors
-    case InvalidOrMissingParameterException(parameterName: DictionaryKey)
   };
   
   /// Definition of the keys that will be used when initializing a PatternFormatter with a dictionary.
@@ -65,24 +62,24 @@ public class PatternFormatter : Formatter {
 
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.  
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-  public convenience init(dictionary: Dictionary<String, AnyObject>) throws {
+  public convenience required init(dictionary: Dictionary<String, AnyObject>) throws {
     
     let identifier: String;
     let pattern: String;
-    var errorToThrow: Error?;
+    var errorToThrow: ErrorType?;
     
     if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
       identifier = safeIdentifier;
     } else {
       identifier = "placeholder";
-      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier);
+      errorToThrow = Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
     }
     
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
       pattern = safePattern;
     } else {
       pattern = "placeholder";
-      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern);
+      errorToThrow = Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern.rawValue);
     }
 
     try self.init(identifier: identifier, pattern: pattern);

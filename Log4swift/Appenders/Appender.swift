@@ -30,11 +30,6 @@ public class Appender {
     case FormatterId = "FormatterId"
   }
   
-  public enum Error : ErrorType {
-    // init with directory errors
-    case InvalidOrMissingParameterException(parameterName: String)
-  };
-  
   let identifier: String;
   public var thresholdLevel = LogLevel.Debug;
   public var formatter: Formatter?;
@@ -43,7 +38,7 @@ public class Appender {
     self.identifier = identifier;
   }
   
-  init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  required public init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
     
     if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
@@ -54,7 +49,7 @@ public class Appender {
     }
     
     if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
-      if let safeThreshold = LogLevelFromString(safeThresholdString) {
+      if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);

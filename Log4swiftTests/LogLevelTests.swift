@@ -12,25 +12,25 @@ import Log4swift
 class LogLevelTests: XCTestCase {
 
   func testLogLevelFromStringConvertsInvalidValuesToNil() {
-    let parsedLevel = LogLevelFromString("value that does not exist");
+    let parsedLevel = LogLevel("value that does not exist");
     
     XCTAssertTrue(parsedLevel == nil);
   }
   
   func testLogLevelFromStringIsCaseInsensitive() {
-    let parsedLevel1 = LogLevelFromString("debug");
-    let parsedLevel2 = LogLevelFromString("DEBUg");
+    let parsedLevel1 = LogLevel("debug");
+    let parsedLevel2 = LogLevel("DEBUg");
     
     XCTAssertEqual(parsedLevel1!, LogLevel.Debug);
     XCTAssertEqual(parsedLevel2!, LogLevel.Debug);
   }
   
   func testLogLevelFromStringCanConvertAllLogLevels() {
-    let parsedDebug = LogLevelFromString("debug");
-    let parsedInfo = LogLevelFromString("info");
-    let parsedWarning = LogLevelFromString("warning");
-    let parsedError = LogLevelFromString("error");
-    let parsedFatal = LogLevelFromString("fatal");
+    let parsedDebug = LogLevel("debug");
+    let parsedInfo = LogLevel("info");
+    let parsedWarning = LogLevel("warning");
+    let parsedError = LogLevel("error");
+    let parsedFatal = LogLevel("fatal");
     
     XCTAssertEqual(parsedDebug!, LogLevel.Debug);
     XCTAssertEqual(parsedInfo!, LogLevel.Info);

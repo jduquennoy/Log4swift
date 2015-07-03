@@ -1,8 +1,8 @@
 //
-//  MemoryAppender.swift
+//  Errors.swift
 //  Log4swift
 //
-//  Created by jerome on 14/06/2015.
+//  Created by Jérôme Duquennoy on 03/07/2015.
 //  Copyright © 2015 jerome. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
@@ -19,25 +19,7 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-@testable import Log4swift
+public enum Error : ErrorType {
+  case InvalidOrMissingParameterException(parameterName: String)
+};
 
-/**
-This test appender will store logs in memory for latter validation.
-*/
-class MemoryAppender: Appender {
-  
-  var logMessages = [(message: String, level: LogLevel)]();
-  
-  init() {
-    super.init("test.memoryAppender");
-  }
-
-  required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    try super.init(dictionary, availableFormatters: availableFormatters);
-  }
-  
-  override func performLog(log: String, level: LogLevel) {
-    logMessages.append((message: log, level: level));
-  }
-  
-}

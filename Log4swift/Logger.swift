@@ -23,11 +23,6 @@
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
 public class Logger {
-  public enum Error : ErrorType {
-    case InvalidOrMissingParameterException(parameterName: String)
-
-  };
-  
   public enum DictionaryKey: String {
     case Identifier = "Identifier"
     case Level = "Level"
@@ -73,7 +68,7 @@ public class Logger {
     }
     
     if let safeLevelString = configurationDictionary[DictionaryKey.Level.rawValue] as? String {
-      if let safeLevel = LogLevelFromString(safeLevelString) {
+      if let safeLevel = LogLevel(safeLevelString) {
         level = safeLevel;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Level.rawValue);

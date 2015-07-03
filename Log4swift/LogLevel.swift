@@ -33,6 +33,25 @@ public enum LogLevel: Int, CustomStringConvertible {
   case Error = 3
   case Fatal = 4
   
+  /// Converts a string to a log level if possible.
+  /// This initializer is not case sensitive
+  public init?(_ stringValue: String) {
+    switch(stringValue.lowercaseString) {
+    case LogLevel.Debug.description.lowercaseString:
+      self = .Debug;
+    case LogLevel.Info.description.lowercaseString:
+      self = .Info;
+    case LogLevel.Warning.description.lowercaseString:
+      self = .Warning;
+    case LogLevel.Error.description.lowercaseString:
+      self = .Error;
+    case LogLevel.Fatal.description.lowercaseString:
+      self = .Fatal;
+    default:
+      return nil;
+    }
+  }
+  
   /// Returns a human readable representation of the log level.
   public var description : String {
     get {
@@ -49,24 +68,5 @@ public enum LogLevel: Int, CustomStringConvertible {
         return "Fatal";
       }
     }
-  }
-}
-
-/// Will convert a string to a log level if possible.  
-/// This method is not case sensitive.
-public func LogLevelFromString(string: String) -> LogLevel? {
-  switch(string.lowercaseString) {
-    case LogLevel.Debug.description.lowercaseString:
-      return .Debug;
-    case LogLevel.Info.description.lowercaseString:
-      return .Info;
-    case LogLevel.Warning.description.lowercaseString:
-      return .Warning;
-    case LogLevel.Error.description.lowercaseString:
-      return .Error;
-    case LogLevel.Fatal.description.lowercaseString:
-      return .Fatal;
-    default:
-      return nil;
   }
 }

@@ -35,13 +35,13 @@ public class ConsoleAppender: Appender {
     super.init(identifier);
   }
   
-  public override init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     var errorToThrow: Error? = nil;
 
     try super.init(dictionary, availableFormatters: availableFormatters);
 
     if let safeErrorThresholdString = (dictionary[DictionaryKey.ErrorThreshold.rawValue] as? String) {
-      if let safeErrorThreshold = LogLevelFromString(safeErrorThresholdString) {
+      if let safeErrorThreshold = LogLevel(safeErrorThresholdString) {
         errorThresholdLevel = safeErrorThreshold;
       } else {
         errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ErrorThreshold.rawValue);
