@@ -21,10 +21,6 @@
 
 import Foundation
 
-enum FileAppenderError : ErrorType {
-  case FilePathError
-}
-
 /**
 This appender will write logs to a file.
 If file does not exist, it will be created on the first log, or re-created if deleted or moved (compatible with log rotate systems).
