@@ -25,7 +25,6 @@ This class is the base class, from which all appenders should inherit.
 */
 public class Appender {
   public enum DictionaryKey: String {
-    case Identifier = "Identifier"
     case Threshold = "Threshold"
     case FormatterId = "FormatterId"
   }
@@ -34,25 +33,16 @@ public class Appender {
   public var thresholdLevel = LogLevel.Debug;
   public var formatter: Formatter?;
   
-  init(_ identifier: String) {
+  public required init(_ identifier: String) {
     self.identifier = identifier;
   }
   
-  required public init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    var errorToThrow: Error? = nil;
-    
-    if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
-      identifier = safeIdentifier;
-    } else {
-      identifier = "placeholder";
-      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
-    }
-    
-    if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
+  internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+     if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
       if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold;
       } else {
-        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
       }
     }
     
@@ -62,10 +52,6 @@ public class Appender {
       } else {
         throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FormatterId.rawValue);
       }
-    }
-    
-    if let errorToThrow = errorToThrow {
-      throw errorToThrow;
     }
   }
   

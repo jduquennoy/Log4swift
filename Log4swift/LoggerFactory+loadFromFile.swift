@@ -28,8 +28,17 @@ extension LoggerFactory {
     case Appenders = "Appenders"
     case Loggers = "Loggers"
     case RootLogger = "RootLogger"
+    case Identifier = "Identifier"
   };
-    
+  
+  public func readConfigurationFromPlistFile(filePath: String) throws {
+    let configurationNSDictionary = NSDictionary(contentsOfFile: filePath);
+    if let configurationNSDictionary = configurationNSDictionary {
+      let configurationDictionary = configurationNSDictionary as! Dictionary<String, AnyObject>
+      try self.readConfiguration(configurationDictionary);
+    }
+  }
+  
   /// Reads a whole configuration from the given dictionary.  
   /// **Warning:** This will destroy all current loggers and appenders, replacing them by those found in that configuration.
   public func readConfiguration(configurationDictionary: Dictionary<String, AnyObject>) throws -> (Array<Formatter>, Array<Appender>, Array<Logger>) {
@@ -56,20 +65,23 @@ extension LoggerFactory {
     // Loggers
     if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, AnyObject>> {
       for currentLoggerDefinition in loggersArray {
-        let logger = try processLoggerDictionary(currentLoggerDefinition, appenders: appenders);
-        loggers.append(logger);
+        if let logger = try processLoggerDictionary(currentLoggerDefinition, appenders: appenders) {
+          loggers.append(logger);
+          try registerLogger(logger);
+        }
       }
     }
-    
     
     return (formatters, appenders, loggers);
   }
   
   private func processFormatterDictionary(dictionary: Dictionary<String, AnyObject>) throws -> Formatter {
+    let identifier = try identifierFromConfigurationDictionary(dictionary);
     let formatter: Formatter;
     if let className = dictionary[DictionaryKey.ClassName.rawValue] as? String {
       if let formatterType = formatterForClassName(className) {
-        formatter = try formatterType.init(dictionary: dictionary);
+        formatter = formatterType.init(identifier);
+        try formatter.updateWithDictionary(dictionary);
       } else {
         throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ClassName.rawValue)
       }
@@ -92,10 +104,12 @@ extension LoggerFactory {
   }
 
   private func processAppenderDictionary(dictionary: Dictionary<String, AnyObject>, formatters: Array<Formatter>) throws -> Appender {
+    let identifier = try identifierFromConfigurationDictionary(dictionary);
     let appender: Appender;
     if let className = dictionary[DictionaryKey.ClassName.rawValue] as? String {
       if let appenderType = appenderForClassName(className) {
-        appender = try appenderType.init(dictionary, availableFormatters: formatters);
+        appender = appenderType.init(identifier);
+        try appender.updateWithDictionary(dictionary, availableFormatters: formatters);
       } else {
         throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ClassName.rawValue)
       }
@@ -121,11 +135,32 @@ extension LoggerFactory {
     return type;
   }
 
-  private func processLoggerDictionary(dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger {
+  private func processLoggerDictionary(dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger? {
+    let identifier = try identifierFromConfigurationDictionary(dictionary);
     let logger: Logger;
+    
+    if let existingLogger = loggers[identifier] {
+      logger = existingLogger;
+    } else {
+      logger = Logger(identifier: identifier);
+    }
 
-    logger = try Logger(dictionary, availableAppenders: appenders);
+    try logger.updateWithDictionary(dictionary, availableAppenders: appenders);
     
     return logger;
+  }
+  
+  private func identifierFromConfigurationDictionary(configurationDictionary: Dictionary<String, AnyObject>) throws -> String {
+    let identifier: String;
+    if let safeIdentifier = configurationDictionary[DictionaryKey.Identifier.rawValue] as? String {
+      if(safeIdentifier.isEmpty) {
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
+      }
+      identifier = safeIdentifier;
+    } else {
+      throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
+    }
+    
+    return identifier
   }
 }

@@ -32,8 +32,8 @@ class MemoryAppender: Appender {
     super.init("test.memoryAppender");
   }
 
-  required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    try super.init(dictionary, availableFormatters: availableFormatters);
+  required init(_ identifier: String) {
+    super.init(identifier);
   }
   
   override func performLog(log: String, level: LogLevel) {

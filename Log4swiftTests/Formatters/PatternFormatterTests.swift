@@ -121,7 +121,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m");
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n] %m");
     let info = FormatterInfoDictionary();
     
     // Execute
@@ -131,33 +131,27 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "[-][-] Log message");
   }
   
-  func testCreatingFormatterFromDictionaryWithNoIdentifierThrowsError() {
-    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "azert"];
+  func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {
+    let dictionary = Dictionary<String, AnyObject>();
+    let formatter = PatternFormatter("testFormatter");
     
-    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
+    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) };
+  }
+
+  func testUpdatingFormatterFromDictionaryWithInvalidPatternThrowsError() {
+    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"];
+    let formatter = PatternFormatter("testFormatter");
+    
+    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) };
   }
   
-  func testCreatingFormatterFromDictionaryWithNoPatternThrowsError() {
-    let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert"];
-    
-    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
-  }
+  func testUpdatingFormatterFromDictionaryWithValidParametersCreatesFormatter() {
+    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"];
+    let formatter = PatternFormatter("testFormatter");
 
-  func testCreatingFormatterFromDictionaryWithInvalidPatternThrowsError() {
-    let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert",
-      PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"];
-    
-    XCTAssertThrows { try PatternFormatter(dictionary: dictionary) };
-  }
-  
-  func testCreatingFormatterFromDictionaryWithValidParametersCreatesFormatter() {
-    let dictionary = [PatternFormatter.DictionaryKey.Identifier.rawValue: "azert",
-      PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"];
+    XCTAssertNoThrow { try formatter.updateWithDictionary(dictionary); };
 
-    let formatter = XCTAssertNoThrow { return try PatternFormatter(dictionary: dictionary); };
-
-    let formattedMessage = formatter!.format("", info: FormatterInfoDictionary());
-    XCTAssertEqual(formatter!.identifier, dictionary[PatternFormatter.DictionaryKey.Identifier.rawValue]!);
+    let formattedMessage = formatter.format("", info: FormatterInfoDictionary());
     XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!);
   }
   

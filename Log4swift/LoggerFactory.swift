@@ -35,7 +35,7 @@ public class LoggerFactory {
   
   /// The root logger is the catchall logger used when no other logger matches. It is the only non-optional logger of the factory.
   public let rootLogger = Logger();
-  private var loggers = Dictionary<String, Logger>();
+  internal var loggers = Dictionary<String, Logger>();
   
   // MARK: Configuration
 

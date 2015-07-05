@@ -224,91 +224,72 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
   }
   
-  func testCreateLoggerFromDictionaryWithNoIdentifierThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>();
-    
-    XCTAssertThrows { try Logger(dictionary, availableAppenders: Array<Appender>()) };
-  }
-  
-  func testCreateLoggerFromDictionaryWithEmptyIdentifierThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: ""];
-    
-    XCTAssertThrows { try Logger(dictionary, availableAppenders: Array<Appender>()) };
-  }
-  
-  func testCreateLoggerFromDictionaryUsesProvidedIdentifier() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger"];    
-    
-    // Execute
-    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
-    
-    // Validate
-    XCTAssertEqual(logger.identifier, "test.logger");
-  }
-  
-  func testCreateLoggerFromDictionaryWithoutLevelUsesDebugAsDefaultValue() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger"];    
-    
-    // Execute
-    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
-    
-    // Validate
-    XCTAssertEqual(logger.thresholdLevel, LogLevel.Debug);
-  }
-  
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.Level.rawValue: "invalidLevel"];
+
+    let logger = Logger(identifier: "testLogger");
     
     // Execute & Validate
-    XCTAssertThrows { try Logger(dictionary, availableAppenders: Array<Appender>()) };
+    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: []) };
   }
   
-  func testCreateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+  func testUpdateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.Level.rawValue: "info"];    
     
+    let logger = Logger(identifier: "testLogger");
+    
     // Execute
-    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>());
     
     // Validate
     XCTAssertEqual(logger.thresholdLevel, LogLevel.Info);
   }
 
-  func testCreateLoggerFromDictionaryWithoutAppenderUsesOneDefaultAppender() {
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+  func testUpdateLoggerFromDictionaryWithoutAppenderRemovesExistingOnes() {
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.Level.rawValue: "info"];
     
+    let logger = Logger(identifier: "testLogger");
+    logger.appenders.append(MemoryAppender());
+    logger.appenders.append(MemoryAppender());
+
     // Execute
-    let logger = try! Logger(dictionary, availableAppenders: Array<Appender>());
+    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>());
     
     // Validate
-    XCTAssertEqual(logger.appenders.count, 1);
+    XCTAssertEqual(logger.appenders.count, 0);
     
   }
   
-  func testCreateLoggerWithNotAvailableAppenderIdThrowsError() {
-  let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+  func testUpdateLoggerWithNotAvailableAppenderIdThrowsError() {
+  let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
   
+    let logger = Logger(identifier: "testLogger");
+    
     // Execute
-    XCTAssertThrows { try Logger(dictionary, availableAppenders: Array<Appender>()) };
+    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>()) };
   }
   
-  func testCreateLoggerWithExistingAppenderIdUsesThem() {
+  func testUpdateLoggerWithExistingAppenderIdUsesThem() {
     let appender1 = ConsoleAppender("id1");
     let appender2 = ConsoleAppender("id2");
     
-    let dictionary: Dictionary<String, AnyObject> = [Logger.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
     
+    let logger = Logger(identifier: "testLogger");
+    logger.appenders.append(ConsoleAppender("appenderThatShouldBeRemoved"));
+    
     // Execute
-    let logger = try! Logger(dictionary, availableAppenders: [appender1, appender2]);
+    try! logger.updateWithDictionary(dictionary, availableAppenders: [appender1, appender2]);
   
     // Validate
     XCTAssertEqual(logger.appenders.count, 2);
     XCTAssertTrue(logger.appenders[0] === appender1);
-    XCTAssertTrue(logger.appenders[1] === appender2);
+    XCTAssertTrue(logger .appenders[1] === appender2);
   }
   
   func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifier() {

@@ -44,7 +44,6 @@ public class PatternFormatter : Formatter {
   
   /// Definition of the keys that will be used when initializing a PatternFormatter with a dictionary.
   public enum DictionaryKey: String {
-    case Identifier = "Identifier"
     case Pattern = "Pattern"
   };
   
@@ -60,32 +59,18 @@ public class PatternFormatter : Formatter {
     self.formattingClosuresSequence = try parser.parsePattern(pattern);
   }
 
+  public required convenience init(_ identifier: String) {
+    try! self.init(identifier: identifier, pattern: "");
+  }
+  
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.  
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-  public convenience required init(dictionary: Dictionary<String, AnyObject>) throws {
-    
-    let identifier: String;
-    let pattern: String;
-    var errorToThrow: ErrorType?;
-    
-    if let safeIdentifier = (dictionary[DictionaryKey.Identifier.rawValue] as? String) {
-      identifier = safeIdentifier;
-    } else {
-      identifier = "placeholder";
-      errorToThrow = Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
-    }
-    
+  public func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
-      pattern = safePattern;
+      let parser = PatternParser();
+      self.formattingClosuresSequence = try parser.parsePattern(safePattern);
     } else {
-      pattern = "placeholder";
-      errorToThrow = Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern.rawValue);
-    }
-
-    try self.init(identifier: identifier, pattern: pattern);
-    
-    if let errorToThrow = errorToThrow {
-      throw errorToThrow;
+      throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern.rawValue);
     }
   }
   

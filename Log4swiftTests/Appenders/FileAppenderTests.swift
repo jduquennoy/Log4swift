@@ -128,46 +128,48 @@ class FileAppenderTests: XCTestCase {
     }
   }
   
-  func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
+  func testUpdatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
     let dictionary = Dictionary<String, AnyObject>();
+    let appender = FileAppender("testAppender");
     
-    XCTAssertThrows { try FileAppender(dictionary, availableFormatters:[]) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
   }
   
-  func testCreatingAppenderFromDictionaryWithNoFilePathThrowsError() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
+  func testUpdatingAppenderFromDictionaryWithNoFilePathThrowsError() {
+    let dictionary = Dictionary<String, AnyObject>();
+    let appender = FileAppender("testAppender");
     
     // Execute & Analyze
-    XCTAssertThrows { try FileAppender(dictionary, availableFormatters:[]) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
   }
   
-  func testCreatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
-      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"];
+  func testUpdatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
+    let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"];
+    let appender = FileAppender("testAppender");
     
     // Execute
-    let appender = try! FileAppender(dictionary, availableFormatters:[]);
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
     
     // Analyze
     XCTAssertEqual(appender.filePath,  "/log/file/path.log");
   }
   
-  func testCreatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
-      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+  func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+    let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
+    let appender = FileAppender("testAppender");
     
-    XCTAssertThrows { try FileAppender(dictionary, availableFormatters: []) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
   
-  func testCreatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+  func testUpdatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
     let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
-      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+    let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
       Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
+    let appender = FileAppender("testAppender");
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters: [formatter]);
+    try! appender.updateWithDictionary(dictionary, availableFormatters: [formatter]);
     
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);

@@ -24,7 +24,6 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 */
 public class Logger {
   public enum DictionaryKey: String {
-    case Identifier = "Identifier"
     case Level = "Level"
     case AppenderIds = "AppenderIds"
   }
@@ -44,54 +43,7 @@ public class Logger {
   public var appenders: [Appender];
   
   convenience init() {
-    self.init(identifier: "", level: LogLevel.Debug, appenders: Logger.createDefaultAppenders());
-  }
-  
-  /// Will init a Logger using a dictionary.  
-  /// This initializer is mostly meant to be used to load a configuration from a file.
-  public convenience init(_ configurationDictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws
-  {
-    var errorToThrow: Error?;
-    
-    let identifier: String;
-    var level: LogLevel = LogLevel.Debug;
-    var appenders: [Appender] = Logger.createDefaultAppenders();
-    
-    if let safeIdentifier = configurationDictionary[DictionaryKey.Identifier.rawValue] as? String {
-      if(safeIdentifier.isEmpty) {
-        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
-      }
-      identifier = safeIdentifier;
-    } else {
-      identifier = "placeholder";
-      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Identifier.rawValue);
-    }
-    
-    if let safeLevelString = configurationDictionary[DictionaryKey.Level.rawValue] as? String {
-      if let safeLevel = LogLevel(safeLevelString) {
-        level = safeLevel;
-      } else {
-        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Level.rawValue);
-      }
-    }
-    
-    if let appenderIds = configurationDictionary[DictionaryKey.AppenderIds.rawValue] as? Array<String> {
-      appenders.removeAll();
-      for currentAppenderId in appenderIds {
-        if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
-          appenders.append(foundAppender);
-        } else {
-          errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
-          break;
-        }
-      }
-    }
-    
-    self.init(identifier: identifier, level: level, appenders: appenders);
-    
-    if let errorToThrow = errorToThrow {
-      throw errorToThrow;
-    }
+    self.init(identifier: "", appenders: Logger.createDefaultAppenders());
   }
   
   convenience init(loggerToCopy: Logger, newIdentifier: String) {
@@ -100,10 +52,34 @@ public class Logger {
   
   /// Creates a new logger with the given identifier, log level and appenders.
   /// The identifier will not be modifiable, and should not be an empty string.
-  public init(identifier: String, level: LogLevel, appenders: [Appender]) {
+  public init(identifier: String, level: LogLevel = LogLevel.Debug, appenders: [Appender] = []) {
     self.identifier = identifier;
     self.thresholdLevel = level;
     self.appenders = appenders;
+  }
+  
+  /// Updates the logger with the content of the configuration dictionary.
+  internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws {
+    
+    if let safeLevelString = dictionary[DictionaryKey.Level.rawValue] as? String {
+      if let safeLevel = LogLevel(safeLevelString) {
+        self.thresholdLevel = safeLevel;
+      } else {
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Level.rawValue);
+      }
+    }
+    
+    self.appenders.removeAll();
+    if let appenderIds = dictionary[DictionaryKey.AppenderIds.rawValue] as? Array<String> {
+      appenders.removeAll();
+      for currentAppenderId in appenderIds {
+        if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
+          appenders.append(foundAppender);
+        } else {
+          throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
+        }
+      }
+    }
   }
   
   // MARK: Logging methods
@@ -128,7 +104,7 @@ public class Logger {
   public func fatal(message: String) {
     self.log(message, level: LogLevel.Fatal);
   }
-
+  
   /// Logs a the message returned by the closer with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   public func debug(closure: () -> String) {
@@ -154,7 +130,7 @@ public class Logger {
   public func fatal(closure: () -> String) {
     self.log(closure, level: LogLevel.Fatal);
   }
-
+  
   private func willIssueLogForLevel(level: LogLevel) -> Bool {
     return level.rawValue >= self.thresholdLevel.rawValue && self.appenders.reduce(false) { (shouldLog, currentAppender) in
       shouldLog || level.rawValue >= currentAppender.thresholdLevel.rawValue
@@ -172,7 +148,7 @@ public class Logger {
       }
     }
   }
-
+  
   private func log(closure: () -> (String), level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
       let logMessage = closure();
@@ -185,7 +161,7 @@ public class Logger {
       }
     }
   }
-
+  
   private final class func createDefaultAppenders() -> [Appender] {
     return [ConsoleAppender("defaultAppender")];
   }

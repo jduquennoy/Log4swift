@@ -34,7 +34,14 @@ public class FileAppender : Appender {
     case FilePath = "FilePath"
   };
   
-  internal let filePath : String;
+  internal var filePath : String {
+    willSet {
+      if let safeHandler = self.fileHandler {
+        safeHandler.closeFile();
+        self.fileHandler = nil;
+      }
+    }
+  };
   private var fileHandler: NSFileHandle?;
 
   public init(identifier: String, filePath: String) {
@@ -43,20 +50,19 @@ public class FileAppender : Appender {
 
     super.init(identifier);
   }
+
+  public required convenience init(_ identifier: String) {
+    self.init(identifier: identifier, filePath: "/dev/null");
+  }
   
-  public required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    var errorToThrow: Error? = nil;
+  public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
+    
     if let safeFilePath = (dictionary[DictionaryKey.FilePath.rawValue] as? String) {
       self.filePath = safeFilePath;
     } else {
       self.filePath = "placeholder";
-      errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FilePath.rawValue);
-    }
-
-    try super.init(dictionary, availableFormatters: availableFormatters);
-
-    if let errorToThrow = errorToThrow {
-      throw errorToThrow;
+      throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FilePath.rawValue);
     }
   }
   

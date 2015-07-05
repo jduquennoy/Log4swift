@@ -96,84 +96,90 @@ class ConsoleAppenderTests: XCTestCase {
     }
   }
   
-  func testCreatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>();
-    
-    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
-  }
-
-  func testCreatingAppenderFromDictionaryWithNoThresholdUsesDebugByDefault() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
+  func testUpdatingAppenderFromDictionaryWithNoThresholdDoesNotChangeIt() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender"];
+    let appender = ConsoleAppender("test appender");
+    appender.thresholdLevel = .Info;
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
+    try! appender.updateWithDictionary(dictionary, availableFormatters: []);
     
     // Validate
-    XCTAssertEqual(appender.thresholdLevel, LogLevel.Debug);
+    XCTAssertEqual(appender.thresholdLevel, LogLevel.Info);
   }
 
-  func testCreatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+  func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       ConsoleAppender.DictionaryKey.Threshold.rawValue: "invalid level"];
-    
+    let appender = ConsoleAppender("test appender");
+
     // Execute & validate
-    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
   
-  func testCreatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+  func testUpdatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       ConsoleAppender.DictionaryKey.Threshold.rawValue: LogLevel.Info.description];
+    let appender = ConsoleAppender("test appender");
+    appender.thresholdLevel = .Debug;
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters:[]);
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Info);
   }
   
-  func testCreatingAppenderFromDictionaryWithNoErrorThresholdUsesNilErrorThresholdByDefault() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender"];
-    
+  func testUpdatingAppenderFromDictionaryWithNoErrorThresholdUsesNilErrorThresholdByDefault() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender"];
+    let appender = ConsoleAppender("test appender");
+    appender.errorThresholdLevel = .Debug;
+
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
+    try! appender.updateWithDictionary(dictionary, availableFormatters: []);
     
     // Validate
     XCTAssert(appender.errorThresholdLevel == nil);
   }
   
-  func testCreatingAppenderFromDictionaryWithInvalidErrorThresholdThrowsError() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+  func testUpdatingAppenderFromDictionaryWithInvalidErrorThresholdThrowsError() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: "invalid level"];
+    let appender = ConsoleAppender("test appender");
     
     // Execute & validate
-    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
   
-  func testCreatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+  func testUpdatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: LogLevel.Info.description];
+    let appender = ConsoleAppender("test appender");
+    appender.errorThresholdLevel = .Info;
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters: []);
+    try! appender.updateWithDictionary(dictionary, availableFormatters: []);
     
     // Validate
     XCTAssertEqual(appender.errorThresholdLevel!, LogLevel.Info);
   }
   
-  func testCreatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+  func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
+    let appender = ConsoleAppender("test appender");
     
-    XCTAssertThrows { try ConsoleAppender(dictionary, availableFormatters: []) };
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
   
-  func testCreatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+  func testUpdatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
     let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
-    let dictionary = [ConsoleAppender.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
+    let appender = ConsoleAppender("test appender");
     
     // Execute
-    let appender = try! ConsoleAppender(dictionary, availableFormatters: [formatter]);
+    try! appender.updateWithDictionary(dictionary, availableFormatters: [formatter]);
     
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);

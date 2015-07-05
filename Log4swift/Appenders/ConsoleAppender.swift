@@ -31,27 +31,22 @@ public class ConsoleAppender: Appender {
   
   var errorThresholdLevel: LogLevel? = .Error;
   
-  public override init(_ identifier: String) {
+  public required init(_ identifier: String) {
     super.init(identifier);
   }
   
-  public required init(_ dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    var errorToThrow: Error? = nil;
+  public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
 
-    try super.init(dictionary, availableFormatters: availableFormatters);
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
 
     if let safeErrorThresholdString = (dictionary[DictionaryKey.ErrorThreshold.rawValue] as? String) {
       if let safeErrorThreshold = LogLevel(safeErrorThresholdString) {
         errorThresholdLevel = safeErrorThreshold;
       } else {
-        errorToThrow = Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ErrorThreshold.rawValue);
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ErrorThreshold.rawValue);
       }
     } else {
       errorThresholdLevel = nil;
-    }
-    
-    if let errorToThrow = errorToThrow {
-      throw errorToThrow;
     }
   }
   
