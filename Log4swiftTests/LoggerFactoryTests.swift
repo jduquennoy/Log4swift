@@ -117,53 +117,45 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
-    let logger = Logger(identifier: "test.logger.identifier.plsu.some.more", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let logger = Logger(identifier: "test.logger.identifier.plus.some.more", level: .Info, appenders: [ConsoleAppender("test.appender")]);
     
     try! self.factory.registerLogger(logger);
     
     // Execute
-    let foundLogger = self.factory.getLogger("test.logger.identifier.plus.some.more");
+    let foundLogger = self.factory.getLogger("test.logger.identifier");
     
     // Validate
     let rootLogger = self.factory.rootLogger;
     XCTAssertEqual(foundLogger.thresholdLevel, rootLogger.thresholdLevel, "The obtained logger should have the same threshold as the root logger");
     XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one");
-    XCTAssertEqual(foundLogger.identifier, "test.logger.identifier.plus.some.more", "The created logger should have the requested identifier");
+    XCTAssertEqual(foundLogger.identifier, "test.logger.identifier", "The created logger should have the requested identifier");
   }
   
-  func testLoggerSendsLogToAllAppenders() {
-    let appender1 = MemoryAppender();
-    let appender2 = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender1, appender2]);
+  func testGeneratedLoggersAreDeletedWhenRegisteringANewLogger() {
+    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    try! self.factory.registerLogger(registeredLogger1);
+    
+    let generatedLogger = self.factory.getLogger("test.logger.generated");
     
     // Execute
-    logger.info("ping");
+    try! self.factory.registerLogger(registeredLogger2);
     
     // Validate
-    XCTAssertEqual(appender1.logMessages.count, 1, "Appender 1 should have received one message");
-    XCTAssertEqual(appender2.logMessages.count, 1, "Appender 2 should have received one message");
+    XCTAssertNil(self.factory.loggers["test.logger.generated"]);
+    XCTAssertFalse(generatedLogger === self.factory.getLogger("test.logger.generated"));
   }
-
-  func testLoggerDoNotSendMessagesToAppendersIfLevelIsEqualToThreshold() {
-    let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
+  
+  func testRegisteredLoggersAreNotDeletedWhenRegisteringANewLogger() {
+    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    try! self.factory.registerLogger(registeredLogger1);
     
     // Execute
-    logger.warn("Info message");
+    try! self.factory.registerLogger(registeredLogger2);
     
     // Validate
-    XCTAssertEqual(appender.logMessages.count, 1, "The message should have been sent to the appender");
-  }
-
-  func testLoggerDoNotSendMessagesToAppendersIfThresholdLevelIsNotReached() {
-    let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
-    
-    // Execute
-    logger.info("Info message");
-    
-    // Validate
-    XCTAssertEqual(appender.logMessages.count, 0, "The message should not have been sent to the appender");
+    XCTAssertTrue(registeredLogger1 === self.factory.getLogger("test.logger"));
   }
   
   // MARK: Performance tests

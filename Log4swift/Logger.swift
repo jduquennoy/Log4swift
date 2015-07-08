@@ -36,9 +36,11 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   /// * logs issued with a Debug or Info will be ignored
   /// * logs issued wiht a Warning, Error or Fatal level will be processed
   public var thresholdLevel: LogLevel;
-  
+
   /// The list of destination appenders for the log messages.
   public var appenders: [Appender];
+
+  internal var parentIdentifier: String?;
   
   convenience init() {
     self.init(identifier: "", appenders: Logger.createDefaultAppenders());
@@ -46,6 +48,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   convenience init(loggerToCopy: Logger, newIdentifier: String) {
     self.init(identifier: newIdentifier, level: loggerToCopy.thresholdLevel, appenders: [Appender]() + loggerToCopy.appenders);
+    self.parentIdentifier = loggerToCopy.identifier;
   }
   
   /// Creates a new logger with the given identifier, log level and appenders.

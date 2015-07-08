@@ -38,7 +38,13 @@ class LoggerTests: XCTestCase {
     
     XCTAssertEqual(logger.thresholdLevel , LogLevel.Debug, "Default log level for loggers should be Debug");
   }
-
+  
+  func testLoggerHasNoParentIdentifierByDefault() {
+    let logger = Logger();
+    
+    XCTAssertNil(logger.parentIdentifier, "Logger should have not parentIdentifier by default");
+  }
+  
   func testLogWithClosureWillNotCallClosureIfLoggerThresholdsPreventsLogging() {
     var closureCalled = false;
     let logger = Logger();
@@ -293,7 +299,7 @@ class LoggerTests: XCTestCase {
     XCTAssertTrue(logger .appenders[1] === appender2);
   }
   
-  func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifier() {
+  func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifierAndParentIdentifier() {
     let appender1 = ConsoleAppender("id1");
     let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
     
@@ -302,6 +308,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(logger2.identifier, "test.logger2");
+    XCTAssertEqual(logger2.parentIdentifier!, logger1.identifier);
     XCTAssertEqual(logger2.thresholdLevel, logger1.thresholdLevel);
     XCTAssertEqual(logger2.appenders.count, logger1.appenders.count);
     XCTAssertTrue(logger2.appenders[0] === logger1.appenders[0]);
@@ -321,4 +328,40 @@ class LoggerTests: XCTestCase {
     XCTAssertTrue(logger1.appenders[0] === appender1);
     XCTAssertTrue(logger2.appenders[0] === appender2);
   }
+  
+  func testLoggerSendsLogToAllAppenders() {
+    let appender1 = MemoryAppender();
+    let appender2 = MemoryAppender();
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender1, appender2]);
+    
+    // Execute
+    logger.info("ping");
+    
+    // Validate
+    XCTAssertEqual(appender1.logMessages.count, 1, "Appender 1 should have received one message");
+    XCTAssertEqual(appender2.logMessages.count, 1, "Appender 2 should have received one message");
+  }
+  
+  func testLoggerDoNotSendMessagesToAppendersIfLevelIsEqualToThreshold() {
+    let appender = MemoryAppender();
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
+    
+    // Execute
+    logger.warn("Info message");
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages.count, 1, "The message should have been sent to the appender");
+  }
+  
+  func testLoggerDoNotSendMessagesToAppendersIfThresholdLevelIsNotReached() {
+    let appender = MemoryAppender();
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
+    
+    // Execute
+    logger.info("Info message");
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages.count, 0, "The message should not have been sent to the appender");
+  }
+  
 }
