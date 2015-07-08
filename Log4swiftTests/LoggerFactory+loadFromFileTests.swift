@@ -36,7 +36,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]];
     
     // Execute & validate
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try self.factory.readConfiguration(dictionary) };
   }
   
   func testLoadDictionaryWithUnknownFormatterClassThrowsError() {
@@ -45,7 +45,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]];
     
     // Execute & validate
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try self.factory.readConfiguration(dictionary) };
   }
   
   func testLoadDictionaryWithNoFormatterIdentifierThrowsError() {
@@ -53,7 +53,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]];
     
     // Execute & validate
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try self.factory.readConfiguration(dictionary) };
   }
   
   func testLoadDictionaryWithEmptyFormatterFormatterIdentifierThrowsError() {
@@ -63,7 +63,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]];
     
     // Execute & validate
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try self.factory.readConfiguration(dictionary) };
   }
   
   func testLoadDictionaryWithPatternFormatterClassCreatesRequestedFormatter() {
@@ -74,7 +74,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]];
     
     // Execute
-    let (formatters, _, _) = try! factory.readConfiguration(dictionary);
+    let (formatters, _, _) = try! factory.readConfigurationToTupple(dictionary);
     
     // validate
     XCTAssertEqual(formatters.count, 1);
@@ -94,7 +94,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary1, formattersDictionary2]];
     
     // Execute
-    let (formatters, _, _) = try! factory.readConfiguration(dictionary);
+    let (formatters, _, _) = try! factory.readConfigurationToTupple(dictionary);
     
     // validate
     XCTAssertEqual(formatters.count, 2);
@@ -110,7 +110,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithUnknownAppenderClassThrowsError() {
@@ -120,7 +120,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithNoAppenderIdentifierThrowsError() {
@@ -129,7 +129,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithEmptyAppenderIdentifierThrowsError() {
@@ -139,7 +139,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfiguration(dictionary) };
+    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithConsoleAppenderAndFormatCreatesRequestedAppender() {
@@ -154,7 +154,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    let (formatters, appenders, _) = try! factory.readConfiguration(dictionary);
+    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(dictionary);
     
     // Validate
     XCTAssertEqual(appenders.count, 1);
@@ -183,7 +183,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary1, appenderDictionary2]];
     
     // Execute
-    let (formatters, appenders, _) = try! factory.readConfiguration(dictionary);
+    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(dictionary);
     
     // Validate
     XCTAssertEqual(appenders.count, 2);
@@ -243,6 +243,32 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       XCTAssertEqual(logger.appenders[0].identifier, "test appender");
     }
   }
+  
+  // MARK: Root logger tests
+
+  func testReadConfigurationWithRootLoggerUpdatesIt() {
+    let appenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"];
+    let rootLoggerDictionary = [Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
+      Logger.DictionaryKey.Level.rawValue: "info"];
+    
+    factory.rootLogger.thresholdLevel = .Error;
+    factory.rootLogger.appenders = [MemoryAppender("MemoryAppender")];
+    
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
+      LoggerFactory.DictionaryKey.RootLogger.rawValue: rootLoggerDictionary];
+    
+    // Execute
+    try! factory.readConfiguration(dictionary);
+    
+    // Validate
+    XCTAssertEqual(factory.rootLogger.thresholdLevel, LogLevel.Info);
+    XCTAssertEqual(factory.rootLogger.appenders.count, 1);
+    if(factory.rootLogger.appenders.count > 0) { 
+      XCTAssertEqual(factory.rootLogger.appenders[0].identifier, "test appender");
+    }
+  }
+  
   
   // MARK: Utility methods
   

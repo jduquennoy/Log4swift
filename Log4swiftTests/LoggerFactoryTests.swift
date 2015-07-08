@@ -28,6 +28,7 @@ class LoggerFactoryTests: XCTestCase {
   override func setUp() {
     super.setUp()
     
+    LoggerFactory.sharedInstance.resetConfiguration();
     factory = LoggerFactory()
   }
   

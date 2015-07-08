@@ -25,7 +25,7 @@ Order of the levels is :
 
 Debug < Info < Warning < Error < Fatal
 */
-public enum LogLevel: Int, CustomStringConvertible {
+@objc public enum LogLevel: Int, CustomStringConvertible {
   
   case Debug = 0
   case Info = 1

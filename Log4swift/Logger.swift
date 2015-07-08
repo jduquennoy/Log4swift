@@ -22,18 +22,16 @@
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
-public class Logger {
+@objc public class Logger {
   public enum DictionaryKey: String {
     case Level = "Level"
     case AppenderIds = "AppenderIds"
   }
   
-  
-  /// The UTI string that identifies the logger.  
-  /// Exemple : product.module.feature
+  /// The UTI string that identifies the logger. Exemple : product.module.feature
   public let identifier: String;
   
-  /// The threshold under which log messages will be ignored.  
+  /// The threshold under which log messages will be ignored.
   /// For exemple, if the threshold is Warning:
   /// * logs issued with a Debug or Info will be ignored
   /// * logs issued wiht a Warning, Error or Fatal level will be processed
@@ -82,6 +80,11 @@ public class Logger {
     }
   }
   
+  func resetConfiguration() {
+    self.thresholdLevel = .Debug;
+    self.appenders = Logger.createDefaultAppenders();
+  }
+  
   // MARK: Logging methods
   
   /// Logs the provided message with a debug level
@@ -107,27 +110,27 @@ public class Logger {
   
   /// Logs a the message returned by the closer with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  public func debug(closure: () -> String) {
+  @nonobjc public func debug(closure: () -> String) {
     self.log(closure, level: LogLevel.Debug);
   }
   /// Logs a the message returned by the closer with an info level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  public func info(closure: () -> String) {
+  @nonobjc public func info(closure: () -> String) {
     self.log(closure, level: LogLevel.Info);
   }
   /// Logs a the message returned by the closer with a warning level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  public func warn(closure: () -> String) {
+  @nonobjc public func warn(closure: () -> String) {
     self.log(closure, level: LogLevel.Warning);
   }
   /// Logs a the message returned by the closer with an error level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  public func error(closure: () -> String) {
+  @nonobjc public func error(closure: () -> String) {
     self.log(closure, level: LogLevel.Error);
   }
   /// Logs a the message returned by the closer with a fatal level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  public func fatal(closure: () -> String) {
+  @nonobjc public func fatal(closure: () -> String) {
     self.log(closure, level: LogLevel.Fatal);
   }
   

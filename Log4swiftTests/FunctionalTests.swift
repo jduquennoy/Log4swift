@@ -11,6 +11,11 @@ import XCTest
 
 class FunctionalTests: XCTestCase {
 
+  override func setUp() {
+    super.setUp()
+    LoggerFactory.sharedInstance.resetConfiguration();
+  }
+  
   func testLogToLoggerWithFormatterAndMultipleAppenders() {
     let formatter1 = try! PatternFormatter(identifier:"testFormatter1", pattern: "[%l][%n] %m");
     let formatter2 = try! PatternFormatter(identifier:"testFormatter2", pattern: "[%n][%l] %m");

@@ -20,10 +20,10 @@
 //
 
 /**
-Appenders are responsible for sending logs to heir destination.  
+Appenders are responsible for sending logs to heir destination.
 This class is the base class, from which all appenders should inherit.
 */
-public class Appender {
+@objc public class Appender {
   public enum DictionaryKey: String {
     case Threshold = "Threshold"
     case FormatterId = "FormatterId"

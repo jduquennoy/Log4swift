@@ -35,7 +35,7 @@ public class NSLoggerAppender : Appender {
 
   var logger: UnsafeMutablePointer<NSLogger>;
   
-  /// This initializer will configure the NSLogger client to send the messages to a specific host, with a specific port.  
+  /// This initializer will configure the NSLogger client to send the messages to a specific host, with a specific port.
   /// Parameters are :
   /// * remoteHost : the remote host address, as an IP or a resolable host name. Default value is 127.0.0.1.
   /// * remotePort : the number of the TCP port to which the client will connect Default value is 50 000.

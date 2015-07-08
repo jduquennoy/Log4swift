@@ -35,7 +35,7 @@ Available markers are :
 **Exemples**  
 "[%p] %m" -> "[Debug] log message"
 */
-public class PatternFormatter : Formatter {
+@objc public class PatternFormatter : Formatter {
   /// Definition of errors the PatternFormatter can throw
   public enum Error : ErrorType {
     case InvalidFormatSyntax
@@ -63,7 +63,7 @@ public class PatternFormatter : Formatter {
     try! self.init(identifier: identifier, pattern: "");
   }
   
-  /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.  
+  /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
   public func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {

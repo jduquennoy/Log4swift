@@ -43,7 +43,7 @@ public protocol Formatter {
   
   func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws;
   
-  /// Formats the given message, using the provided info dictionary.  
-  /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.   
+  /// Formats the given message, using the provided info dictionary.
+  /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.
   func format(message: String, info: FormatterInfoDictionary) -> String;
 }

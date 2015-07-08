@@ -23,9 +23,10 @@ import XCTest
 @testable import Log4swift
 
 class LoggerTests: XCTestCase {
-
+  
   override func setUp() {
     super.setUp()
+    LoggerFactory.sharedInstance.resetConfiguration();
   }
   
   override func tearDown() {
