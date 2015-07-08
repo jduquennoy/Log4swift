@@ -31,24 +31,24 @@ extension Logger {
   // MARK: Logging class methods
   
   /// Logs the provided message with a debug level using the root logger of the shared logger factory
-  public class func debug(message: String) {
-    LoggerFactory.sharedInstance.rootLogger.debug(message);
+  public class func debug(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Debug);
   }
   /// Logs the provided message with a info level using the root logger of the shared logger factory
-  public class func info(message: String) {
-    LoggerFactory.sharedInstance.rootLogger.info(message);
+  public class func info(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Info);
   }
   /// Logs the provided message with a warning level using the root logger of the shared logger factory
-  public class func warn(message: String) {
-    LoggerFactory.sharedInstance.rootLogger.warn(message);
+  public class func warn(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Warning);
   }
   /// Logs the provided message with a error level using the root logger of the shared logger factory
-  public class func error(message: String) {
-    LoggerFactory.sharedInstance.rootLogger.error(message);
+  public class func error(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Error);
   }
   /// Logs the provided message with a fatal level using the root logger of the shared logger factory
-  public class func fatal(message: String) {
-    LoggerFactory.sharedInstance.rootLogger.fatal(message);
+  public class func fatal(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Fatal);
   }
   
   /// Logs a the message returned by the closer with a debug level using the root logger of the shared logger factory

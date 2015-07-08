@@ -52,7 +52,7 @@ class FileAppenderTests: XCTestCase {
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
-      XCTAssert(fileContent.length > 0, "Content of log file should not be empty")
+      XCTAssert(fileContent.length > 0, "Content of log file should not be empty");
     } catch let error {
       XCTAssert(false, "Error in test : \(error)");
     }
@@ -76,7 +76,7 @@ class FileAppenderTests: XCTestCase {
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
-      XCTAssert(fileContent.length > 0, "Content of log file should not be empty")
+      XCTAssert(fileContent.length > 0, "Content of log file should not be empty");
     } catch let error {
       XCTAssert(false, "Error in test : \(error)");
     }
@@ -99,7 +99,7 @@ class FileAppenderTests: XCTestCase {
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
-      XCTAssertEqual(fileContent, logContent + "\n", "Content of log file does not match expectation")
+      XCTAssertEqual(fileContent, logContent + "\n", "Content of log file does not match expectation");
     } catch let error {
       XCTAssert(false, "Error in test : \(error)");
     }
@@ -119,10 +119,37 @@ class FileAppenderTests: XCTestCase {
       
       // Execute
       fileAppender.log(logContent, level: LogLevel.Debug, info: FormatterInfoDictionary());
-
+      
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding);
-      XCTAssertEqual(fileContent, logContent, "Content of log file does not match expectation")
+      XCTAssertEqual(fileContent, logContent, "Content of log file does not match expectation");
+    } catch let error {
+      XCTAssert(false, "Error in test : \(error)");
+    }
+  }
+  
+  func testLogsAreRedirectedToNewLogFileIfPathIsChanged()  {
+    do {
+      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath2 = try self.createTemporaryFileUrl();
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
+      let logContent1 = "ping1";
+      let logContent2 = "ping2";
+      defer {
+        unlink(tempFilePath.fileSystemRepresentation());
+        unlink(tempFilePath2.fileSystemRepresentation());
+      }
+      
+      fileAppender.log(logContent1, level: LogLevel.Debug, info: FormatterInfoDictionary());
+      
+      // Execute
+      fileAppender.filePath = tempFilePath2;
+      fileAppender.log(logContent2, level: LogLevel.Debug, info: FormatterInfoDictionary());
+      
+      
+      // Validate
+      let fileContent2 = try NSString(contentsOfFile: tempFilePath2, encoding: NSUTF8StringEncoding);
+      XCTAssertEqual(fileContent2, logContent2 + "\n", "Content of second log file does not match expectation");
     } catch let error {
       XCTAssert(false, "Error in test : \(error)");
     }

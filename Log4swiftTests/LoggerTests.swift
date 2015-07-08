@@ -364,4 +364,42 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appender.logMessages.count, 0, "The message should not have been sent to the appender");
   }
   
+  func testLoggerMethodsFormatsString() {
+    let appender = MemoryAppender();
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    
+    // Execute
+    logger.debug("ping %@ %02x", "blabla", 12);
+    logger.info("ping %@ %02x", "blabla", 12);
+    logger.warn("ping %@ %02x", "blabla", 12);
+    logger.error("ping %@ %02x", "blabla", 12);
+    logger.fatal("ping %@ %02x", "blabla", 12);
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[1].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[2].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[3].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
+  }
+  
+  func testLoggerConvenienceMethodsFormatsMessages() {
+    let appender = MemoryAppender();
+    LoggerFactory.sharedInstance.rootLogger.appenders = [appender];
+    
+    // Execute
+    Logger.debug("ping %@ %02x", "blabla", 12);
+    Logger.info("ping %@ %02x", "blabla", 12);
+    Logger.warn("ping %@ %02x", "blabla", 12);
+    Logger.error("ping %@ %02x", "blabla", 12);
+    Logger.fatal("ping %@ %02x", "blabla", 12);
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[1].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[2].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[3].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
+  }
+  
 }

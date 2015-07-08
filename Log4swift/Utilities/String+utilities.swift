@@ -32,6 +32,10 @@ extension String {
     }
     return result;
   }
+
+  public func format(args: CVaListPointer) -> String {
+    return NSString(format: self, arguments: args) as String
+  }
 }
 
 extension String : CustomStringConvertible {

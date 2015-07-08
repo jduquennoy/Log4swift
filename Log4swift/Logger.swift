@@ -90,25 +90,25 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   // MARK: Logging methods
   
-  /// Logs the provided message with a debug level
-  public func debug(message: String) {
-    self.log(message, level: LogLevel.Debug);
+  /// Logs the provided message with a debug level.
+  public func debug(format: String, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Debug);
   }
   /// Logs the provided message with an info level
-  public func info(message: String) {
-    self.log(message, level: LogLevel.Info);
+  public func info(format: String, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Info);
   }
   /// Logs the provided message with a warning level
-  public func warn(message: String) {
-    self.log(message, level: LogLevel.Warning);
+  public func warn(format: String, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Warning);
   }
   /// Logs the provided message with an error level
-  public func error(message: String) {
-    self.log(message, level: LogLevel.Error);
+  public func error(format: String, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Error);
   }
   /// Logs the provided message with a fatal level
-  public func fatal(message: String) {
-    self.log(message, level: LogLevel.Fatal);
+  public func fatal(format: String, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Fatal);
   }
   
   /// Logs a the message returned by the closer with a debug level
@@ -137,13 +137,14 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.log(closure, level: LogLevel.Fatal);
   }
   
-  private func willIssueLogForLevel(level: LogLevel) -> Bool {
+  /// Returns true if a message sent with the given level will be issued by at least one appender.
+  public func willIssueLogForLevel(level: LogLevel) -> Bool {
     return level.rawValue >= self.thresholdLevel.rawValue && self.appenders.reduce(false) { (shouldLog, currentAppender) in
       shouldLog || level.rawValue >= currentAppender.thresholdLevel.rawValue
     }
   }
   
-  private func log(message: String, level: LogLevel) {
+  @nonobjc internal func log(message: String, level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
       let info: FormatterInfoDictionary = [
         FormatterInfoKeys.LoggerName: self.identifier,
@@ -155,7 +156,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
   }
   
-  private func log(closure: () -> (String), level: LogLevel) {
+  @nonobjc internal func log(closure: () -> (String), level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
       let logMessage = closure();
       let info: FormatterInfoDictionary = [
