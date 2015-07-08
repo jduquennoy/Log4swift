@@ -1,9 +1,9 @@
 //
-//  MemoryAppender.swift
+//  LogInformation.swift
 //  Log4swift
 //
-//  Created by jerome on 14/06/2015.
-//  Copyright © 2015 jerome. All rights reserved.
+//  Created by Jérôme Duquennoy on 08/07/2015.
+//  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Log4swift is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -19,25 +19,15 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
-@testable import Log4swift
+/**
+Keys used in the information dictionary attached to log messages
+*/
+public enum LogInfoKeys {
+  case LogLevel
+  case LoggerName
+}
 
 /**
-This test appender will store logs in memory for latter validation.
+The definition of the type used to attach meta informations to log messages
 */
-class MemoryAppender: Appender {
-  
-  var logMessages = [(message: String, level: LogLevel)]();
-  
-  init() {
-    super.init("test.memoryAppender");
-  }
-
-  required init(_ identifier: String) {
-    super.init(identifier);
-  }
-  
-  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    logMessages.append((message: log, level: level));
-  }
-  
-}
+public typealias LogInfoDictionary = Dictionary<LogInfoKeys, CustomStringConvertible>;

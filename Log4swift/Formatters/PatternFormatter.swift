@@ -49,7 +49,7 @@ Available markers are :
   
   public let identifier: String;
   
-  typealias FormattingClosure = (message: String, infos: FormatterInfoDictionary) -> String;
+  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String;
   private var formattingClosuresSequence = [FormattingClosure]();
   
   /// This initialiser will throw an error if the pattern is not valid.
@@ -74,15 +74,15 @@ Available markers are :
     }
   }
   
-  public func format(message: String, info: FormatterInfoDictionary) -> String {
+  public func format(message: String, info: LogInfoDictionary) -> String {
     return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) };
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: String?, message: String, info: FormatterInfoDictionary) -> String;
+    typealias MarkerClosure = (parameters: String?, message: String, info: LogInfoDictionary) -> String;
     // This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
     // Add an entry to this array to declare a new marker.
-    private let markerClosures : Dictionary<String, MarkerClosure> = [
+    private let markerClosures: Dictionary<String, MarkerClosure> = [
       "d": {(parameters, message, info) in NSDate().description },
       "l": {(parameters, message, info) in
         if let logLevel = info[.LogLevel] {

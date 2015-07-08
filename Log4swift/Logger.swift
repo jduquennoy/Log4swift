@@ -146,9 +146,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   @nonobjc internal func log(message: String, level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
-      let info: FormatterInfoDictionary = [
-        FormatterInfoKeys.LoggerName: self.identifier,
-        FormatterInfoKeys.LogLevel: level,
+      let info: LogInfoDictionary = [
+        LogInfoKeys.LoggerName: self.identifier,
+        LogInfoKeys.LogLevel: level,
       ];
       for currentAppender in self.appenders {
         currentAppender.log(message, level:level, info: info);
@@ -159,9 +159,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   @nonobjc internal func log(closure: () -> (String), level: LogLevel) {
     if(self.willIssueLogForLevel(level)) {
       let logMessage = closure();
-      let info: FormatterInfoDictionary = [
-        FormatterInfoKeys.LoggerName: self.identifier,
-        FormatterInfoKeys.LogLevel: level,
+      let info: LogInfoDictionary = [
+        LogInfoKeys.LoggerName: self.identifier,
+        LogInfoKeys.LogLevel: level,
       ];
       for currentAppender in self.appenders {
         currentAppender.log(logMessage, level:level, info: info);

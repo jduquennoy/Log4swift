@@ -55,11 +55,11 @@ This class is the base class, from which all appenders should inherit.
     }
   }
   
-  func performLog(log: String, level: LogLevel) {
+  func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
     // To be overriden by subclasses
   }
   
-  final func log(log: String, level: LogLevel, info: FormatterInfoDictionary) {
+  final func log(log: String, level: LogLevel, info: LogInfoDictionary) {
     if(level.rawValue >= self.thresholdLevel.rawValue) {
       let logMessage: String;
       
@@ -69,7 +69,7 @@ This class is the base class, from which all appenders should inherit.
         logMessage = log;
       }
       
-      self.performLog(logMessage, level: level);
+      self.performLog(logMessage, level: level, info: info);
     }
   }
 }

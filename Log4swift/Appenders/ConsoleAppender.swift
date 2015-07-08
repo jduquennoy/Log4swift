@@ -50,7 +50,7 @@ public class ConsoleAppender: Appender {
     }
   }
   
-  override func performLog(log: String, level: LogLevel) {
+  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
     var destinationFile = stdout;
     
     if let errorThresholdLevel = self.errorThresholdLevel {

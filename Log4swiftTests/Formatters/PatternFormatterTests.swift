@@ -42,7 +42,7 @@ class PatternFormatterTests: XCTestCase {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%l");
 
     // Execute
-    let formattedMessage = formatter.format("", info: [FormatterInfoKeys.LogLevel: LogLevel.Error]);
+    let formattedMessage = formatter.format("", info: [LogInfoKeys.LogLevel: LogLevel.Error]);
     
     // validate
     XCTAssertEqual(formattedMessage, LogLevel.Error.description);
@@ -50,7 +50,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterAppliesLoggerNameMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n");
-    let info: FormatterInfoDictionary = [FormatterInfoKeys.LoggerName: "loggername"];
+    let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "loggername"];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
@@ -61,7 +61,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterAppliesDateMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d");
-    let info = FormatterInfoDictionary();
+    let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
@@ -75,7 +75,7 @@ class PatternFormatterTests: XCTestCase {
 
   func testMarkerParametersAreInterpreted() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{param}");
-    let info: FormatterInfoDictionary = [FormatterInfoKeys.LogLevel: LogLevel.Debug];
+    let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
@@ -86,7 +86,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterAppliesPercentageMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%");
-    let info = FormatterInfoDictionary();
+    let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
@@ -97,7 +97,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterDoesNotReplaceUnknownMarkers() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%x %y %z are unknown markers");
-    let info = FormatterInfoDictionary();
+    let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
@@ -108,9 +108,9 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterWithComplexFormatting() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m");
-    let info: FormatterInfoDictionary = [
-      FormatterInfoKeys.LoggerName: "nameOfTheLogger",
-      FormatterInfoKeys.LogLevel: LogLevel.Warning
+    let info: LogInfoDictionary = [
+      LogInfoKeys.LoggerName: "nameOfTheLogger",
+      LogInfoKeys.LogLevel: LogLevel.Warning
     ];
     
     // Execute
@@ -122,7 +122,7 @@ class PatternFormatterTests: XCTestCase {
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
     let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n] %m");
-    let info = FormatterInfoDictionary();
+    let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("Log message", info: info);
@@ -151,15 +151,15 @@ class PatternFormatterTests: XCTestCase {
 
     XCTAssertNoThrow { try formatter.updateWithDictionary(dictionary); };
 
-    let formattedMessage = formatter.format("", info: FormatterInfoDictionary());
+    let formattedMessage = formatter.format("", info: LogInfoDictionary());
     XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!);
   }
   
   func testFormatterPerformance() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m");
-    let info: FormatterInfoDictionary = [
-      FormatterInfoKeys.LoggerName: "nameOfTheLogger",
-      FormatterInfoKeys.LogLevel: LogLevel.Info
+    let info: LogInfoDictionary = [
+      LogInfoKeys.LoggerName: "nameOfTheLogger",
+      LogInfoKeys.LogLevel: LogLevel.Info
     ];
     
     self.measureBlock() {

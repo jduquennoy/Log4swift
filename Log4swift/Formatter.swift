@@ -20,19 +20,6 @@
 //
 
 /**
-Keys used in the information dictionary passed to the formatters
-*/
-public enum FormatterInfoKeys {
-  case LogLevel
-  case LoggerName
-}
-
-/**
-The definition of the type used to pass informations to the formatters
-*/
-public typealias FormatterInfoDictionary = Dictionary<FormatterInfoKeys, CustomStringConvertible>;
-
-/**
 This protocol defines a formatter, that will format log messages on the fly.
 */
 public protocol Formatter {
@@ -45,5 +32,5 @@ public protocol Formatter {
   
   /// Formats the given message, using the provided info dictionary.
   /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.
-  func format(message: String, info: FormatterInfoDictionary) -> String;
+  func format(message: String, info: LogInfoDictionary) -> String;
 }

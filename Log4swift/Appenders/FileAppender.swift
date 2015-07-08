@@ -62,7 +62,7 @@ public class FileAppender : Appender {
     }
   }
   
-  override func performLog(var log: String, level: LogLevel) {
+  override func performLog(var log: String, level: LogLevel, info: LogInfoDictionary) {
     if(self.fileHandler == nil || !NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
       do {
         try self.openFileHandleForPath(self.filePath);

@@ -62,7 +62,7 @@ class ConsoleAppenderTests: XCTestCase {
     let appender = ConsoleAppender("appender");
     
     // Execute
-    appender.log("log value", level: .Info, info: FormatterInfoDictionary());
+    appender.log("log value", level: .Info, info: LogInfoDictionary());
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
@@ -75,7 +75,7 @@ class ConsoleAppenderTests: XCTestCase {
     appender.errorThresholdLevel = .Warning;
     
     // Execute
-    appender.log("log value", level: .Info, info: FormatterInfoDictionary());
+    appender.log("log value", level: .Info, info: LogInfoDictionary());
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
@@ -88,7 +88,7 @@ class ConsoleAppenderTests: XCTestCase {
     appender.errorThresholdLevel = .Warning;
     
     // Execute
-    appender.log("log value", level: .Warning, info: FormatterInfoDictionary());
+    appender.log("log value", level: .Warning, info: LogInfoDictionary());
     
     // Validate
     if let stderrContent = getFileHandleContentAsString(self.stderrReadFileHandle) {

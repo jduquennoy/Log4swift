@@ -27,7 +27,7 @@ The NSLogger appender relies on the NSLogger project (see https://github.com/fpi
 public class NSLoggerAppender : Appender {
   public enum DictionaryKey: String {
     case BonjourServiceName = "BonjourServiceName"
-    case UseLocalCache = "UseLocalCacke"
+    case UseLocalCache = "UseLocalCache"
     case UseSSL = "UseSSL"
     case RemoteHost = "RemoteHost"
     case RemotePort = "RemotePort"
@@ -122,9 +122,13 @@ public class NSLoggerAppender : Appender {
     LoggerStop(nil);
   }
   
-  override func performLog(log: String, level: LogLevel) {
+  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
     if(self.logger != nil) {
-      LogMessageRaw(log);
+      var loggerId = "";
+      if let safeLoggerId = info[LogInfoKeys.LoggerName] {
+        loggerId = safeLoggerId.description;
+      }
+      LogMessageRawToF(self.logger, nil, 0, nil, loggerId, Int32(level.rawValue), log);
     }
   }
   
