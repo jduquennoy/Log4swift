@@ -1,4 +1,4 @@
-//
+ //
 //  LoggerTests.swift
 //  log4swift
 //
@@ -39,10 +39,10 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(logger.thresholdLevel , LogLevel.Debug, "Default log level for loggers should be Debug");
   }
   
-  func testLoggerHasNoParentIdentifierByDefault() {
+  func testLoggerHasNoParentByDefault() {
     let logger = Logger();
     
-    XCTAssertNil(logger.parentIdentifier, "Logger should have not parentIdentifier by default");
+    XCTAssertNil(logger.parent, "Logger should have not parentIdentifier by default");
   }
   
   func testLogWithClosureWillNotCallClosureIfLoggerThresholdsPreventsLogging() {
@@ -304,31 +304,16 @@ class LoggerTests: XCTestCase {
     let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
     
     // Execute
-    let logger2 = Logger(loggerToCopy: logger1, newIdentifier: "test.logger2");
+    let logger2 = Logger(parentLogger: logger1, identifier: "test.logger2");
     
     // Validate
     XCTAssertEqual(logger2.identifier, "test.logger2");
-    XCTAssertEqual(logger2.parentIdentifier!, logger1.identifier);
+    XCTAssertTrue(logger2.parent! === logger1);
     XCTAssertEqual(logger2.thresholdLevel, logger1.thresholdLevel);
     XCTAssertEqual(logger2.appenders.count, logger1.appenders.count);
     XCTAssertTrue(logger2.appenders[0] === logger1.appenders[0]);
   }
 
-  func testCopyInitializerCreatesIndependentLoggers() {
-    let appender1 = ConsoleAppender("id1");
-    let appender2 = ConsoleAppender("id2");
-    let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
-    
-    // Execute
-    let logger2 = Logger(loggerToCopy: logger1, newIdentifier: "test.logger2");
-    
-    // Validate
-    logger2.appenders.removeAll();
-    logger2.appenders.append(appender2);
-    XCTAssertTrue(logger1.appenders[0] === appender1);
-    XCTAssertTrue(logger2.appenders[0] === appender2);
-  }
-  
   func testLoggerSendsLogToAllAppenders() {
     let appender1 = MemoryAppender();
     let appender2 = MemoryAppender();
@@ -402,4 +387,55 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
   }
   
+  func testLoggerWithParentUsesParentThreshold() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    
+    // Execute
+    let threshold1 = sonLogger.thresholdLevel;
+    parentLogger.thresholdLevel = .Debug;
+    let threshold2 = sonLogger.thresholdLevel;
+    
+    // Validate
+    XCTAssertEqual(threshold1, .Info);
+    XCTAssertEqual(threshold2, .Debug);
+  }
+  
+  func testLoggerWithParentUsesParentAppenders() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    
+    // Execute
+    parentLogger.appenders.append(MemoryAppender());
+    let appenders = sonLogger.appenders;
+    
+    // Validate
+    XCTAssertEqual(appenders.count, 2);
+  }
+  
+  func testChangingSonLoggerParameterBreakLinkWithParent() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    
+    // Execute
+    sonLogger.thresholdLevel = .Warning;
+    
+    // Validate
+    XCTAssertEqual(parentLogger.thresholdLevel, .Info);
+    XCTAssertEqual(sonLogger.thresholdLevel, .Warning);
+    XCTAssertNil(sonLogger.parent);
+  }
+  
+  func testSettingSonLoggerAppendersArrayBreakLinkWithParent() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    
+    // Execute
+    sonLogger.appenders = [MemoryAppender(), MemoryAppender()];
+    
+    // Validate
+    XCTAssertEqual(parentLogger.appenders.count, 1);
+    XCTAssertEqual(sonLogger.appenders.count, 2);
+    XCTAssertNil(sonLogger.parent);
+  }
 }

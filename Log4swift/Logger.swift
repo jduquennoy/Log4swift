@@ -30,33 +30,63 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   /// The UTI string that identifies the logger. Exemple : product.module.feature
   public let identifier: String;
+
+  internal var parent: Logger?;
   
+  private var thresholdLevelStorage: LogLevel;
+  private var appendersStorage: [Appender];
+
   /// The threshold under which log messages will be ignored.
   /// For exemple, if the threshold is Warning:
   /// * logs issued with a Debug or Info will be ignored
   /// * logs issued wiht a Warning, Error or Fatal level will be processed
-  public var thresholdLevel: LogLevel;
+  public var thresholdLevel: LogLevel {
+    get {
+      if let parent = self.parent {
+        return parent.thresholdLevel;
+      } else {
+        return self.thresholdLevelStorage;
+      }
+    }
+    set {
+      self.breakDependencyWithParent();
+      self.thresholdLevelStorage = newValue;
+    }
+  };
 
   /// The list of destination appenders for the log messages.
-  public var appenders: [Appender];
+  public var appenders: [Appender] {
+    get {
+      if let parent = self.parent {
+        return parent.appenders;
+      } else {
+        return self.appendersStorage;
+      }
+    }
+    set {
+      self.breakDependencyWithParent();
+      self.appendersStorage = newValue;
+    }
+  };
 
-  internal var parentIdentifier: String?;
-  
-  convenience init() {
-    self.init(identifier: "", appenders: Logger.createDefaultAppenders());
-  }
-  
-  convenience init(loggerToCopy: Logger, newIdentifier: String) {
-    self.init(identifier: newIdentifier, level: loggerToCopy.thresholdLevel, appenders: [Appender]() + loggerToCopy.appenders);
-    self.parentIdentifier = loggerToCopy.identifier;
-  }
   
   /// Creates a new logger with the given identifier, log level and appenders.
   /// The identifier will not be modifiable, and should not be an empty string.
   public init(identifier: String, level: LogLevel = LogLevel.Debug, appenders: [Appender] = []) {
     self.identifier = identifier;
-    self.thresholdLevel = level;
-    self.appenders = appenders;
+    self.thresholdLevelStorage = level;
+    self.appendersStorage = appenders;
+  }
+
+  convenience init() {
+    self.init(identifier: "", appenders: Logger.createDefaultAppenders());
+  }
+  
+  /// Create a logger that is a child of the given logger.
+  /// The created logger will follow the parent logger's configuration until it is manually modified.
+  convenience init(parentLogger: Logger, identifier: String) {
+    self.init(identifier: identifier, level: parentLogger.thresholdLevel, appenders: [Appender]() + parentLogger.appenders);
+    self.parent = parentLogger;
   }
   
   /// Updates the logger with the content of the configuration dictionary.
@@ -167,6 +197,17 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         currentAppender.log(logMessage, level:level, info: info);
       }
     }
+  }
+  
+  // MARK: Private methods
+  
+  private func breakDependencyWithParent() {
+    guard let parent = self.parent else {
+      return;
+    }
+    self.thresholdLevelStorage = parent.thresholdLevel;
+    self.appendersStorage = parent.appenders;
+    self.parent = nil;
   }
   
   private final class func createDefaultAppenders() -> [Appender] {
