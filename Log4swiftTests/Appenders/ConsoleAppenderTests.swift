@@ -110,7 +110,7 @@ class ConsoleAppenderTests: XCTestCase {
 
   func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.Threshold.rawValue: "invalid level"];
+      ConsoleAppender.DictionaryKey.ThresholdLevel.rawValue: "invalid level"];
     let appender = ConsoleAppender("test appender");
 
     // Execute & validate
@@ -119,7 +119,7 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.Threshold.rawValue: LogLevel.Info.description];
+      ConsoleAppender.DictionaryKey.ThresholdLevel.rawValue: LogLevel.Info.description];
     let appender = ConsoleAppender("test appender");
     appender.thresholdLevel = .Debug;
     

@@ -17,9 +17,9 @@ The goal of this project is to propose a logging library with those caracteristi
 * powerful for more complexe cases, with multi-destination logging for exemple
 * ability to log over the network, and notably to NSLogger.
 * dynamically configurable by code
+* configurable by file
 
 ### Not yet achieved goals
-* configurable by file
 * synchronous by default, but with the ability to request asynchronous behavior
 * should be useable on linux once Apple releases Swift for that OS
 
@@ -69,6 +69,13 @@ Providing a closure instead of a string is pretty handy if the code that generat
 ```
 Logger.debug { someHeavyCodeThatGeneratesTheLogMessage() }
 ```
+
+### Flexible configuration
+Configuration of the logging system can be loaded from a file, or done in software.
+
+In software, you can configure it using a dictionary, that you can then store and load from anywhere you want (a web service, a database, a preference file, ...).
+
+Configuration can be modified any time while running.
 
 ## Provided appenders
 

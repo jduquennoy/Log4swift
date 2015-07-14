@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		021136B31B55A85A000954DF /* ValidCompleteConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */; };
 		024E2E051B3F470500457304 /* XCTestCase+noThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2E031B3F41D500457304 /* XCTestCase+noThrow.swift */; };
 		024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024FD79B1B2DD3FE00A8609C /* String+utilities.swift */; };
 		024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024FD79E1B2DE13300A8609C /* MemoryAppender.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ValidCompleteConfiguration.plist; sourceTree = "<group>"; };
 		0237CF351B2E220F004D5B9F /* SimpleUsage-OSX.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "SimpleUsage-OSX.playground"; sourceTree = "<group>"; };
 		024E2E031B3F41D500457304 /* XCTestCase+noThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+noThrow.swift"; sourceTree = "<group>"; };
 		024FD79B1B2DD3FE00A8609C /* String+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = "String+utilities.swift"; sourceTree = "<group>"; };
@@ -64,7 +66,6 @@
 		02664C0D1B2CE96500B695DE /* log4swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log4swift.h; sourceTree = "<group>"; };
 		02664C0F1B2CE96500B695DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02664C141B2CE96500B695DE /* Log4swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Log4swiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		02664C1B1B2CE96500B695DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02664C241B2CEB2900B695DE /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		02664C261B2D92CB00B695DE /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		02664C2A1B2D97DE00B695DE /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
@@ -117,6 +118,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		021136B11B55A789000954DF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		0237CF341B2E220F004D5B9F /* Example playgrounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,16 +206,16 @@
 		02664C181B2CE96500B695DE /* Log4swiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				024E2E021B3F414000457304 /* Utilities */,
-				024FD79D1B2DE0F000A8609C /* TestObjects */,
-				02664C1B1B2CE96500B695DE /* Info.plist */,
+				5ED41A661B3D949900C39F6E /* LogLevelTests.swift */,
 				02664C341B2DB25C00B695DE /* LoggerTests.swift */,
 				02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */,
 				5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */,
+				5ED244E01B343A0400453B31 /* FunctionalTests.swift */,
 				02B8F6211B30B21B0077A8A6 /* Appenders */,
 				5E17F3281B341B4900E262F5 /* Formatters */,
-				5ED244E01B343A0400453B31 /* FunctionalTests.swift */,
-				5ED41A661B3D949900C39F6E /* LogLevelTests.swift */,
+				024FD79D1B2DE0F000A8609C /* TestObjects */,
+				024E2E021B3F414000457304 /* Utilities */,
+				021136B11B55A789000954DF /* Resources */,
 			);
 			path = Log4swiftTests;
 			sourceTree = "<group>";
@@ -370,6 +379,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				021136B31B55A85A000954DF /* ValidCompleteConfiguration.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

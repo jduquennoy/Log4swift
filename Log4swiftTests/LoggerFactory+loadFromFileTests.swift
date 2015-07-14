@@ -201,7 +201,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"];
     let loggerDictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
-      Logger.DictionaryKey.Level.rawValue: "info"];
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [loggerDictionary]];
@@ -223,7 +223,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"];
     let loggerDictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
-      Logger.DictionaryKey.Level.rawValue: "info"];
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
     let existingLogger = Logger(identifier: "test.logger", level: .Error, appenders: [MemoryAppender("MemoryAppender")]);
     try! factory.registerLogger(existingLogger);
@@ -250,7 +250,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let appenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"];
     let rootLoggerDictionary = [Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
-      Logger.DictionaryKey.Level.rawValue: "info"];
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
     factory.rootLogger.thresholdLevel = .Error;
     factory.rootLogger.appenders = [MemoryAppender("MemoryAppender")];
@@ -269,6 +269,29 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     }
   }
   
+  
+  // Mark: Load from file tests
+  func testLoadValidCompletePlistFile() {
+    let filePath = NSBundle(forClass: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist");
+    
+    // Execute
+    XCTAssertNoThrow  { try self.factory.readConfigurationFromPlistFile(filePath!); };
+    
+    // Validate loggers
+    XCTAssertEqual(self.factory.rootLogger.thresholdLevel, .Info);
+    XCTAssertEqual(self.factory.loggers.count, 2);
+    let logger1 = self.factory.getLogger("project.feature.logger1");
+    let logger2 = self.factory.getLogger("project.feature.logger2");
+    XCTAssertNil(logger1.parent);
+    XCTAssertNil(logger2.parent);
+    XCTAssertEqual(logger1.thresholdLevel, .Error);
+    XCTAssertEqual(logger2.thresholdLevel, .Fatal);
+    
+    // Validate appenders
+    let logger1Appender1 = logger1.appenders[0];
+    let logger2Appender1 = logger1.appenders[0];
+    XCTAssertTrue(logger1Appender1 === logger2Appender1);
+}
   
   // MARK: Utility methods
   

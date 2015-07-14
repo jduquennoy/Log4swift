@@ -24,7 +24,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 */
 @objc public class Logger {
   public enum DictionaryKey: String {
-    case Level = "Level"
+    case ThresholdLevel = "ThresholdLevel"
     case AppenderIds = "AppenderIds"
   }
   
@@ -92,11 +92,11 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   /// Updates the logger with the content of the configuration dictionary.
   internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws {
     
-    if let safeLevelString = dictionary[DictionaryKey.Level.rawValue] as? String {
+    if let safeLevelString = dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String {
       if let safeLevel = LogLevel(safeLevelString) {
         self.thresholdLevel = safeLevel;
       } else {
-        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Level.rawValue);
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ThresholdLevel.rawValue);
       }
     }
     

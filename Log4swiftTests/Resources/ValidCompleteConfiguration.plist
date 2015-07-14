@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Formatters</key>
+	<array>
+		<dict>
+			<key>Pattern</key>
+			<string>log pattern - %m</string>
+			<key>Identifier</key>
+			<string>patternFormatter1</string>
+			<key>Class</key>
+			<string>PatternFormatter</string>
+		</dict>
+	</array>
+	<key>Appenders</key>
+	<array>
+		<dict>
+			<key>FormatterId</key>
+			<string>patternFormatter1</string>
+			<key>Class</key>
+			<string>ConsoleAppender</string>
+			<key>Identifier</key>
+			<string>consoleAppender1</string>
+			<key>ThresholdLevel</key>
+			<string>Warning</string>
+		</dict>
+	</array>
+	<key>RootLogger</key>
+	<dict>
+		<key>ThresholdLevel</key>
+		<string>Info</string>
+	</dict>
+	<key>Loggers</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>project.feature.logger1</string>
+			<key>ThresholdLevel</key>
+			<string>Error</string>
+			<key>AppenderIds</key>
+			<array>
+				<string>consoleAppender1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>project.feature.logger2</string>
+			<key>ThresholdLevel</key>
+			<string>Fatal</string>
+			<key>AppenderIds</key>
+			<array>
+				<string>consoleAppender1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

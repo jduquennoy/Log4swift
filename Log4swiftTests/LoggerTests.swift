@@ -233,7 +233,7 @@ class LoggerTests: XCTestCase {
   
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
-      Logger.DictionaryKey.Level.rawValue: "invalidLevel"];
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "invalidLevel"];
 
     let logger = Logger(identifier: "testLogger");
     
@@ -243,7 +243,7 @@ class LoggerTests: XCTestCase {
   
   func testUpdateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
-      Logger.DictionaryKey.Level.rawValue: "info"];    
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];    
     
     let logger = Logger(identifier: "testLogger");
     
@@ -256,7 +256,7 @@ class LoggerTests: XCTestCase {
 
   func testUpdateLoggerFromDictionaryWithoutAppenderRemovesExistingOnes() {
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
-      Logger.DictionaryKey.Level.rawValue: "info"];
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
     let logger = Logger(identifier: "testLogger");
     logger.appenders.append(MemoryAppender());

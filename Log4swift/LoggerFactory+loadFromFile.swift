@@ -33,8 +33,7 @@ extension LoggerFactory {
   
   public func readConfigurationFromPlistFile(filePath: String) throws {
     let configurationNSDictionary = NSDictionary(contentsOfFile: filePath);
-    if let configurationNSDictionary = configurationNSDictionary {
-      let configurationDictionary = configurationNSDictionary as! Dictionary<String, AnyObject>
+    if let configurationDictionary = configurationNSDictionary as? Dictionary<String, AnyObject> {
       try self.readConfiguration(configurationDictionary);
     }
   }

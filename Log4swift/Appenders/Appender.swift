@@ -25,7 +25,7 @@ This class is the base class, from which all appenders should inherit.
 */
 @objc public class Appender {
   public enum DictionaryKey: String {
-    case Threshold = "Threshold"
+    case ThresholdLevel = "ThresholdLevel"
     case FormatterId = "FormatterId"
   }
   
@@ -38,11 +38,11 @@ This class is the base class, from which all appenders should inherit.
   }
   
   internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-     if let safeThresholdString = (dictionary[DictionaryKey.Threshold.rawValue] as? String) {
+     if let safeThresholdString = (dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String) {
       if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold;
       } else {
-        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Threshold.rawValue);
+        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ThresholdLevel.rawValue);
       }
     }
     

@@ -77,7 +77,7 @@ class NSLoggerAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError () {
     let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
-      Appender.DictionaryKey.Threshold.rawValue: "dummy level"];
+      Appender.DictionaryKey.ThresholdLevel.rawValue: "dummy level"];
     let appender = NSLoggerAppender("testAppender");
     
     // Execute
@@ -86,7 +86,7 @@ class NSLoggerAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesIt () {
     let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
-      Appender.DictionaryKey.Threshold.rawValue: "Warning"];
+      Appender.DictionaryKey.ThresholdLevel.rawValue: "Warning"];
     let appender = NSLoggerAppender("testAppender");
     
     // Execute
