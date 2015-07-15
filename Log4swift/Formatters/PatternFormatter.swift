@@ -35,7 +35,7 @@ Available markers are :
 **Exemples**  
 "[%p] %m" -> "[Debug] log message"
 */
-@objc public class PatternFormatter : Formatter {
+@objc public final class PatternFormatter : Formatter {
   /// Definition of errors the PatternFormatter can throw
   public enum Error : ErrorType {
     case InvalidFormatSyntax

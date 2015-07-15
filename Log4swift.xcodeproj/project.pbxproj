@@ -23,8 +23,11 @@
 		02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C361B2DBC5C00B695DE /* Logger+convenience.swift */; };
 		02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */; };
 		026A43811B4DCF2700997862 /* LogInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026A43801B4DCF2700997862 /* LogInformation.swift */; };
+		02B61A5D1B56D1F100C683D8 /* Log4swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02664C0A1B2CE96500B695DE /* Log4swift.framework */; };
+		02B61A5F1B56D1F100C683D8 /* ValidCompleteConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */; };
 		02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */; };
 		02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */; };
+		02C9E1581B56D40F0038AB0E /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */; };
 		02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */; };
 		02F4E86E1B3A0454004AB9EA /* LoggerClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86A1B3A0454004AB9EA /* LoggerClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E86B1B3A0454004AB9EA /* LoggerClient.m */; };
@@ -53,6 +56,13 @@
 			remoteGlobalIDString = 02664C091B2CE96500B695DE;
 			remoteInfo = log4swift;
 		};
+		02B61A4D1B56D1F100C683D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02664C011B2CE96500B695DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02664C091B2CE96500B695DE;
+			remoteInfo = log4swift;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +85,9 @@
 		02664C361B2DBC5C00B695DE /* Logger+convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+convenience.swift"; sourceTree = "<group>"; };
 		02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactoryTests.swift; sourceTree = "<group>"; };
 		026A43801B4DCF2700997862 /* LogInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInformation.swift; sourceTree = "<group>"; };
+		02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
+		02B61A631B56D1F100C683D8 /* log4swiftPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = log4swiftPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		02B61A641B56D1F200C683D8 /* log4swiftPerformanceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "log4swiftPerformanceTests-Info.plist"; sourceTree = "<group>"; };
 		02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppender.swift; sourceTree = "<group>"; };
 		02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAppenderTests.swift; sourceTree = "<group>"; };
 		02D87E431B34BBCC0089A222 /* SoftwareConfiguration-OSX.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "SoftwareConfiguration-OSX.playground"; sourceTree = "<group>"; };
@@ -112,6 +125,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02664C151B2CE96500B695DE /* Log4swift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02B61A5C1B56D1F100C683D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02B61A5D1B56D1F100C683D8 /* Log4swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +189,7 @@
 			children = (
 				02664C0C1B2CE96500B695DE /* Log4swift */,
 				02664C181B2CE96500B695DE /* Log4swiftTests */,
+				02B61A491B56D11A00C683D8 /* Log4swiftPerformanceTests */,
 				02F4E85E1B3A02EC004AB9EA /* Third parties */,
 				0237CF341B2E220F004D5B9F /* Example playgrounds */,
 				02664C0B1B2CE96500B695DE /* Products */,
@@ -180,6 +202,7 @@
 			children = (
 				02664C0A1B2CE96500B695DE /* Log4swift.framework */,
 				02664C141B2CE96500B695DE /* Log4swiftTests.xctest */,
+				02B61A631B56D1F100C683D8 /* log4swiftPerformanceTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -229,6 +252,15 @@
 				02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */,
 			);
 			path = Appenders;
+			sourceTree = "<group>";
+		};
+		02B61A491B56D11A00C683D8 /* Log4swiftPerformanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */,
+				02B61A641B56D1F200C683D8 /* log4swiftPerformanceTests-Info.plist */,
+			);
+			path = Log4swiftPerformanceTests;
 			sourceTree = "<group>";
 		};
 		02B8F6211B30B21B0077A8A6 /* Appenders */ = {
@@ -331,6 +363,24 @@
 			productReference = 02664C141B2CE96500B695DE /* Log4swiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		02B61A4B1B56D1F100C683D8 /* log4swiftPerformanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02B61A601B56D1F100C683D8 /* Build configuration list for PBXNativeTarget "log4swiftPerformanceTests" */;
+			buildPhases = (
+				02B61A4E1B56D1F100C683D8 /* Sources */,
+				02B61A5C1B56D1F100C683D8 /* Frameworks */,
+				02B61A5E1B56D1F100C683D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				02B61A4C1B56D1F100C683D8 /* PBXTargetDependency */,
+			);
+			name = log4swiftPerformanceTests;
+			productName = log4swiftTests;
+			productReference = 02B61A631B56D1F100C683D8 /* log4swiftPerformanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -363,6 +413,7 @@
 			targets = (
 				02664C091B2CE96500B695DE /* log4swift */,
 				02664C131B2CE96500B695DE /* log4swiftTests */,
+				02B61A4B1B56D1F100C683D8 /* log4swiftPerformanceTests */,
 			);
 		};
 /* End PBXProject section */
@@ -380,6 +431,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				021136B31B55A85A000954DF /* ValidCompleteConfiguration.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02B61A5E1B56D1F100C683D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02B61A5F1B56D1F100C683D8 /* ValidCompleteConfiguration.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +489,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02B61A4E1B56D1F100C683D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02C9E1581B56D40F0038AB0E /* PerformanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -437,6 +504,11 @@
 			isa = PBXTargetDependency;
 			target = 02664C091B2CE96500B695DE /* log4swift */;
 			targetProxy = 02664C161B2CE96500B695DE /* PBXContainerItemProxy */;
+		};
+		02B61A4C1B56D1F100C683D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02664C091B2CE96500B695DE /* log4swift */;
+			targetProxy = 02B61A4D1B56D1F100C683D8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -560,6 +632,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = log4swift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -593,6 +666,28 @@
 			};
 			name = Release;
 		};
+		02B61A611B56D1F100C683D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Log4swiftPerformanceTests/log4swiftPerformanceTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02B61A621B56D1F100C683D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Log4swiftPerformanceTests/log4swiftPerformanceTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -619,6 +714,15 @@
 			buildConfigurations = (
 				02664C221B2CE96500B695DE /* Debug */,
 				02664C231B2CE96500B695DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02B61A601B56D1F100C683D8 /* Build configuration list for PBXNativeTarget "log4swiftPerformanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02B61A611B56D1F100C683D8 /* Debug */,
+				02B61A621B56D1F100C683D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

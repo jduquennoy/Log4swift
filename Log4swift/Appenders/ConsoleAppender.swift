@@ -29,7 +29,7 @@ public class ConsoleAppender: Appender {
     case ErrorThreshold = "ErrorThreshold"
   };
   
-  var errorThresholdLevel: LogLevel? = .Error;
+  public var errorThresholdLevel: LogLevel? = .Error;
   
   public required init(_ identifier: String) {
     super.init(identifier);
