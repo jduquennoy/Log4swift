@@ -25,7 +25,7 @@ The logger factory is responsible for
 * holding the loggers and appenders
 * matching UTI identifiers to loggers
 */
-@objc public class LoggerFactory {
+@objc public final class LoggerFactory {
   static public let sharedInstance = LoggerFactory();
   
   /// Errors that can be thrown by logger factory

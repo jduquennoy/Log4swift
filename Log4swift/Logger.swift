@@ -22,7 +22,7 @@
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
-@objc public class Logger {
+@objc public final class Logger {
   public enum DictionaryKey: String {
     case ThresholdLevel = "ThresholdLevel"
     case AppenderIds = "AppenderIds"

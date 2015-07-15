@@ -70,10 +70,9 @@ extension LoggerFactory {
     // Loggers
     if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, AnyObject>> {
       for currentLoggerDefinition in loggersArray {
-        if let logger = try processLoggerDictionary(currentLoggerDefinition, appenders: appenders) {
-          loggers.append(logger);
-          try registerLogger(logger);
-        }
+        let logger = try processLoggerDictionary(currentLoggerDefinition, appenders: appenders)
+        loggers.append(logger);
+        try registerLogger(logger);
       }
     }
     
@@ -145,7 +144,7 @@ extension LoggerFactory {
     return type;
   }
 
-  private func processLoggerDictionary(dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger? {
+  private func processLoggerDictionary(dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger {
     let identifier = try identifierFromConfigurationDictionary(dictionary);
     let logger: Logger;
     
