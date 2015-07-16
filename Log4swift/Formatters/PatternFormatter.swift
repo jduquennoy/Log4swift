@@ -28,7 +28,7 @@ Use '%%' to print a '%' character in the formatted message.
 Available markers are :
 * l : The name of the log level
 * n : The name of the logger
-* d : The date of the log
+* d{format} : The date of the log. The format is the one of the strftime function.
 * m : the message
 * % : the '%' character
 
@@ -83,7 +83,22 @@ Available markers are :
     // This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
     // Add an entry to this array to declare a new marker.
     private let markerClosures: Dictionary<String, MarkerClosure> = [
-      "d": {(parameters, message, info) in NSDate().description },
+      "d": {(parameters, message, info) in
+        let result: String;
+        if let parameters = parameters {
+          let now = UnsafeMutablePointer<time_t>.alloc(1);
+          time(now);
+          let date = localtime(now);
+          let buffer = UnsafeMutablePointer<Int8>.alloc(80);
+          strftime(buffer, 80, parameters , date);
+          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String;
+          buffer.destroy();
+          now.destroy();
+        } else {
+          result = NSDate().description;
+        }
+        return result
+      },
       "l": {(parameters, message, info) in
         if let logLevel = info[.LogLevel] {
           return logLevel.description
@@ -181,7 +196,7 @@ Available markers are :
         case .End:
           throw Error.NotClosedMarkerParameter;
         default:
-          processMarker(markerName);
+          processMarker(markerName, parameters: String(parserStatus.charactersAccumulator));
           parserStatus.charactersAccumulator.removeAll();
         }
       default:

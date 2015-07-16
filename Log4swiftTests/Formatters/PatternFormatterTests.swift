@@ -72,6 +72,20 @@ class PatternFormatterTests: XCTestCase {
     let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
+  
+  func testFormatterAppliesDateMarkerWithFormat() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{%D %R}");
+    let info = LogInfoDictionary();
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    // TODO: the validation of this test is pretty weak.
+    let validationRegexp = try! NSRegularExpression(pattern: "^\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}$", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+  }  
 
   func testMarkerParametersAreInterpreted() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{param}");

@@ -34,7 +34,7 @@ class PerformanceTests: XCTestCase {
   }
   
   func testConsoleLoggerWithFormatterPerformanceTest() {
-    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d %m");
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{%D %R} %m");
     let consoleAppender = ConsoleAppender("appender");
     consoleAppender.errorThresholdLevel = .Debug;
     consoleAppender.formatter = formatter;
