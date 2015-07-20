@@ -47,9 +47,9 @@ class FunctionalTests: XCTestCase {
     
     // Execute
     Logger.getLogger("test.identifier").debug("This log to \(LogLevel.Debug) should not be printed");
-    Logger.getLogger("test.identifier").warn{ return "This log should be printed to appender1 only"}
+    Logger.getLogger("test.identifier").warning{ return "This log should be printed to appender1 only"}
     Logger.getLogger("test.identifier").fatal("this log should be printed to both appenders");
-    Logger.getLogger("test.identifier.sublogger").warn("this log should be printed to appender1 too");
+    Logger.getLogger("test.identifier.sublogger").warning("this log should be printed to appender1 too");
     
     // Validate
     XCTAssertEqual(appender1.logMessages.count, 3, "Appender1 should have received two messages");

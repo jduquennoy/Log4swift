@@ -39,7 +39,7 @@ extension Logger {
     LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Info);
   }
   /// Logs the provided message with a warning level using the root logger of the shared logger factory
-  public class func warn(format: String, _ args: CVarArgType...) {
+  public class func warning(format: String, _ args: CVarArgType...) {
     LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Warning);
   }
   /// Logs the provided message with a error level using the root logger of the shared logger factory
@@ -63,8 +63,8 @@ extension Logger {
   }
   /// Logs a the message returned by the closer with a warning level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public class func warn(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.warn(closure);
+  @nonobjc public class func warning(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.warning(closure);
   }
   /// Logs a the message returned by the closer with an error level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.

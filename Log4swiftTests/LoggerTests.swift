@@ -133,7 +133,7 @@ class LoggerTests: XCTestCase {
     LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
     
     //Execute
-    Logger.warn("ping");
+    Logger.warning("ping");
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
@@ -198,7 +198,7 @@ class LoggerTests: XCTestCase {
     LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
     
     //Execute
-    Logger.warn{ return "ping"; };
+    Logger.warning{ return "ping"; };
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
@@ -332,7 +332,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.logger", level: LogLevel.Warning, appenders: [appender]);
     
     // Execute
-    logger.warn("Info message");
+    logger.warning("Info message");
     
     // Validate
     XCTAssertEqual(appender.logMessages.count, 1, "The message should have been sent to the appender");
@@ -356,7 +356,7 @@ class LoggerTests: XCTestCase {
     // Execute
     logger.debug("ping %@ %02x", "blabla", 12);
     logger.info("ping %@ %02x", "blabla", 12);
-    logger.warn("ping %@ %02x", "blabla", 12);
+    logger.warning("ping %@ %02x", "blabla", 12);
     logger.error("ping %@ %02x", "blabla", 12);
     logger.fatal("ping %@ %02x", "blabla", 12);
     
@@ -375,7 +375,7 @@ class LoggerTests: XCTestCase {
     // Execute
     Logger.debug("ping %@ %02x", "blabla", 12);
     Logger.info("ping %@ %02x", "blabla", 12);
-    Logger.warn("ping %@ %02x", "blabla", 12);
+    Logger.warning("ping %@ %02x", "blabla", 12);
     Logger.error("ping %@ %02x", "blabla", 12);
     Logger.fatal("ping %@ %02x", "blabla", 12);
     

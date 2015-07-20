@@ -96,7 +96,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       if let safeLevel = LogLevel(safeLevelString) {
         self.thresholdLevel = safeLevel;
       } else {
-        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ThresholdLevel.rawValue);
+        throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ThresholdLevel.rawValue);
       }
     }
     
@@ -107,7 +107,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
           appenders.append(foundAppender);
         } else {
-          throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
+          throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
         }
       }
     }
@@ -129,7 +129,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.log(format.format(getVaList(args)), level: LogLevel.Info);
   }
   /// Logs the provided message with a warning level
-  public func warn(format: String, _ args: CVarArgType...) {
+  public func warning(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Warning);
   }
   /// Logs the provided message with an error level
@@ -153,7 +153,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   }
   /// Logs a the message returned by the closer with a warning level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func warn(closure: () -> String) {
+  @nonobjc public func warning(closure: () -> String) {
     self.log(closure, level: LogLevel.Warning);
   }
   /// Logs a the message returned by the closer with an error level

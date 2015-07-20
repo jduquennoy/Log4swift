@@ -41,6 +41,7 @@
 		5E484E541B468E6600CA5C01 /* LoggerFactory+loadFromFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */; };
 		5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F7691B42C959009395CE /* Bool+utilities.swift */; };
 		5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */; };
+		5EA3F1571B5D2DEA00B7C420 /* Logger+objectiveC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */; };
 		5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E01B343A0400453B31 /* FunctionalTests.swift */; };
 		5ED244E51B34408600453B31 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E41B34408600453B31 /* Formatter.swift */; };
 		5ED41A671B3D949900C39F6E /* LogLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED41A661B3D949900C39F6E /* LogLevelTests.swift */; };
@@ -105,6 +106,7 @@
 		5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFileTests.swift"; sourceTree = "<group>"; };
 		5E66F7691B42C959009395CE /* Bool+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilities.swift"; sourceTree = "<group>"; };
 		5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilitiesTests.swift"; sourceTree = "<group>"; };
+		5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+objectiveC.swift"; sourceTree = "<group>"; };
 		5ED244E01B343A0400453B31 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
 		5ED244E41B34408600453B31 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Formatter.swift; path = ../Formatter.swift; sourceTree = "<group>"; };
 		5ED41A661B3D949900C39F6E /* LogLevelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevelTests.swift; sourceTree = "<group>"; };
@@ -214,9 +216,10 @@
 				02664C0D1B2CE96500B695DE /* log4swift.h */,
 				02664C2A1B2D97DE00B695DE /* LogLevel.swift */,
 				02664C241B2CEB2900B695DE /* Logger.swift */,
+				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
+				5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */,
 				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
-				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
 				5E484E501B46843D00CA5C01 /* Errors.swift */,
 				02664C2F1B2DA69A00B695DE /* Appenders */,
 				5E17F3231B3328BA00E262F5 /* Formatters */,
@@ -460,6 +463,7 @@
 				02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */,
 				D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
+				5EA3F1571B5D2DEA00B7C420 /* Logger+objectiveC.swift in Sources */,
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
 				02664C2B1B2D97DE00B695DE /* LogLevel.swift in Sources */,
 				02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */,
