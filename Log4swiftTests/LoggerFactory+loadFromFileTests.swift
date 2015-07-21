@@ -239,11 +239,87 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     XCTAssertTrue(logger === existingLogger);
     XCTAssertEqual(logger.thresholdLevel, LogLevel.Info);
     XCTAssertEqual(logger.appenders.count, 1);
-    if(logger.appenders.count > 0) { 
+    if(logger.appenders.count > 0) {
       XCTAssertEqual(logger.appenders[0].identifier, "test appender");
     }
   }
   
+  func testLoggerFromConfigurationDictionaryInheritsLevelFromParentIfNotSpecified() {
+    let appender1Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"];
+    let appender2Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "second appender"];
+    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+      Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
+    let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger",
+      Logger.DictionaryKey.AppenderIds.rawValue: ["second appender"]];
+    
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary, appender2Dictionary],
+      LoggerFactory.DictionaryKey.Loggers.rawValue: [logger1Dictionary, logger2Dictionary]];
+    
+    // Execute
+    try! factory.readConfiguration(dictionary);
+    
+    // Validate
+    let sonLogger = factory.getLogger("test.parentLogger.sonLogger");
+    XCTAssertNil(sonLogger.parent);
+    XCTAssertEqual(sonLogger.thresholdLevel, LogLevel.Info);
+    XCTAssertEqual(sonLogger.appenders.count, 1);
+    if(sonLogger.appenders.count > 0) {
+      XCTAssertEqual(sonLogger.appenders[0].identifier, "second appender");
+    }
+  }
+  
+  func testLoggerFromConfigurationDictionaryInheritsAppendersFromParentIfNotSpecified() {
+    let appender1Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"];
+    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+      Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
+    let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger",
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "warning"];
+    
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
+      LoggerFactory.DictionaryKey.Loggers.rawValue: [logger1Dictionary, logger2Dictionary]];
+    
+    // Execute
+    try! factory.readConfiguration(dictionary);
+    
+    // Validate
+    let sonLogger = factory.getLogger("test.parentLogger.sonLogger");
+    XCTAssertNil(sonLogger.parent);
+    XCTAssertEqual(sonLogger.thresholdLevel, LogLevel.Warning);
+    XCTAssertEqual(sonLogger.appenders.count, 1);
+    if(sonLogger.appenders.count > 0) {
+      XCTAssertEqual(sonLogger.appenders[0].identifier, "first appender");
+    }
+  }
+  
+  func testLoggersInheritFromParentEvenIfOutOfOrder() {
+    let appender1Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ConsoleAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"];
+    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+      Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
+    let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger"];
+    
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
+      LoggerFactory.DictionaryKey.Loggers.rawValue: [logger2Dictionary, logger1Dictionary]];
+    
+    // Execute
+    try! factory.readConfiguration(dictionary);
+    
+    // Validate
+    let sonLogger = factory.getLogger("test.parentLogger.sonLogger");
+    XCTAssertNil(sonLogger.parent);
+    XCTAssertEqual(sonLogger.thresholdLevel, LogLevel.Info);
+    XCTAssertEqual(sonLogger.appenders.count, 1);
+    if(sonLogger.appenders.count > 0) {
+      XCTAssertEqual(sonLogger.appenders[0].identifier, "first appender");
+    }
+  }
+
   // MARK: Root logger tests
 
   func testReadConfigurationWithRootLoggerUpdatesIt() {
@@ -268,7 +344,6 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       XCTAssertEqual(factory.rootLogger.appenders[0].identifier, "test appender");
     }
   }
-  
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {

@@ -67,18 +67,28 @@ extension LoggerFactory {
       }
     }
     
+    // Root logger
+    if let rootLoggerDictionary = configurationDictionary[DictionaryKey.RootLogger.rawValue] as? Dictionary<String, AnyObject> {
+      try self.rootLogger.updateWithDictionary(rootLoggerDictionary, availableAppenders: appenders);
+    }
+    
     // Loggers
     if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, AnyObject>> {
-      for currentLoggerDefinition in loggersArray {
+      let sortedLoggersArray = loggersArray.sort({ (a, b) -> Bool in
+        do {
+          let identifierA: String = try self.identifierFromConfigurationDictionary(a);
+          let identifierB: String = try self.identifierFromConfigurationDictionary(b);
+          return identifierA.characters.count < identifierB.characters.count;
+        } catch {
+          return false;
+        }
+      });
+      
+      for currentLoggerDefinition in sortedLoggersArray {
         let logger = try processLoggerDictionary(currentLoggerDefinition, appenders: appenders)
         loggers.append(logger);
         try registerLogger(logger);
       }
-    }
-    
-    // Root logger
-    if let rootLoggerDictionary = configurationDictionary[DictionaryKey.RootLogger.rawValue] as? Dictionary<String, AnyObject> {
-      try self.rootLogger.updateWithDictionary(rootLoggerDictionary, availableAppenders: appenders);
     }
     
     return (formatters, appenders, loggers);
@@ -146,14 +156,8 @@ extension LoggerFactory {
 
   private func processLoggerDictionary(dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger {
     let identifier = try identifierFromConfigurationDictionary(dictionary);
-    let logger: Logger;
+    let logger = self.getLogger(identifier);
     
-    if let existingLogger = loggers[identifier] {
-      logger = existingLogger;
-    } else {
-      logger = Logger(identifier: identifier);
-    }
-
     try logger.updateWithDictionary(dictionary, availableAppenders: appenders);
     
     return logger;

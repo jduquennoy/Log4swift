@@ -91,21 +91,22 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   /// Updates the logger with the content of the configuration dictionary.
   internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws {
+    breakDependencyWithParent();
     
     if let safeLevelString = dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String {
       if let safeLevel = LogLevel(safeLevelString) {
         self.thresholdLevel = safeLevel;
-      } else {
+      }
+      else {
         throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ThresholdLevel.rawValue);
       }
     }
     
-    self.appenders.removeAll();
     if let appenderIds = dictionary[DictionaryKey.AppenderIds.rawValue] as? Array<String> {
-      appenders.removeAll();
+      appendersStorage.removeAll();
       for currentAppenderId in appenderIds {
         if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
-          appenders.append(foundAppender);
+          appendersStorage.append(foundAppender);
         } else {
           throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);
         }

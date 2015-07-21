@@ -254,7 +254,7 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(logger.thresholdLevel, LogLevel.Info);
   }
 
-  func testUpdateLoggerFromDictionaryWithoutAppenderRemovesExistingOnes() {
+  func testUpdateLoggerFromDictionaryWithoutAppenderDoesNotChangeExistingAppenders() {
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
@@ -262,6 +262,22 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(MemoryAppender());
     logger.appenders.append(MemoryAppender());
 
+    // Execute
+    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertEqual(logger.appenders.count, 2);
+  }
+  
+  func testUpdateLoggerFromDictionaryWithEmptyAppendersArrayRemovesThem() {
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+      Logger.DictionaryKey.ThresholdLevel.rawValue: "info",
+    Logger.DictionaryKey.AppenderIds.rawValue: []];
+    
+    let logger = Logger(identifier: "testLogger");
+    logger.appenders.append(MemoryAppender());
+    logger.appenders.append(MemoryAppender());
+    
     // Execute
     try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>());
     

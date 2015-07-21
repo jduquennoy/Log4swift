@@ -26,7 +26,7 @@ ConsoleAppender will print the log to stdout or stderr depending on thresholds a
 */
 public class ConsoleAppender: Appender {
   public enum DictionaryKey: String {
-    case ErrorThreshold = "ErrorThreshold"
+    case ErrorThreshold = "ErrorThresholdLevel"
   };
   
   public var errorThresholdLevel: LogLevel? = .Error;
