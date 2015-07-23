@@ -35,4 +35,4 @@ var logger1 = Logger.getLogger("package1.feature1"); // This logger will be base
 logger1.info("first log message");
 
 var logger2 = Logger.getLogger("package2.feature1"); // This logger will be based on the root logger
-logger2.warn("second log message");
+logger2.warning("second log message");

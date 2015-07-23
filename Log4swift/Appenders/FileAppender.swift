@@ -37,12 +37,15 @@ public class FileAppender : Appender {
         self.fileHandler = nil;
       }
     }
+    didSet {
+      self.filePath = self.filePath.stringByExpandingTildeInPath;
+    }
   };
   private var fileHandler: NSFileHandle?;
 
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil;
-    self.filePath = filePath;
+    self.filePath = filePath.stringByExpandingTildeInPath;
 
     super.init(identifier);
   }

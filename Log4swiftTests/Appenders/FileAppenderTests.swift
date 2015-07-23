@@ -38,6 +38,27 @@ class FileAppenderTests: XCTestCase {
     super.tearDown()
   }
   
+  func testFileAppenderExpandsTildeWhenInitializing() {
+    let filePath = "~/log/logFile.log";
+    
+    // Execute
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath);
+    
+    // Validate
+    XCTAssertEqual(fileAppender.filePath, filePath.stringByExpandingTildeInPath);
+  }
+
+  func testFileAppenderExpandsTildeWhenSettingFilePath() {
+    let filePath = "~/log/logFile.log";
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: "/dummy/path");
+    
+    // Execute
+    fileAppender.filePath = filePath
+    
+    // Validate
+    XCTAssertEqual(fileAppender.filePath, filePath.stringByExpandingTildeInPath);
+  }
+  
   func testFileAppenderCreatesFileIfItDoesNotExist()  {
     do {
       let tempFilePath = try self.createTemporaryFileUrl();
