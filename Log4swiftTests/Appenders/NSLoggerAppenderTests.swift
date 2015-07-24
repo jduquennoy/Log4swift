@@ -9,6 +9,14 @@
 import XCTest
 @testable import Log4swift
 
+extension NSLoggerAppender {
+  var logger: UnsafeMutablePointer<NSLogger>  {
+    get {
+      return LoggerGetDefaultLogger();
+    }
+  }
+}
+
 class NSLoggerAppenderTests: XCTestCase {
 
   func testSettingUpAHostLoggerWithSSLEnabledEnablesSSLOption() {
