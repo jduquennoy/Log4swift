@@ -38,4 +38,20 @@ extension Logger {
   @objc public func logFatal(message: String) {
     self.log(message, level: LogLevel.Fatal);
   }
+  
+  @objc public func logDebugBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Debug);
+  }
+  @objc public func logInfoBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Info);
+  }
+  @objc public func logWarningBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Warning);
+  }
+  @objc public func logErrorBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Error);
+  }
+  @objc public func logFatalBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Fatal);
+  }
 }

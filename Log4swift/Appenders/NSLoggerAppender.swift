@@ -33,6 +33,8 @@ public class NSLoggerAppender : Appender {
     case RemotePort = "RemotePort"
   }
 
+  let logger: UnsafeMutablePointer<NSLogger>;
+  
   /// This initializer will configure the NSLogger client to send the messages to a specific host, with a specific port.
   /// Parameters are :
   /// * remoteHost : the remote host address, as an IP or a resolable host name. Default value is 127.0.0.1.
@@ -54,6 +56,7 @@ public class NSLoggerAppender : Appender {
   }
 
   public required init(_ identifier: String) {
+    self.logger = LoggerInit();
     super.init(identifier);
   }
 
@@ -116,7 +119,7 @@ public class NSLoggerAppender : Appender {
   }
   
   deinit {
-    LoggerStop(nil);
+    LoggerStop(self.logger);
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
@@ -124,12 +127,10 @@ public class NSLoggerAppender : Appender {
     if let safeLoggerId = info[LogInfoKeys.LoggerName] {
       loggerId = safeLoggerId.description;
     }
-    LogMessageRawToF(nil, nil, 0, nil, loggerId, Int32(level.rawValue), log);
+    LogMessageRawToF(self.logger, nil, 0, nil, loggerId, Int32(level.rawValue), log);
   }
   
   private func setupBonjourLogger(bonjourServiceName: String, useLocalCache: Bool, useSSL: Bool) {
-    LoggerStop(nil);
-    
     var options = UInt32(kLoggerOption_BrowseBonjour);
     if(useLocalCache) {
       options |= UInt32(kLoggerOption_BufferLogsUntilConnection);
@@ -137,16 +138,14 @@ public class NSLoggerAppender : Appender {
     if(useSSL) {
       options |= UInt32(kLoggerOption_UseSSL);
     }
-    LoggerSetOptions(nil, options);
+    LoggerSetOptions(self.logger, options);
     
-    LoggerSetupBonjour(nil, nil, bonjourServiceName);
+    LoggerSetupBonjour(self.logger, nil, bonjourServiceName);
 
-    LoggerStart(nil);
+    LoggerStart(self.logger);
 }
   
   private func setupTcpLogger(remoteHost: String, remotePort: UInt32, useLocalCache: Bool, useSSL: Bool) {
-    LoggerStop(nil);
-    
     var options = UInt32(0);
     if(useLocalCache) {
       options |= UInt32(kLoggerOption_BufferLogsUntilConnection);
@@ -154,10 +153,10 @@ public class NSLoggerAppender : Appender {
     if(useSSL) {
       options |= UInt32(kLoggerOption_UseSSL);
     }
-    LoggerSetOptions(nil, options);
+    LoggerSetOptions(self.logger, options);
     
-    LoggerSetViewerHost(nil, remoteHost, remotePort);
+    LoggerSetViewerHost(self.logger, remoteHost, remotePort);
     
-    LoggerStart(nil);
+    LoggerStart(self.logger);
   }
 }

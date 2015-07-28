@@ -122,23 +122,23 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   // MARK: Logging methods
   
   /// Logs the provided message with a debug level.
-  public func debug(format: String, _ args: CVarArgType...) {
+  @nonobjc public func debug(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Debug);
   }
   /// Logs the provided message with an info level
-  public func info(format: String, _ args: CVarArgType...) {
+  @nonobjc public func info(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Info);
   }
   /// Logs the provided message with a warning level
-  public func warning(format: String, _ args: CVarArgType...) {
+  @nonobjc public func warning(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Warning);
   }
   /// Logs the provided message with an error level
-  public func error(format: String, _ args: CVarArgType...) {
+  @nonobjc public func error(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Error);
   }
   /// Logs the provided message with a fatal level
-  public func fatal(format: String, _ args: CVarArgType...) {
+  @nonobjc public func fatal(format: String, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Fatal);
   }
   
