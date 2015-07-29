@@ -39,6 +39,8 @@
 		5E484E4F1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */; };
 		5E484E511B46843D00CA5C01 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E501B46843D00CA5C01 /* Errors.swift */; };
 		5E484E541B468E6600CA5C01 /* LoggerFactory+loadFromFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */; };
+		5E4D39121B690DC40006961C /* NSLogAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4D39111B690DC40006961C /* NSLogAppender.swift */; };
+		5E4D39511B6915FE0006961C /* Logger+objectiveCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4D39501B6915FE0006961C /* Logger+objectiveCTests.swift */; };
 		5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F7691B42C959009395CE /* Bool+utilities.swift */; };
 		5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */; };
 		5EA3F1571B5D2DEA00B7C420 /* Logger+objectiveC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */; };
@@ -104,6 +106,8 @@
 		5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFile.swift"; sourceTree = "<group>"; };
 		5E484E501B46843D00CA5C01 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		5E484E521B468E5900CA5C01 /* LoggerFactory+loadFromFileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFileTests.swift"; sourceTree = "<group>"; };
+		5E4D39111B690DC40006961C /* NSLogAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLogAppender.swift; sourceTree = "<group>"; };
+		5E4D39501B6915FE0006961C /* Logger+objectiveCTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+objectiveCTests.swift"; sourceTree = "<group>"; };
 		5E66F7691B42C959009395CE /* Bool+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilities.swift"; sourceTree = "<group>"; };
 		5E66F76B1B42CA21009395CE /* Bool+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bool+utilitiesTests.swift"; sourceTree = "<group>"; };
 		5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+objectiveC.swift"; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 				024FD79D1B2DE0F000A8609C /* TestObjects */,
 				024E2E021B3F414000457304 /* Utilities */,
 				021136B11B55A789000954DF /* Resources */,
+				5E4D39501B6915FE0006961C /* Logger+objectiveCTests.swift */,
 			);
 			path = Log4swiftTests;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 				02664C321B2DA70C00B695DE /* ConsoleAppender.swift */,
 				02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */,
 				02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */,
+				5E4D39111B690DC40006961C /* NSLogAppender.swift */,
 			);
 			path = Appenders;
 			sourceTree = "<group>";
@@ -462,6 +468,7 @@
 				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
 				02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */,
 				D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */,
+				5E4D39121B690DC40006961C /* NSLogAppender.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
 				5EA3F1571B5D2DEA00B7C420 /* Logger+objectiveC.swift in Sources */,
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
@@ -481,6 +488,7 @@
 				024E2E051B3F470500457304 /* XCTestCase+noThrow.swift in Sources */,
 				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
 				D9B229E41B443B670001EE9A /* Array+utilitiesTests.swift in Sources */,
+				5E4D39511B6915FE0006961C /* Logger+objectiveCTests.swift in Sources */,
 				02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */,
 				5ED41A671B3D949900C39F6E /* LogLevelTests.swift in Sources */,
 				5E66F76C1B42CA21009395CE /* Bool+utilitiesTests.swift in Sources */,
@@ -619,6 +627,7 @@
 				INFOPLIST_FILE = log4swift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swift;
 				PRODUCT_NAME = Log4swift;
 				SKIP_INSTALL = YES;
@@ -643,6 +652,7 @@
 				INFOPLIST_FILE = log4swift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swift;
 				PRODUCT_NAME = Log4swift;
 				SKIP_INSTALL = YES;
