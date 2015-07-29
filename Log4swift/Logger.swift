@@ -22,7 +22,7 @@
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */
-@objc public final class Logger {
+@objc public final class Logger: NSObject {
   public enum DictionaryKey: String {
     case ThresholdLevel = "ThresholdLevel"
     case AppenderIds = "AppenderIds"
@@ -78,7 +78,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.appendersStorage = appenders;
   }
 
-  convenience init() {
+  convenience override init() {
     self.init(identifier: "", appenders: Logger.createDefaultAppenders());
   }
   

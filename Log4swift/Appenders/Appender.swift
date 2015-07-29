@@ -23,7 +23,7 @@
 Appenders are responsible for sending logs to heir destination.
 This class is the base class, from which all appenders should inherit.
 */
-@objc public class Appender {
+@objc public class Appender: NSObject {
   public enum DictionaryKey: String {
     case ThresholdLevel = "ThresholdLevel"
     case FormatterId = "FormatterId"

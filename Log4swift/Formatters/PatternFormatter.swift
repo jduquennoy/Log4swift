@@ -35,7 +35,7 @@ Available markers are :
 **Exemples**  
 "[%p] %m" -> "[Debug] log message"
 */
-@objc public final class PatternFormatter : Formatter {
+@objc public final class PatternFormatter: NSObject, Formatter {
   /// Definition of errors the PatternFormatter can throw
   public enum Error : ErrorType {
     case InvalidFormatSyntax
@@ -56,6 +56,7 @@ Available markers are :
   public init(identifier: String, pattern: String) throws {
     self.identifier = identifier;
     let parser = PatternParser();
+    super.init();
     self.formattingClosuresSequence = try parser.parsePattern(pattern);
   }
 
