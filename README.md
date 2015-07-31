@@ -6,7 +6,7 @@
 
 Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
 
-**Note that is still a work in progress. It is not full featured as of today.**
+Despite being written in swift2, Log4swift can be used in Objective-c base projects, as well as mixed projects.
 
 It is available as a cocoaPod for easy integration in your projects.
 
@@ -23,7 +23,10 @@ The goal of this project is to propose a logging library with those caracteristi
 * synchronous by default, but with the ability to request asynchronous behavior
 * should be useable on linux once Apple releases Swift for that OS
 
-Another goal, that I think we all share, is to have readable and tested code. Feel free to send feedbacks if you have ideas to highen the quality of that code !
+Another goal, that I think we all share, is to have readable and tested code.
+
+* The code coverage of Log4swift's code (excluding third party code) is 100% for most of the source files, and very close to it for others.
+* Feel free to send feedbacks if you find the code not readable enough, or if you have ideas to highen the quality of that code !
 
 ## Concepts
 The three main concepts of this library are borrowed from log4j :
@@ -79,14 +82,16 @@ Configuration can be modified any time while running.
 
 ## Provided appenders
 
-### The console appender
+### The stdout appender
 This appender will write log messages to stdout or stderr. It has two thresholds : the regular threshold, available on all appenders, and an error threshold.
 
 * If the log level is bellow the general threshold, the message is ignored
 * If the log level is above the general threshold but bellow the error threshold, the message is issued on stdout
 * If the log level is above both the general and the error threshold, the message is issued on stderr
 
-By default, the console appender is configured to send Error and Fatal messages to stderr, and all other levers to stdout. This is a good configuration for good citizen CLI tools.
+By default, the stdout appender is configured to send Error and Fatal messages to stderr, and all other levers to stdout.
+
+This appender is a good choice for CLI tools.
 
 ### The file appender
 This appender will write log messages to a file, specified by its path. It will create the file if needed (and possible), and will re-create it if it disapears. This allows log rotation scripts to avoid having to restart the process to ensure logs are recorded in a new file after rotation.
@@ -94,6 +99,11 @@ This appender will write log messages to a file, specified by its path. It will 
 ### The NSLogger appender
 This appender uses NSLogger (https://github.com/fpillet/NSLogger) to send log messages over the network.
 Not all capabilities of NSLogger are accessibles yet : only text messages can be logged.
+
+### The ASL Appender
+The ASL appender sends log messages to the system logging service, provided by Apple. Your messages will we visible in the Console.app application if the ASL configuration has not been customized.
+
+This appender is a good choice for release versions of softwares.
 
 ## Provided formatters
 
