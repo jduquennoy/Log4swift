@@ -1,5 +1,5 @@
 //
-//  ConsoleAppender.swift
+//  StdOutAppender.swift
 //  Log4swift
 //
 //  Created by Jérôme Duquennoy on 16/06/2015.
@@ -22,7 +22,7 @@
 import XCTest
 @testable import Log4swift
 
-class ConsoleAppenderTests: XCTestCase {
+class StdOutAppenderTests: XCTestCase {
   let savedStdout = dup(fileno(stdout));
   let savedStderr = dup(fileno(stderr));
   var stdoutReadFileHandle = NSFileHandle();
@@ -47,8 +47,8 @@ class ConsoleAppenderTests: XCTestCase {
     dup2(self.savedStderr, fileno(stderr));
   }
   
-  func testConsoleAppenderDefaultErrorThresholdIsError() {
-    let appender = ConsoleAppender("appender");
+  func testStdOutAppenderDefaultErrorThresholdIsError() {
+    let appender = StdOutAppender("appender");
     
     // Validate
     if let errorThreshold = appender.errorThresholdLevel {
@@ -58,8 +58,8 @@ class ConsoleAppenderTests: XCTestCase {
     }
   }
   
-  func testConsoleAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotDefined() {
-    let appender = ConsoleAppender("appender");
+  func testStdOutAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotDefined() {
+    let appender = StdOutAppender("appender");
     
     // Execute
     appender.log("log value", level: .Info, info: LogInfoDictionary());
@@ -70,8 +70,8 @@ class ConsoleAppenderTests: XCTestCase {
     }
   }
   
-  func testConsoleAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotReached() {
-    let appender = ConsoleAppender("appender");
+  func testStdOutAppenderWritesLogToStdoutWithALineFeedIfErrorThresholdIsNotReached() {
+    let appender = StdOutAppender("appender");
     appender.errorThresholdLevel = .Warning;
     
     // Execute
@@ -83,8 +83,8 @@ class ConsoleAppenderTests: XCTestCase {
     }
   }
   
-  func testConsoleAppenderWritesLogToStderrWithALineFeedIfErrorThresholdIsReached() {
-    let appender = ConsoleAppender("appender");
+  func testStdOutAppenderWritesLogToStderrWithALineFeedIfErrorThresholdIsReached() {
+    let appender = StdOutAppender("appender");
     appender.errorThresholdLevel = .Warning;
     
     // Execute
@@ -98,7 +98,7 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithNoThresholdDoesNotChangeIt() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender"];
-    let appender = ConsoleAppender("test appender");
+    let appender = StdOutAppender("test appender");
     appender.thresholdLevel = .Info;
     
     // Execute
@@ -110,8 +110,8 @@ class ConsoleAppenderTests: XCTestCase {
 
   func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.ThresholdLevel.rawValue: "invalid level"];
-    let appender = ConsoleAppender("test appender");
+      StdOutAppender.DictionaryKey.ThresholdLevel.rawValue: "invalid level"];
+    let appender = StdOutAppender("test appender");
 
     // Execute & validate
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
@@ -119,8 +119,8 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.ThresholdLevel.rawValue: LogLevel.Info.description];
-    let appender = ConsoleAppender("test appender");
+      StdOutAppender.DictionaryKey.ThresholdLevel.rawValue: LogLevel.Info.description];
+    let appender = StdOutAppender("test appender");
     appender.thresholdLevel = .Debug;
     
     // Execute
@@ -132,7 +132,7 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithNoErrorThresholdUsesNilErrorThresholdByDefault() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender"];
-    let appender = ConsoleAppender("test appender");
+    let appender = StdOutAppender("test appender");
     appender.errorThresholdLevel = .Debug;
 
     // Execute
@@ -144,8 +144,8 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithInvalidErrorThresholdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: "invalid level"];
-    let appender = ConsoleAppender("test appender");
+      StdOutAppender.DictionaryKey.ErrorThreshold.rawValue: "invalid level"];
+    let appender = StdOutAppender("test appender");
     
     // Execute & validate
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
@@ -153,8 +153,8 @@ class ConsoleAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      ConsoleAppender.DictionaryKey.ErrorThreshold.rawValue: LogLevel.Info.description];
-    let appender = ConsoleAppender("test appender");
+      StdOutAppender.DictionaryKey.ErrorThreshold.rawValue: LogLevel.Info.description];
+    let appender = StdOutAppender("test appender");
     appender.errorThresholdLevel = .Info;
     
     // Execute
@@ -167,7 +167,7 @@ class ConsoleAppenderTests: XCTestCase {
   func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
-    let appender = ConsoleAppender("test appender");
+    let appender = StdOutAppender("test appender");
     
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
@@ -176,7 +176,7 @@ class ConsoleAppenderTests: XCTestCase {
     let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
-    let appender = ConsoleAppender("test appender");
+    let appender = StdOutAppender("test appender");
     
     // Execute
     try! appender.updateWithDictionary(dictionary, availableFormatters: [formatter]);

@@ -1,5 +1,5 @@
 //
-//  ConsoleAppender.swift
+//  StdOutAppender.swift
 //  log4swift
 //
 //  Created by Jérôme Duquennoy on 14/06/2015.
@@ -20,11 +20,11 @@
 //
 
 /**
-ConsoleAppender will print the log to stdout or stderr depending on thresholds and levels.
+StdOutAppender will print the log to stdout or stderr depending on thresholds and levels.
 * If general threshold is reached but error threshold is undefined or not reached, log will be printed to stdout
 * If both general and error threshold are reached, log will be printed to stderr
 */
-public class ConsoleAppender: Appender {
+public class StdOutAppender: Appender {
   public enum DictionaryKey: String {
     case ErrorThreshold = "ErrorThresholdLevel"
   };

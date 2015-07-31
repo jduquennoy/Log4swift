@@ -12,8 +12,8 @@ let consoleFormatter = try! PatternFormatter(identifier:"consoleFormatter", patt
 let errorFileFormatter = try! PatternFormatter(identifier:"errorFormatter", pattern: "[%d][%n] - %m");
 
 // Create appenders
-let consoleAppender = ConsoleAppender("consoleAppender");
-consoleAppender.formatter = consoleFormatter;
+let stdOutAppender = StdOutAppender("stdOutAppender");
+stdOutAppender.formatter = consoleFormatter;
 
 let errorFileAppender = FileAppender(identifier: "errorFileAppender", filePath: NSTemporaryDirectory().stringByAppendingPathComponent("log4swiftDemoPlayground-error.log"))
 errorFileAppender.thresholdLevel = .Debug;
@@ -24,7 +24,7 @@ let rootLogger = LoggerFactory.sharedInstance.rootLogger;
 rootLogger.thresholdLevel = .Warning;
 rootLogger.appenders[0].formatter = rootFormatter
 
-let packageLogger = Logger(identifier: "package1", level: .Info, appenders: [consoleAppender, errorFileAppender]);
+let packageLogger = Logger(identifier: "package1", level: .Info, appenders: [stdOutAppender, errorFileAppender]);
 packageLogger.thresholdLevel = .Debug;
 
 // Register additional loggers

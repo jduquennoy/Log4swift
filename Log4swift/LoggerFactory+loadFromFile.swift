@@ -142,8 +142,8 @@ extension LoggerFactory {
   private func appenderForClassName(className: String) -> Appender.Type? {
     let type: Appender.Type?;
     switch(className) {
-    case "ConsoleAppender":
-      type = ConsoleAppender.self;
+    case "StdOutAppender":
+      type = StdOutAppender.self;
     case "FileAppender":
       type = FileAppender.self;
     case "NSLoggerAppender":

@@ -212,7 +212,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   }
   
   private final class func createDefaultAppenders() -> [Appender] {
-    return [ConsoleAppender("defaultAppender")];
+    return [StdOutAppender("defaultAppender")];
   }
   
 }

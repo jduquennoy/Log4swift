@@ -71,8 +71,8 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testFactoryProvidesLoggerThatExactlyMatchesTheRequestedIdentifier() {
-    let logger = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender("test.appender")]);
-    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let logger = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [StdOutAppender("test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.anotherIdentifier", level: .Info, appenders: [StdOutAppender("test.appender")]);
     
     try! self.factory.registerLogger(logger);
     try! self.factory.registerLogger(logger2);
@@ -85,8 +85,8 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testFactoryCreatesLoggerBasedOnTheClosestOneIfNoExactMatch() {
-    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender("test.appender")]);
-    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [StdOutAppender("test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [StdOutAppender("test.appender")]);
     
     try! self.factory.registerLogger(logger1);
     try! self.factory.registerLogger(logger2);
@@ -102,8 +102,8 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testRequestingTwiceTheSameNonDefinedLoggerShouldReturnTheSameObject() {
-    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [ConsoleAppender("test.appender")]);
-    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let logger1 = Logger(identifier: "test.logger", level:.Info, appenders: [StdOutAppender("test.appender")]);
+    let logger2 = Logger(identifier: "test.logger.identifier", level: .Info, appenders: [StdOutAppender("test.appender")]);
     
     try! self.factory.registerLogger(logger1);
     try! self.factory.registerLogger(logger2);
@@ -117,7 +117,7 @@ class LoggerFactoryTests: XCTestCase {
   }
 
   func testFactoryDoesNotProvidesLoggerWithMorePreciseIdentifiers() {
-    let logger = Logger(identifier: "test.logger.identifier.plus.some.more", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let logger = Logger(identifier: "test.logger.identifier.plus.some.more", level: .Info, appenders: [StdOutAppender("test.appender")]);
     
     try! self.factory.registerLogger(logger);
     
@@ -132,8 +132,8 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testGeneratedLoggersAreDeletedWhenRegisteringANewLogger() {
-    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [ConsoleAppender("test.appender")]);
-    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [StdOutAppender("test.appender")]);
+    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [StdOutAppender("test.appender")]);
     try! self.factory.registerLogger(registeredLogger1);
     
     let generatedLogger = self.factory.getLogger("test.logger.generated");
@@ -147,8 +147,8 @@ class LoggerFactoryTests: XCTestCase {
   }
   
   func testRegisteredLoggersAreNotDeletedWhenRegisteringANewLogger() {
-    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [ConsoleAppender("test.appender")]);
-    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [ConsoleAppender("test.appender")]);
+    let registeredLogger1 = Logger(identifier: "test.logger", level: .Info, appenders: [StdOutAppender("test.appender")]);
+    let registeredLogger2 = Logger(identifier: "test.logger2", level: .Info, appenders: [StdOutAppender("test.appender")]);
     try! self.factory.registerLogger(registeredLogger1);
     
     // Execute
@@ -162,7 +162,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForSamedIdentifierPerformance() {
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [ConsoleAppender("test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]));
     }
     
     self.measureBlock() {
@@ -174,7 +174,7 @@ class LoggerFactoryTests: XCTestCase {
   
   func testGetLoggerForDifferentIdentifierPerformance() {
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [ConsoleAppender("test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]));
     }
     
     self.measureBlock() {

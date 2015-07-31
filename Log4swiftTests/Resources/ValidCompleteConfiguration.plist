@@ -19,9 +19,9 @@
 			<key>FormatterId</key>
 			<string>patternFormatter1</string>
 			<key>Class</key>
-			<string>ConsoleAppender</string>
+			<string>StdOutAppender</string>
 			<key>Identifier</key>
-			<string>consoleAppender1</string>
+			<string>stdOutAppender1</string>
 			<key>ThresholdLevel</key>
 			<string>Warning</string>
 		</dict>
@@ -40,7 +40,7 @@
 			<string>Error</string>
 			<key>AppenderIds</key>
 			<array>
-				<string>consoleAppender1</string>
+				<string>stdOutAppender1</string>
 			</array>
 		</dict>
 		<dict>
@@ -50,7 +50,7 @@
 			<string>Fatal</string>
 			<key>AppenderIds</key>
 			<array>
-				<string>consoleAppender1</string>
+				<string>stdOutAppender1</string>
 			</array>
 		</dict>
 	</array>

@@ -35,11 +35,11 @@ class PerformanceTests: XCTestCase {
   
   func testConsoleLoggerWithFormatterPerformanceTest() {
     let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{%D %R} %m");
-    let consoleAppender = ConsoleAppender("appender");
-    consoleAppender.errorThresholdLevel = .Debug;
-    consoleAppender.formatter = formatter;
+    let stdOutAppender = StdOutAppender("appender");
+    stdOutAppender.errorThresholdLevel = .Debug;
+    stdOutAppender.formatter = formatter;
     let logger = Logger(identifier: "");
-    logger.appenders = [consoleAppender];
+    logger.appenders = [stdOutAppender];
     
     // This is an example of a performance test case.
     self.measureBlock() {

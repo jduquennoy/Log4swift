@@ -297,14 +297,14 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerWithExistingAppenderIdUsesThem() {
-    let appender1 = ConsoleAppender("id1");
-    let appender2 = ConsoleAppender("id2");
+    let appender1 = StdOutAppender("id1");
+    let appender2 = StdOutAppender("id2");
     
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
     
     let logger = Logger(identifier: "testLogger");
-    logger.appenders.append(ConsoleAppender("appenderThatShouldBeRemoved"));
+    logger.appenders.append(StdOutAppender("appenderThatShouldBeRemoved"));
     
     // Execute
     try! logger.updateWithDictionary(dictionary, availableAppenders: [appender1, appender2]);
@@ -316,7 +316,7 @@ class LoggerTests: XCTestCase {
   }
   
   func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifierAndParentIdentifier() {
-    let appender1 = ConsoleAppender("id1");
+    let appender1 = StdOutAppender("id1");
     let logger1 = Logger(identifier: "test.logger", level: LogLevel.Info, appenders: [appender1]);
     
     // Execute
