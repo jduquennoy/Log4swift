@@ -105,7 +105,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     if let appenderIds = dictionary[DictionaryKey.AppenderIds.rawValue] as? Array<String> {
       appendersStorage.removeAll();
       for currentAppenderId in appenderIds {
-        if let foundAppender = availableAppenders.find({$0.identifier ==  currentAppenderId}) {
+        if let foundAppender = availableAppenders.find({$0.identifier == currentAppenderId}) {
           appendersStorage.append(foundAppender);
         } else {
           throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.AppenderIds.rawValue);

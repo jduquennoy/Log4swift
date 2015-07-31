@@ -29,7 +29,8 @@ FOUNDATION_EXPORT double log4swift2VersionNumber;
 FOUNDATION_EXPORT const unsigned char log4swift2VersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <log4swift/PublicHeader.h>
-
 #import <Log4swift/NSLogger.h>
 #import <Log4swift/LoggerClient.h>
 #import <Log4swift/LoggerCommon.h>
+
+#import <Log4swift/ASLWrapper.h>

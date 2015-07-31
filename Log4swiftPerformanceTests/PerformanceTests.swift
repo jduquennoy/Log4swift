@@ -67,6 +67,19 @@ class PerformanceTests: XCTestCase {
     unlink(tempFilePath.fileSystemRepresentation());
   }
   
+  func testASLLoggerWithFormatterPerformanceTest() {
+    let aslAppender = ASLAppender("appender");
+    let logger = Logger(identifier: "");
+    logger.appenders = [aslAppender];
+    
+    // This is an example of a performance test case.
+    self.measureBlock() {
+      for _ in 0...5000 {
+        logger.error("This is a perf test log");
+      }
+    }
+  }
+
   private func createTemporaryFileUrl() throws -> String {
     let temporaryFilePath = NSTemporaryDirectory().stringByAppendingPathComponent(NSUUID().UUIDString + ".log");
     return temporaryFilePath;
