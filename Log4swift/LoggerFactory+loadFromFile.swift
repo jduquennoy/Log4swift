@@ -150,6 +150,8 @@ extension LoggerFactory {
       type = NSLoggerAppender.self;
     case "NSLogAppender":
       type = NSLogAppender.self;
+    case "ASLAppender":
+      type = ASLAppender.self;
     default:
       type = nil;
     }
