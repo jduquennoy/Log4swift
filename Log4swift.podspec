@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "Log4swift"
-  s.version      = "0.9.0"
+  s.version      = "1.0b1"
   s.summary      = "A looging library written in swift."
 
   s.description  = <<-DESC
@@ -27,7 +27,6 @@ Pod::Spec.new do |s|
                    * extensively configurable for less simple cases
                    * taking advantage of the swift 2 language
 
-                   It is still a work in progress : fully functinnal, but missing the ability to read configuration from a file.
                    DESC
 
   s.homepage     = "http://github.com/jduquennoy/Log4swift"
@@ -65,7 +64,7 @@ Pod::Spec.new do |s|
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
-  s.osx.deployment_target = "10.10"
+  s.osx.deployment_target = "10.9"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
