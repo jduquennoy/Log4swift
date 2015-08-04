@@ -31,17 +31,17 @@ public class FileAppender : Appender {
   };
   
   internal var filePath : String {
-    willSet {
+    didSet {
       if let safeHandler = self.fileHandler {
         safeHandler.closeFile();
         self.fileHandler = nil;
       }
-    }
-    didSet {
       self.filePath = self.filePath.stringByExpandingTildeInPath;
+      didLogFailure = false;
     }
   };
   private var fileHandler: NSFileHandle?;
+  private var didLogFailure = false;
 
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil;
@@ -61,7 +61,7 @@ public class FileAppender : Appender {
       self.filePath = safeFilePath;
     } else {
       self.filePath = "placeholder";
-      throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.FilePath.rawValue);
+      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'");
     }
   }
   
@@ -69,8 +69,12 @@ public class FileAppender : Appender {
     if(self.fileHandler == nil || !NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
       do {
         try self.openFileHandleForPath(self.filePath);
+        didLogFailure = false;
       } catch (let error) {
-        NSLog("Appender \(self.identifier) failed to write log to \(self.filePath) : \(error)")
+        if(!didLogFailure) {
+          NSLog("Appender \(self.identifier) failed to open log file \(self.filePath) : \(error)")
+          didLogFailure = true;
+        }
       }
     }
     

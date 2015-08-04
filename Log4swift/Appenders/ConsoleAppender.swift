@@ -43,7 +43,7 @@ public class StdOutAppender: Appender {
       if let safeErrorThreshold = LogLevel(safeErrorThresholdString) {
         errorThresholdLevel = safeErrorThreshold;
       } else {
-        throw Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.ErrorThreshold.rawValue);
+        throw InvalidOrMissingParameterException("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for console appender '\(self.identifier)'");
       }
     } else {
       errorThresholdLevel = nil;

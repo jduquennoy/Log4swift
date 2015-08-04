@@ -194,6 +194,31 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     XCTAssertEqual(appenders[1].formatter!.identifier, "formatter1");
   }
   
+  func testAppendersClassesGeneratesCorrectObjects() {
+    let fileAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "FileAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "FileAppender",
+      FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"];
+    let nsloggerAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLoggerAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLoggerAppender",
+      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"];
+    let stdoutAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"];
+    let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"];
+    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"];
+    
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]];
+    
+    // Execute
+    let (_, appenders, _) = try! factory.readConfigurationToTupple(dictionary);
+    
+    XCTAssertEqual(appenders.count, 5);
+    for currentAppender in appenders {
+      XCTAssertEqual(currentAppender.identifier, currentAppender.className.componentsSeparatedByString(".").last!);
+    }
+  }
+  
   // MARK: Logger tests
   
   func testReadConfigurationWithNewLoggerAddsItToLoggersPool() {
@@ -345,6 +370,11 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     }
   }
   
+  func testReadConfigurationWithNonDictionaryRootLoggerThrowsError() {
+    // Execute & validate
+    XCTAssertThrows { try self.factory.readConfiguration(["RootLogger": "string value"]); };
+  }
+  
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
     let filePath = NSBundle(forClass: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist");
@@ -366,12 +396,11 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let logger1Appender1 = logger1.appenders[0];
     let logger2Appender1 = logger1.appenders[0];
     XCTAssertTrue(logger1Appender1 === logger2Appender1);
-}
+  }
   
   // MARK: Utility methods
   
- private func classNameAsString(obj: Any) -> String {
+  private func classNameAsString(obj: Any) -> String {
     return _stdlib_getDemangledTypeName(obj).componentsSeparatedByString(".").last!
   }
-
 }

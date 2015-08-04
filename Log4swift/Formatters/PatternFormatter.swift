@@ -71,7 +71,7 @@ Available markers are :
       let parser = PatternParser();
       self.formattingClosuresSequence = try parser.parsePattern(safePattern);
     } else {
-      throw Log4swift.Error.InvalidOrMissingParameterException(parameterName: DictionaryKey.Pattern.rawValue);
+      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'");
     }
   }
   

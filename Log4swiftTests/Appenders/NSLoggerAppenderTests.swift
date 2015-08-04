@@ -124,6 +124,24 @@ class NSLoggerAppenderTests: XCTestCase {
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
   }
   
+  func testUpdatingAppenderFromDictionaryWithRemotePortLowerThan1024ThrowsError () {
+    let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
+      NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "110"];
+    let appender = NSLoggerAppender("testAppender");
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithRemotePortLowerThan65535ThrowsError () {
+    let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
+      NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "65540"];
+    let appender = NSLoggerAppender("testAppender");
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
+  }
+
   func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortUsesProvidedValue () {
     let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
       NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "1234"];
