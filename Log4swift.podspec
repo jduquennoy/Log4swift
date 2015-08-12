@@ -87,7 +87,7 @@ Pod::Spec.new do |s|
   s.source_files  = "Log4swift", "Log4swift/**/*.{swift,h,m}", "Third parties/**/*.{h,m}"
   s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "Log4swift/log4swift.h"
+  s.public_header_files = ["Log4swift/log4swift.h", "Third Parties/NSLogger/*.h", "Log4swift/Objective-c wrappers/*.h"]
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
