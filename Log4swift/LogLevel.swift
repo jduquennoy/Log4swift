@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation
+
 /**
 Log level defines the importance of the log : is it just a debug log, an informational notice, or an error.
 Order of the levels is :

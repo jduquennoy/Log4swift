@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation
+
 class InvalidOrMissingParameterException: NSError {
   init(_ description: String) {
     super.init(domain: "Log4swift", code: 0, userInfo: [NSLocalizedDescriptionKey: description]);

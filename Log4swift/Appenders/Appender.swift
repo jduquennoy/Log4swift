@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation
+
 /**
 Appenders are responsible for sending logs to heir destination.
 This class is the base class, from which all appenders should inherit.

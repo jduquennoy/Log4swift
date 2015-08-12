@@ -79,7 +79,7 @@
     }
   }
 
-  aslresponse_free(response);
+  asl_release(response);
   
   return [self _aslLevelToLogLevel:foundLevel];
 }
@@ -99,7 +99,7 @@
     }
   }
   
-  aslresponse_free(response);
+  asl_release(response);
   
   return foundFacility;
 }

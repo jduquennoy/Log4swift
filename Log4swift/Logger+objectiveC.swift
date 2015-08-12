@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation
+
 /**
 This extension of the Logger class adds logging methods that can be exported to objective-C.
 */

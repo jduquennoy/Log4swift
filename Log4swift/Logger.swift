@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation;
+
 /**
 A logger is identified by a UTI identifier, it defines a threshold level and a destination appender
 */

@@ -19,6 +19,8 @@
 // along with Foobar. If not, see <http://www.gnu.org/licenses/>.
 //
 
+import Foundation
+
 /**
 The logger factory is responsible for
 * loading configuration from files or dictionaries
