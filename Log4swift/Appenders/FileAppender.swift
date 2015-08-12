@@ -36,7 +36,7 @@ public class FileAppender : Appender {
         safeHandler.closeFile();
         self.fileHandler = nil;
       }
-      self.filePath = self.filePath.stringByExpandingTildeInPath;
+      self.filePath = (self.filePath as NSString).stringByExpandingTildeInPath;
       didLogFailure = false;
     }
   };
@@ -45,7 +45,7 @@ public class FileAppender : Appender {
 
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil;
-    self.filePath = filePath.stringByExpandingTildeInPath;
+    self.filePath = (filePath as NSString).stringByExpandingTildeInPath;
 
     super.init(identifier);
   }
@@ -88,7 +88,7 @@ public class FileAppender : Appender {
   
   private func openFileHandleForPath(filePath: String) throws {
     let fileManager = NSFileManager.defaultManager();
-    let directoryPath = filePath.stringByDeletingLastPathComponent;
+    let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent;
     try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil);
     
     fileManager.createFileAtPath(filePath, contents: nil, attributes: nil);
