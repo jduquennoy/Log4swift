@@ -45,7 +45,7 @@ class FileAppenderTests: XCTestCase {
     let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath);
     
     // Validate
-    XCTAssertEqual(fileAppender.filePath, filePath.stringByExpandingTildeInPath);
+    XCTAssertEqual(fileAppender.filePath, (filePath as NSString).stringByExpandingTildeInPath);
   }
 
   func testFileAppenderExpandsTildeWhenSettingFilePath() {
@@ -56,7 +56,7 @@ class FileAppenderTests: XCTestCase {
     fileAppender.filePath = filePath
     
     // Validate
-    XCTAssertEqual(fileAppender.filePath, filePath.stringByExpandingTildeInPath);
+    XCTAssertEqual(fileAppender.filePath, (filePath as NSString).stringByExpandingTildeInPath);
   }
   
   func testFileAppenderCreatesFileIfItDoesNotExist()  {
@@ -65,7 +65,7 @@ class FileAppenderTests: XCTestCase {
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
       }
       
       // Execute
@@ -86,11 +86,11 @@ class FileAppenderTests: XCTestCase {
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
       }
       
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
-      unlink(tempFilePath.fileSystemRepresentation());
+      unlink((tempFilePath as NSString).fileSystemRepresentation);
       
       // Execute
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
@@ -109,11 +109,11 @@ class FileAppenderTests: XCTestCase {
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
       }
       
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
-      unlink(tempFilePath.fileSystemRepresentation());
+      unlink((tempFilePath as NSString).fileSystemRepresentation);
       
       // Execute
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
@@ -132,11 +132,11 @@ class FileAppenderTests: XCTestCase {
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping\n";
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
       }
       
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
-      unlink(tempFilePath.fileSystemRepresentation());
+      unlink((tempFilePath as NSString).fileSystemRepresentation);
       
       // Execute
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary());
@@ -157,8 +157,8 @@ class FileAppenderTests: XCTestCase {
       let logContent1 = "ping1";
       let logContent2 = "ping2";
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
-        unlink(tempFilePath2.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
+        unlink((tempFilePath2 as NSString).fileSystemRepresentation);
       }
       
       fileAppender.log(logContent1, level: LogLevel.Debug, info: LogInfoDictionary());
@@ -228,7 +228,7 @@ class FileAppenderTests: XCTestCase {
       let tempFilePath = try self.createTemporaryFileUrl();
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       defer {
-        unlink(tempFilePath.fileSystemRepresentation());
+        unlink((tempFilePath as NSString).fileSystemRepresentation);
       }
       
       measureBlock { () -> Void in
@@ -242,7 +242,7 @@ class FileAppenderTests: XCTestCase {
   }
   
   private func createTemporaryFileUrl() throws -> String {
-    let temporaryFilePath = NSTemporaryDirectory().stringByAppendingPathComponent(NSUUID().UUIDString + ".log");
+    let temporaryFilePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(NSUUID().UUIDString + ".log");
     return temporaryFilePath;
   }
 }

@@ -87,4 +87,17 @@ class ASLAppenderTests: XCTestCase {
       XCTFail("Message not logged");
     }
   }
+
+  func testASLAppenderLogMessagesWithoutTryingToInterpretFormatMarkers() {
+    let appender = ASLAppender("testAppender");
+    let logMessage = "Test message with uninterpretted formatting markers : %f (id=" + NSUUID().UUIDString + ")";
+    let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "That is a nice logger name"];
+    
+    // Execute
+    appender.log(logMessage, level: LogLevel.Error, info: info);
+    
+    // Validate
+    let messageFacility = appender.aslClient.getFacilityOfMessageMatchingText(logMessage);
+    XCTAssertTrue(messageFacility != nil);
+  }
 }

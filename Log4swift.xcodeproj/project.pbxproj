@@ -110,7 +110,7 @@
 		02664C0F1B2CE96500B695DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02664C141B2CE96500B695DE /* Log4swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Log4swiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02664C241B2CEB2900B695DE /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		02664C261B2D92CB00B695DE /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
+		02664C261B2D92CB00B695DE /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoggerFactory.swift; path = ../LoggerFactory.swift; sourceTree = "<group>"; };
 		02664C2A1B2D97DE00B695DE /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		02664C301B2DA6A200B695DE /* Appender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appender.swift; sourceTree = "<group>"; };
 		02664C321B2DA70C00B695DE /* ConsoleAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleAppender.swift; sourceTree = "<group>"; };
@@ -266,13 +266,12 @@
 		02664C0C1B2CE96500B695DE /* Log4swift */ = {
 			isa = PBXGroup;
 			children = (
+				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
 				02664C0D1B2CE96500B695DE /* log4swift.h */,
 				02664C2A1B2D97DE00B695DE /* LogLevel.swift */,
 				02664C241B2CEB2900B695DE /* Logger.swift */,
 				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
 				5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */,
-				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
-				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
 				5E484E501B46843D00CA5C01 /* Errors.swift */,
 				02664C2F1B2DA69A00B695DE /* Appenders */,
 				5E17F3231B3328BA00E262F5 /* Formatters */,
@@ -304,6 +303,7 @@
 		02664C2F1B2DA69A00B695DE /* Appenders */ = {
 			isa = PBXGroup;
 			children = (
+				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				02664C301B2DA6A200B695DE /* Appender.swift */,
 				02664C321B2DA70C00B695DE /* ConsoleAppender.swift */,
 				02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */,
@@ -549,6 +549,7 @@
 					};
 					5EF80A901B7A172400A5F07A = {
 						CreatedOnToolsVersion = 6.3.2;
+						DevelopmentTeam = 3AQJ55VXGL;
 					};
 				};
 			};

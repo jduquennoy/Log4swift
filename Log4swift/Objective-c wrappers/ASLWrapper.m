@@ -49,18 +49,18 @@
 }
 
 - (void)logMessage:(NSString *)log level:(int)level category:(NSString *)category {
+  static char const *const levelStrings[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
   dispatch_sync(loggingQueue, ^{
-    aslmsg aslMessage = asl_new(ASL_TYPE_MSG);
-    asl_set(aslMessage, ASL_KEY_FACILITY, [category UTF8String]);
-    
-    int aslLogLevel = [self _logLevelToAslLevel:level];
-    
     if(logClient != NULL) {
-      va_list empty_va_list;
-      asl_vlog(logClient, aslMessage, aslLogLevel, [log UTF8String], empty_va_list);
+      int aslLogLevel = [self _logLevelToAslLevel:level];
+      aslmsg aslMessage = asl_new(ASL_TYPE_MSG);
+      asl_set(aslMessage, ASL_KEY_FACILITY, [category UTF8String]);
+      asl_set(aslMessage, ASL_KEY_LEVEL, levelStrings[aslLogLevel]);
+      asl_set(aslMessage, ASL_KEY_MSG, [log UTF8String]);
+      asl_send(logClient, aslMessage);
+      asl_free(aslMessage);
     }
     
-    asl_free(aslMessage);
   });
 }
 

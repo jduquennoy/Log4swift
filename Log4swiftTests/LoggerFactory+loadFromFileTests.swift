@@ -353,7 +353,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let rootLoggerDictionary = [Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];
     
-    factory.rootLogger.thresholdLevel = .Error;
+    factory.rootLogger.thresholdLevel = LogLevel.Error;
     factory.rootLogger.appenders = [MemoryAppender("MemoryAppender")];
     
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
@@ -383,14 +383,14 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     XCTAssertNoThrow  { try self.factory.readConfigurationFromPlistFile(filePath!); };
     
     // Validate loggers
-    XCTAssertEqual(self.factory.rootLogger.thresholdLevel, .Info);
+    XCTAssertEqual(self.factory.rootLogger.thresholdLevel, LogLevel.Info);
     XCTAssertEqual(self.factory.loggers.count, 2);
     let logger1 = self.factory.getLogger("project.feature.logger1");
     let logger2 = self.factory.getLogger("project.feature.logger2");
     XCTAssertNil(logger1.parent);
     XCTAssertNil(logger2.parent);
-    XCTAssertEqual(logger1.thresholdLevel, .Error);
-    XCTAssertEqual(logger2.thresholdLevel, .Fatal);
+    XCTAssertEqual(logger1.thresholdLevel, LogLevel.Error);
+    XCTAssertEqual(logger2.thresholdLevel, LogLevel.Fatal);
     
     // Validate appenders
     let logger1Appender1 = logger1.appenders[0];

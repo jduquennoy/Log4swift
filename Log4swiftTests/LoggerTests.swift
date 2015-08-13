@@ -111,7 +111,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Debug);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Debug);
   }
   
   func testStaticLogInfoMessageMethodsLogToRootLogger() {
@@ -124,7 +124,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Info);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Info);
   }
   
   func testStaticLogWarningMessageMethodsLogToRootLogger() {
@@ -137,7 +137,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Warning);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Warning);
   }
   
   func testStaticLogErrorMessageMethodsLogToRootLogger() {
@@ -150,7 +150,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Error);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Error);
   }
   
   func testStaticLogFatalMessageMethodsLogToRootLogger() {
@@ -163,7 +163,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Fatal);
   }
   
   func testStaticLogDebugClosureMethodsLogToRootLogger() {
@@ -176,7 +176,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Debug);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Debug);
   }
   
   func testStaticLogInfoClosureMethodsLogToRootLogger() {
@@ -189,7 +189,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Info);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Info);
   }
   
   func testStaticLogWarningClosureMethodsLogToRootLogger() {
@@ -202,7 +202,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Warning);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Warning);
   }
   
   func testStaticLogErrorClosureMethodsLogToRootLogger() {
@@ -215,7 +215,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Error);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Error);
   }
   
   func testStaticLogFatalClosureMethodsLogToRootLogger() {
@@ -228,7 +228,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
-    XCTAssertEqual(memoryAppender.logMessages[0].level, .Fatal);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Fatal);
   }
   
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
@@ -413,8 +413,8 @@ class LoggerTests: XCTestCase {
     let threshold2 = sonLogger.thresholdLevel;
     
     // Validate
-    XCTAssertEqual(threshold1, .Info);
-    XCTAssertEqual(threshold2, .Debug);
+    XCTAssertEqual(threshold1, LogLevel.Info);
+    XCTAssertEqual(threshold2, LogLevel.Debug);
   }
   
   func testLoggerWithParentUsesParentAppenders() {
@@ -437,8 +437,8 @@ class LoggerTests: XCTestCase {
     sonLogger.thresholdLevel = .Warning;
     
     // Validate
-    XCTAssertEqual(parentLogger.thresholdLevel, .Info);
-    XCTAssertEqual(sonLogger.thresholdLevel, .Warning);
+    XCTAssertEqual(parentLogger.thresholdLevel, LogLevel.Info);
+    XCTAssertEqual(sonLogger.thresholdLevel, LogLevel.Warning);
     XCTAssertNil(sonLogger.parent);
   }
   
