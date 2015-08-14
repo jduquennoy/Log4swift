@@ -1,7 +1,7 @@
 # Log4Swift
 [![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg
             )](http://mit-license.org)
-[![Platform](http://img.shields.io/badge/platform-osx-lightgrey.svg?style=flat
+[![Platform](http://img.shields.io/badge/platform-OS X/iOS-lightgrey.svg?style=flat
              )](https://developer.apple.com/resources/)
 [![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
              )](https://developer.apple.com/swift)
@@ -9,9 +9,22 @@
 
 Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
 
-Despite being written in swift2, Log4swift can be used in Objective-c base projects, as well as mixed projects.
+It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift 2 or objective-C (or a mix of those two).
 
-It is available as a cocoaPod for easy integration in your projects.
+It is available as a cocoaPod for easy integration in your projects. Here is a sample Podfile to embed this library in an iOS project :
+
+```
+platform :ios, '8'
+pod 'Log4swift', '1.0.0b1'
+use_frameworks!
+```
+And in an OS X project :
+
+```
+platform :osx, '10.10'
+pod 'Log4swift', '1.0.0b1'
+use_frameworks!
+```
 
 ## Goal
 The goal of this project is to propose a logging library with those caracteristics :
