@@ -18,7 +18,7 @@
 		02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C261B2D92CB00B695DE /* LoggerFactory.swift */; };
 		02664C2B1B2D97DE00B695DE /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C2A1B2D97DE00B695DE /* LogLevel.swift */; };
 		02664C311B2DA6A200B695DE /* Appender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C301B2DA6A200B695DE /* Appender.swift */; };
-		02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C321B2DA70C00B695DE /* ConsoleAppender.swift */; };
+		02664C331B2DA70C00B695DE /* StdOutAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C321B2DA70C00B695DE /* StdOutAppender.swift */; };
 		02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C341B2DB25C00B695DE /* LoggerTests.swift */; };
 		02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C361B2DBC5C00B695DE /* Logger+convenience.swift */; };
 		02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */; };
@@ -45,7 +45,7 @@
 		5E3E72021B7A185400EEE46B /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E484E501B46843D00CA5C01 /* Errors.swift */; };
 		5E3E72031B7A185400EEE46B /* LogInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026A43801B4DCF2700997862 /* LogInformation.swift */; };
 		5E3E72041B7A186700EEE46B /* Appender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C301B2DA6A200B695DE /* Appender.swift */; };
-		5E3E72051B7A186700EEE46B /* ConsoleAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C321B2DA70C00B695DE /* ConsoleAppender.swift */; };
+		5E3E72051B7A186700EEE46B /* StdOutAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C321B2DA70C00B695DE /* StdOutAppender.swift */; };
 		5E3E72061B7A186700EEE46B /* FileAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */; };
 		5E3E72071B7A186700EEE46B /* NSLoggerAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */; };
 		5E3E72081B7A186700EEE46B /* NSLogAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4D39111B690DC40006961C /* NSLogAppender.swift */; };
@@ -110,10 +110,10 @@
 		02664C0F1B2CE96500B695DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02664C141B2CE96500B695DE /* Log4swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Log4swiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02664C241B2CEB2900B695DE /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		02664C261B2D92CB00B695DE /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoggerFactory.swift; path = ../LoggerFactory.swift; sourceTree = "<group>"; };
+		02664C261B2D92CB00B695DE /* LoggerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactory.swift; sourceTree = "<group>"; };
 		02664C2A1B2D97DE00B695DE /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
 		02664C301B2DA6A200B695DE /* Appender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appender.swift; sourceTree = "<group>"; };
-		02664C321B2DA70C00B695DE /* ConsoleAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleAppender.swift; sourceTree = "<group>"; };
+		02664C321B2DA70C00B695DE /* StdOutAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StdOutAppender.swift; sourceTree = "<group>"; };
 		02664C341B2DB25C00B695DE /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		02664C361B2DBC5C00B695DE /* Logger+convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+convenience.swift"; sourceTree = "<group>"; };
 		02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactoryTests.swift; sourceTree = "<group>"; };
@@ -266,6 +266,7 @@
 		02664C0C1B2CE96500B695DE /* Log4swift */ = {
 			isa = PBXGroup;
 			children = (
+				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
 				02664C0D1B2CE96500B695DE /* log4swift.h */,
 				02664C2A1B2D97DE00B695DE /* LogLevel.swift */,
@@ -303,9 +304,8 @@
 		02664C2F1B2DA69A00B695DE /* Appenders */ = {
 			isa = PBXGroup;
 			children = (
-				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				02664C301B2DA6A200B695DE /* Appender.swift */,
-				02664C321B2DA70C00B695DE /* ConsoleAppender.swift */,
+				02664C321B2DA70C00B695DE /* StdOutAppender.swift */,
 				02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */,
 				02F4E8681B3A0354004AB9EA /* NSLoggerAppender.swift */,
 				5E4D39111B690DC40006961C /* NSLogAppender.swift */,
@@ -620,7 +620,7 @@
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
 				5EFEFA931B69383A00A28A53 /* ASLAppender.swift in Sources */,
 				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
-				02664C331B2DA70C00B695DE /* ConsoleAppender.swift in Sources */,
+				02664C331B2DA70C00B695DE /* StdOutAppender.swift in Sources */,
 				D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */,
 				5E4D39121B690DC40006961C /* NSLogAppender.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
@@ -679,7 +679,7 @@
 				5E3E72021B7A185400EEE46B /* Errors.swift in Sources */,
 				5E3E72031B7A185400EEE46B /* LogInformation.swift in Sources */,
 				5E3E72041B7A186700EEE46B /* Appender.swift in Sources */,
-				5E3E72051B7A186700EEE46B /* ConsoleAppender.swift in Sources */,
+				5E3E72051B7A186700EEE46B /* StdOutAppender.swift in Sources */,
 				5E3E72061B7A186700EEE46B /* FileAppender.swift in Sources */,
 				5E3E72071B7A186700EEE46B /* NSLoggerAppender.swift in Sources */,
 				5E3E72081B7A186700EEE46B /* NSLogAppender.swift in Sources */,
