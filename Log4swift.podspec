@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "Log4swift"
-  s.version      = "1.0.0b1"
+
+  s.version      = "1.0.0b2"
   s.summary      = "A looging library written in swift."
 
   s.description  = <<-DESC
