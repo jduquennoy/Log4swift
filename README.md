@@ -1,8 +1,11 @@
 # Log4Swift
-[![License](https://img.shields.io/badge/License-LGPLv3-blue.svg
-            )](http://mit-license.org) [![Platform](http://img.shields.io/badge/platform-osx-lightgrey.svg?style=flat
-             )](https://developer.apple.com/resources/) [![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
-             )](https://developer.apple.com/swift) [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
+[![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg
+            )](http://mit-license.org)
+[![Platform](http://img.shields.io/badge/platform-osx-lightgrey.svg?style=flat
+             )](https://developer.apple.com/resources/)
+[![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
+             )](https://developer.apple.com/swift)
+[![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
 
 Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
 

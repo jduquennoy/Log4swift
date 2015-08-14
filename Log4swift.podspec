@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.homepage     = "http://github.com/jduquennoy/Log4swift"
   
-  s.license      = { :type => "LGPL v3", :file => "LICENSE" }
+  s.license      = { :type => "Apache v2.0", :file => "LICENSE" }
 
   s.author       = { "Jerome Duquennoy" => "jerome@duquennoy.fr" }
 
