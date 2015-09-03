@@ -28,6 +28,8 @@ Available markers are :
 * l : The name of the log level
 * n : The name of the logger
 * d{format} : The date of the log. The format is the one of the strftime function.
+* L : the number of the line where the log was issued
+* F : the name of the file where the log was issued
 * m : the message
 * % : the '%' character
 
@@ -113,8 +115,22 @@ Available markers are :
           return "-";
         }
       },
+      "L": {(parameters, message, info) in 
+        if let line = info[.FileLine] {
+          return line.description;
+        } else {
+          return "-";
+        }
+      },
+      "F": {(parameters, message, info) in 
+        if let filename = info[.FileName] {
+          return filename.description;
+        } else {
+          return "-";
+        }
+      },
       "m": {(parameters, message, infos) in message },
-      "%": {(parameters, message, infos) in return "%" }
+      "%": {(parameters, message, infos) in "%" }
     ];
     
     

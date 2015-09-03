@@ -53,27 +53,27 @@ extension Logger {
   /// Logs a the message returned by the closer with a debug level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func debug(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.debug(closure);
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Debug);
   }
   /// Logs a the message returned by the closer with an info level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func info(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.info(closure);
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Info);
   }
   /// Logs a the message returned by the closer with a warning level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func warning(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.warning(closure);
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Warning);
   }
   /// Logs a the message returned by the closer with an error level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func error(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.error(closure);
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Error);
   }
   /// Logs a the message returned by the closer with a fatal level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func fatal(closure: () -> (String)) {
-    LoggerFactory.sharedInstance.rootLogger.fatal(closure);
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Fatal);
   }
   
 }

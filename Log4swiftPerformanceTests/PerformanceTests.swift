@@ -63,7 +63,7 @@ class PerformanceTests: XCTestCase {
       }
     }
 
-    unlink(tempFilePath.fileSystemRepresentation());
+    unlink((tempFilePath as NSString).fileSystemRepresentation);
   }
   
   func testASLLoggerWithFormatterPerformanceTest() {
@@ -80,8 +80,9 @@ class PerformanceTests: XCTestCase {
   }
 
   private func createTemporaryFileUrl() throws -> String {
-    let temporaryFilePath = NSTemporaryDirectory().stringByAppendingPathComponent(NSUUID().UUIDString + ".log");
-    return temporaryFilePath;
+    let temporaryDirectoryUrl = NSURL(fileURLWithPath:NSTemporaryDirectory());
+    let temporaryFileUrl = temporaryDirectoryUrl.URLByAppendingPathComponent(NSUUID().UUIDString + ".log");
+    return temporaryFileUrl.path!
   }
 
 }

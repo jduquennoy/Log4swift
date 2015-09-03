@@ -97,6 +97,28 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "test \(LogLevel.Debug)");
   }
   
+  func testFormatterAppliesFileNameMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F");
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "testFileName"];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test testFileName");
+  }
+  
+  func testFormatterAppliesFileLineMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L");
+    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 42");
+  }
+  
   func testFormatterAppliesPercentageMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%");
     let info = LogInfoDictionary();
@@ -134,16 +156,16 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
-    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n] %m");
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n][%F][%L] %m");
     let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("Log message", info: info);
     
     // Validate
-    XCTAssertEqual(formattedMessage, "[-][-] Log message");
+    XCTAssertEqual(formattedMessage, "[-][-][-][-] Log message");
   }
-  
+
   func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {
     let dictionary = Dictionary<String, AnyObject>();
     let formatter = PatternFormatter("testFormatter");
@@ -166,19 +188,5 @@ class PatternFormatterTests: XCTestCase {
 
     let formattedMessage = formatter.format("", info: LogInfoDictionary());
     XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!);
-  }
-  
-  func testFormatterPerformance() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m");
-    let info: LogInfoDictionary = [
-      LogInfoKeys.LoggerName: "nameOfTheLogger",
-      LogInfoKeys.LogLevel: LogLevel.Info
-    ];
-    
-    self.measureBlock() {
-      for _ in 1...1000 {
-        formatter.format("Log message", info: info);
-      }
-    }
   }
 }

@@ -34,6 +34,8 @@
 		02F4E8701B3A0454004AB9EA /* LoggerCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8711B3A0454004AB9EA /* NSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86D1B3A0454004AB9EA /* NSLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
+		5E06D56C1B987F5700273AC7 /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 02664C0D1B2CE96500B695DE /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */; settings = {ASSET_TAGS = (); }; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
 		5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */; };
 		5E3E71FC1B7A185400EEE46B /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C2A1B2D97DE00B695DE /* LogLevel.swift */; };
@@ -73,7 +75,6 @@
 		5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E01B343A0400453B31 /* FunctionalTests.swift */; };
 		5ED244E51B34408600453B31 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED244E41B34408600453B31 /* Formatter.swift */; };
 		5ED41A671B3D949900C39F6E /* LogLevelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED41A661B3D949900C39F6E /* LogLevelTests.swift */; };
-		5EF80A961B7A172400A5F07A /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EF80A951B7A172400A5F07A /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EFEFA931B69383A00A28A53 /* ASLAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFEFA921B69383A00A28A53 /* ASLAppender.swift */; };
 		5EFEFA971B69388800A28A53 /* ASLWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EFEFA951B69388800A28A53 /* ASLWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EFEFA981B69388800A28A53 /* ASLWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EFEFA961B69388800A28A53 /* ASLWrapper.m */; };
@@ -130,6 +131,7 @@
 		02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerCommon.h; sourceTree = "<group>"; };
 		02F4E86D1B3A0454004AB9EA /* NSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogger.h; sourceTree = "<group>"; };
 		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
+		5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterPerformanceTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
 		5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoggerFactory+loadFromFile.swift"; sourceTree = "<group>"; };
@@ -145,10 +147,7 @@
 		5ED244E41B34408600453B31 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		5ED41A661B3D949900C39F6E /* LogLevelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevelTests.swift; sourceTree = "<group>"; };
 		5EF80A911B7A172400A5F07A /* Log4swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Log4swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5EF80A941B7A172400A5F07A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5EF80A951B7A172400A5F07A /* log4swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log4swift.h; sourceTree = "<group>"; };
-		5EF80AA11B7A172500A5F07A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5EF80AA21B7A172500A5F07A /* log4swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = log4swiftTests.swift; sourceTree = "<group>"; };
+		5EF80AA11B7A172500A5F07A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../log4swiftTests/Info.plist; sourceTree = "<group>"; };
 		5EFEFA921B69383A00A28A53 /* ASLAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASLAppender.swift; sourceTree = "<group>"; };
 		5EFEFA951B69388800A28A53 /* ASLWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASLWrapper.h; path = "Log4swift/Objective-c wrappers/ASLWrapper.h"; sourceTree = "<group>"; };
 		5EFEFA961B69388800A28A53 /* ASLWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASLWrapper.m; path = "Log4swift/Objective-c wrappers/ASLWrapper.m"; sourceTree = "<group>"; };
@@ -245,8 +244,6 @@
 				02B61A491B56D11A00C683D8 /* Log4swiftPerformanceTests */,
 				02F4E85E1B3A02EC004AB9EA /* Third parties */,
 				0237CF341B2E220F004D5B9F /* Example playgrounds */,
-				5EF80A921B7A172400A5F07A /* log4swift */,
-				5EF80A9F1B7A172500A5F07A /* log4swiftTests */,
 				02664C0B1B2CE96500B695DE /* Products */,
 			);
 			indentWidth = 2;
@@ -266,9 +263,9 @@
 		02664C0C1B2CE96500B695DE /* Log4swift */ = {
 			isa = PBXGroup;
 			children = (
+				02664C0D1B2CE96500B695DE /* log4swift.h */,
 				02664C261B2D92CB00B695DE /* LoggerFactory.swift */,
 				5E484E4E1B467C2500CA5C01 /* LoggerFactory+loadFromFile.swift */,
-				02664C0D1B2CE96500B695DE /* log4swift.h */,
 				02664C2A1B2D97DE00B695DE /* LogLevel.swift */,
 				02664C241B2CEB2900B695DE /* Logger.swift */,
 				02664C361B2DBC5C00B695DE /* Logger+convenience.swift */,
@@ -286,6 +283,7 @@
 		02664C181B2CE96500B695DE /* Log4swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				5EF80AA11B7A172500A5F07A /* Info.plist */,
 				5ED41A661B3D949900C39F6E /* LogLevelTests.swift */,
 				02664C341B2DB25C00B695DE /* LoggerTests.swift */,
 				02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */,
@@ -318,6 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */,
+				5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */,
 				02B61A641B56D1F200C683D8 /* log4swiftPerformanceTests-Info.plist */,
 			);
 			path = Log4swiftPerformanceTests;
@@ -385,40 +384,6 @@
 			path = "Log4Swift-iOS";
 			sourceTree = "<group>";
 		};
-		5EF80A921B7A172400A5F07A /* log4swift */ = {
-			isa = PBXGroup;
-			children = (
-				5EF80A951B7A172400A5F07A /* log4swift.h */,
-				5EF80A931B7A172400A5F07A /* Supporting Files */,
-			);
-			path = log4swift;
-			sourceTree = "<group>";
-		};
-		5EF80A931B7A172400A5F07A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				5EF80A941B7A172400A5F07A /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		5EF80A9F1B7A172500A5F07A /* log4swiftTests */ = {
-			isa = PBXGroup;
-			children = (
-				5EF80AA21B7A172500A5F07A /* log4swiftTests.swift */,
-				5EF80AA01B7A172500A5F07A /* Supporting Files */,
-			);
-			path = log4swiftTests;
-			sourceTree = "<group>";
-		};
-		5EF80AA01B7A172500A5F07A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				5EF80AA11B7A172500A5F07A /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		5EFEFA941B69384500A28A53 /* Objective-c wrappers */ = {
 			isa = PBXGroup;
 			children = (
@@ -448,9 +413,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EF80A961B7A172400A5F07A /* log4swift.h in Headers */,
 				5E3E72101B7A25BA00EEE46B /* LoggerClient.h in Headers */,
 				5E3E72111B7A25BA00EEE46B /* LoggerCommon.h in Headers */,
+				5E06D56C1B987F5700273AC7 /* log4swift.h in Headers */,
 				5E3E72131B7A25DC00EEE46B /* ASLWrapper.h in Headers */,
 				5E3E72121B7A25BA00EEE46B /* NSLogger.h in Headers */,
 			);
@@ -661,6 +626,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */,
 				02C9E1581B56D40F0038AB0E /* PerformanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

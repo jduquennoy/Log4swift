@@ -122,50 +122,50 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   // MARK: Logging methods
   
   /// Logs the provided message with a debug level.
-  @nonobjc public func debug(format: String, _ args: CVarArgType...) {
-    self.log(format.format(getVaList(args)), level: LogLevel.Debug);
+  @nonobjc public func debug(format: String, file: String = __FILE__, line: Int = __LINE__, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Debug, file: file, line: line);
   }
   /// Logs the provided message with an info level
-  @nonobjc public func info(format: String, _ args: CVarArgType...) {
-    self.log(format.format(getVaList(args)), level: LogLevel.Info);
+  @nonobjc public func info(format: String, file: String = __FILE__, line: Int = __LINE__, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Info, file: file, line: line);
   }
   /// Logs the provided message with a warning level
-  @nonobjc public func warning(format: String, _ args: CVarArgType...) {
-    self.log(format.format(getVaList(args)), level: LogLevel.Warning);
+  @nonobjc public func warning(format: String, file: String = __FILE__, line: Int = __LINE__, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Warning, file: file, line: line);
   }
   /// Logs the provided message with an error level
-  @nonobjc public func error(format: String, _ args: CVarArgType...) {
-    self.log(format.format(getVaList(args)), level: LogLevel.Error);
+  @nonobjc public func error(format: String, file: String = __FILE__, line: Int = __LINE__, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Error, file: file, line: line);
   }
   /// Logs the provided message with a fatal level
-  @nonobjc public func fatal(format: String, _ args: CVarArgType...) {
-    self.log(format.format(getVaList(args)), level: LogLevel.Fatal);
+  @nonobjc public func fatal(format: String, file: String = __FILE__, line: Int = __LINE__, _ args: CVarArgType...) {
+    self.log(format.format(getVaList(args)), level: LogLevel.Fatal, file: file, line: line);
   }
   
   /// Logs a the message returned by the closer with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func debug(closure: () -> String) {
-    self.log(closure, level: LogLevel.Debug);
+  @nonobjc public func debug(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
+    self.log(closure, level: LogLevel.Debug, file: file, line: line);
   }
   /// Logs a the message returned by the closer with an info level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func info(closure: () -> String) {
-    self.log(closure, level: LogLevel.Info);
+  @nonobjc public func info(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
+    self.log(closure, level: LogLevel.Info, file: file, line: line);
   }
   /// Logs a the message returned by the closer with a warning level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func warning(closure: () -> String) {
-    self.log(closure, level: LogLevel.Warning);
+  @nonobjc public func warning(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
+    self.log(closure, level: LogLevel.Warning, file: file, line: line);
   }
   /// Logs a the message returned by the closer with an error level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func error(closure: () -> String) {
-    self.log(closure, level: LogLevel.Error);
+  @nonobjc public func error(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
+    self.log(closure, level: LogLevel.Error, file: file, line: line);
   }
   /// Logs a the message returned by the closer with a fatal level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func fatal(closure: () -> String) {
-    self.log(closure, level: LogLevel.Fatal);
+  @nonobjc public func fatal(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
+    self.log(closure, level: LogLevel.Fatal, file: file, line: line);
   }
   
   /// Returns true if a message sent with the given level will be issued by at least one appender.
@@ -175,25 +175,37 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
   }
   
-  @nonobjc internal func log(message: String, level: LogLevel) {
+  @nonobjc internal func log(message: String, level: LogLevel, file: String? = nil, line: Int? = nil) {
     if(self.willIssueLogForLevel(level)) {
-      let info: LogInfoDictionary = [
+      var info: LogInfoDictionary = [
         LogInfoKeys.LoggerName: self.identifier,
         LogInfoKeys.LogLevel: level,
       ];
+      if let file = file {
+        info[.FileName] = file;
+      }
+      if let line = line {
+        info[.FileLine] = line;
+      }
       for currentAppender in self.appenders {
         currentAppender.log(message, level:level, info: info);
       }
     }
   }
   
-  @nonobjc internal func log(closure: () -> (String), level: LogLevel) {
+  @nonobjc internal func log(closure: () -> (String), level: LogLevel, file: String? = nil, line: Int? = nil) {
     if(self.willIssueLogForLevel(level)) {
       let logMessage = closure();
-      let info: LogInfoDictionary = [
-        LogInfoKeys.LoggerName: self.identifier,
-        LogInfoKeys.LogLevel: level,
+      var info: LogInfoDictionary = [
+        .LoggerName: self.identifier,
+        .LogLevel: level,
       ];
+      if let file = file {
+        info[.FileName] = file;
+      }
+      if let line = line {
+        info[.FileLine] = line;
+      }
       for currentAppender in self.appenders {
         currentAppender.log(logMessage, level:level, info: info);
       }

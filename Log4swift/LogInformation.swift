@@ -24,6 +24,8 @@ Keys used in the information dictionary attached to log messages
 public enum LogInfoKeys {
   case LogLevel
   case LoggerName
+  case FileName
+  case FileLine
 }
 
 /**

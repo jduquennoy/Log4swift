@@ -30,6 +30,8 @@ class ASLAppenderTests: XCTestCase {
     // Execute
     appender.log(logMessage, level: LogLevel.Fatal, info: LogInfoDictionary());
     
+    sleep(1);
+    
     // Validate
     let levelOfMessageInAsl = appender.aslClient.getLevelOfMessageMatchingText(logMessage);
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Fatal.rawValue));
@@ -110,6 +112,6 @@ class ASLAppenderTests: XCTestCase {
     
     // Validate
     let messageFacility = appender.aslClient.getFacilityOfMessageMatchingText(logMessage);
-    XCTAssertTrue(messageFacility != nil);
+    XCTAssertTrue(messageFacility != nil, "Logged message not found in ASL");
   }
 }

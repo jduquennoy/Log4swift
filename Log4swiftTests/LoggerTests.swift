@@ -51,7 +51,7 @@ class LoggerTests: XCTestCase {
     logger.thresholdLevel = .Info;
     
     // Execute
-    logger.debug({
+    logger.debug(closure: {
       closureCalled = true;
       return "";
     });
@@ -59,7 +59,23 @@ class LoggerTests: XCTestCase {
     // Validate
     XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached")
   }
-
+  
+  func testLogWithClosureWorksWithLeadingClosure() {
+    var closureCalled = false;
+    let logger = Logger();
+    
+    logger.thresholdLevel = .Info;
+    
+    // Execute
+    logger.debug {
+      closureCalled = true;
+      return "";
+    };
+    
+    // Validate
+    XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached")
+  }
+  
   func testLogWithClosureWillNotCallClosureIfAppendersThresholdsPreventsLogging() {
     var closureCalled = false;
     let logger = Logger();
@@ -71,7 +87,7 @@ class LoggerTests: XCTestCase {
     logger.appenders = [appender1, appender2];
     
     // Execute
-    logger.debug({
+    logger.debug(closure: {
       closureCalled = true;
       return "";
     });
@@ -91,10 +107,10 @@ class LoggerTests: XCTestCase {
     logger.appenders = [appender1, appender2];
     
     // Execute
-    logger.debug({
+    logger.debug {
       closureCalled = true;
       return "";
-    });
+    };
     
     // Validate
     XCTAssertTrue(closureCalled, "Closure should  have been called")
