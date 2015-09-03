@@ -61,4 +61,46 @@ class LoggerObjectiveCTests: XCTestCase {
     XCTAssertEqual(appender.logMessages[4].level, LogLevel.Fatal);
   }
   
+  func testLoggerObjectiveCLogBlocWithFileAndLineMethodsLogsWithFileAndLine() {
+    let appender = MemoryAppender();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+    appender.formatter = formatter;
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    
+    // Execute
+    logger.logDebugBloc({"message"}, file: "filename", line: 42);
+    logger.logInfoBloc({"message"}, file: "filename", line: 42);
+    logger.logWarningBloc({"message"}, file: "filename", line: 42);
+    logger.logErrorBloc({"message"}, file: "filename", line: 42);
+    logger.logFatalBloc({"message"}, file: "filename", line: 42);
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42] message");
+  }
+  
+  
+  func testLoggerObjectiveCLogMessageWithFileAndLineMethodsLogsWithFileAndLine() {
+    let appender = MemoryAppender();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+    appender.formatter = formatter;
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    
+    // Execute
+    logger.logDebug("message", file: "filename", line: 42);
+    logger.logInfo("message", file: "filename", line: 42);
+    logger.logWarning("message", file: "filename", line: 42);
+    logger.logError("message", file: "filename", line: 42);
+    logger.logFatal("message", file: "filename", line: 42);
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42] message");
+  }
 }
