@@ -6,6 +6,7 @@
 [![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
              )](https://developer.apple.com/swift)
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
+[![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
 
 Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
 
