@@ -126,15 +126,9 @@ This appender is a good choice for release versions of softwares.
 
 ### The PatternFormatter
 
-The PatternFormatter uses a simple textual pattern with marker identified by a '%' prefix to render the log messages. it provides those markers :
+The PatternFormatter uses a simple textual pattern with marker identified by a '%' prefix to render the log messages.
 
-* l : The log level (identified by its name)
-* n : The name of the logger
-* d : The date of the log
-* m : The message
-* % : The '%' character
-
-This pattern :  
+As an exemple, this pattern :  
 ```
 [%d][%l][%n] %m
 ```  
@@ -142,3 +136,5 @@ will produce this kind of log:
 ```
 [2015-02-02 12:45:23 +0000][Debug][logger.name] The message that was sent to the logger
 ```
+
+See [this page](https://github.com/jduquennoy/Log4swift/wiki/Provided-Formatters) for more details, including a full list of available markers.
