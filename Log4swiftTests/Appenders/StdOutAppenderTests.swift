@@ -302,6 +302,24 @@ class StdOutAppenderTests: XCTestCase {
     }
   }
   
+  func testTextColorSetForInfoLevelIsAppliedWithResetAfterLogForOtherTTY() {
+    setenv("XcodeColors", "", 1);
+    setenv("TERM", "xterm", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setTextColor(.Red, level: .Error);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
+    }
+  }
+  
   func testTextColorSetForInfoLevelDoesNotAffectOtherLevels() {
     setenv("XcodeColors", "YES", 1);
     setenv("TERM", "xterm-256color", 1);
@@ -353,6 +371,24 @@ class StdOutAppenderTests: XCTestCase {
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
       XCTAssertEqual(stdoutContent, "\u{1B}[48;5;2mlog value\u{1B}[0m\n");
+    }
+  }
+  
+  func testBackgroundColorSetForInfoLevelIsAppliedWithResetAfterLogForOtherTTY() {
+    setenv("XcodeColors", "", 1);
+    setenv("TERM", "xterm", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setBackgroundColor(.Red, level: .Error);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
     }
   }
   

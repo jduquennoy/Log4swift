@@ -33,6 +33,7 @@ public class StdOutAppender: Appender {
   internal enum TTYType {
     case Xcode
     case XtermColor
+    case Other
   }
   
   public var errorThresholdLevel: LogLevel? = .Error;
@@ -46,8 +47,10 @@ public class StdOutAppender: Appender {
     switch (xcodeColors, terminalType) {
     case (.Some("YES"), _):
       self.ttyType = .Xcode;
-    default:
+    case (_, .Some("xterm-256color")):
       self.ttyType = .XtermColor;
+    default:
+      self.ttyType = .Other
     }
     
     super.init(identifier);
@@ -213,6 +216,7 @@ extension StdOutAppender {
       switch(type) {
       case .XtermColor: return String(self.xtermCode());
       case .Xcode: return self.xcodeCode();
+      case .Other: return "";
       }
     }
   };
@@ -221,6 +225,7 @@ extension StdOutAppender {
     switch(self.ttyType) {
     case .Xcode: return "\u{1B}[fg";
     case .XtermColor: return "\u{1B}[38;5;";
+    case .Other: return "";
     }
   }
   
@@ -228,6 +233,7 @@ extension StdOutAppender {
     switch(self.ttyType) {
     case .Xcode: return "\u{1B}[bg";
     case .XtermColor: return "\u{1B}[48;5;";
+    case .Other: return "";
     }
   }
   
@@ -235,6 +241,7 @@ extension StdOutAppender {
     switch(self.ttyType) {
     case .Xcode: return ";";
     case .XtermColor: return "m";
+    case .Other: return "";
     }
   }
   
@@ -242,6 +249,7 @@ extension StdOutAppender {
     switch(self.ttyType) {
     case .Xcode: return "\u{1B}[;";
     case .XtermColor: return "\u{1B}[0m";
+    case .Other: return "";
     }
   }
   
