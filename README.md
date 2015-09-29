@@ -27,14 +27,15 @@ pod 'Log4swift', '1.0.0b1'
 use_frameworks!
 ```
 
-## Goal
-The goal of this project is to propose a logging library with those caracteristics :
+## Features
+Here are the main features you can expect from Log4swift :
 
 * straitforward to use for simple cases : default configuration should just work
 * powerful for more complexe cases, with multi-destination logging for exemple
-* ability to log over the network, and notably to NSLogger.
+* ability to log over the network, using an NSLogger backend.
 * dynamically configurable by code
 * configurable by file
+* capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color
 
 ### Not yet achieved goals
 * synchronous by default, but with the ability to request asynchronous behavior
