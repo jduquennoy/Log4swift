@@ -33,6 +33,14 @@ class PatternFormatterTests: XCTestCase {
     super.tearDown()
   }
   
+  func testDefaultPatternForFormatterReturnsTheUnmodifiedMessage() {
+    // Execute
+    let formatter = PatternFormatter("identifier");
+    
+    let message = "test message";
+    XCTAssertEqual(formatter.format(message, info: LogInfoDictionary()), message);
+  }
+  
   func testCreateFormatterWithNonClosedParametersThrowsError() {
     XCTAssertThrows { try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") };
   }

@@ -62,7 +62,7 @@ Available markers are :
   }
 
   public required convenience init(_ identifier: String) {
-    try! self.init(identifier: identifier, pattern: "");
+    try! self.init(identifier: identifier, pattern: "%m");
   }
   
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
