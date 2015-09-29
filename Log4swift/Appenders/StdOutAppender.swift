@@ -26,6 +26,8 @@ StdOutAppender will print the log to stdout or stderr depending on thresholds an
 public class StdOutAppender: Appender {
   public enum DictionaryKey: String {
     case ErrorThreshold = "ErrorThresholdLevel"
+    case TextColors = "TextColors"
+    case BackgroundColors = "BackgroundColors"
   };
   
   internal enum TTYType {
@@ -34,8 +36,8 @@ public class StdOutAppender: Appender {
   }
   
   public var errorThresholdLevel: LogLevel? = .Error;
-  private var textColors = [LogLevel: TTYColor]();
-  private var backgroundColors = [LogLevel: TTYColor]();
+  internal private(set) var textColors = [LogLevel: TTYColor]();
+  internal private(set) var backgroundColors = [LogLevel: TTYColor]();
   internal let ttyType: TTYType;
   
   public required init(_ identifier: String) {
@@ -59,10 +61,36 @@ public class StdOutAppender: Appender {
       if let errorThreshold = LogLevel(errorThresholdString) {
         errorThresholdLevel = errorThreshold;
       } else {
-        throw InvalidOrMissingParameterException("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for console appender '\(self.identifier)'");
+        throw InvalidOrMissingParameterException("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'");
       }
     } else {
       errorThresholdLevel = nil;
+    }
+    
+    if let textColors = (dictionary[DictionaryKey.TextColors.rawValue] as? Dictionary<String, String>) {
+      for (levelName, colorName) in textColors {
+        guard let level = LogLevel(levelName) else {
+          throw InvalidOrMissingParameterException("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+        }
+        guard let color = TTYColor(colorName) else {
+          throw InvalidOrMissingParameterException("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+        }
+
+        self.textColors[level] = color;
+      }
+    }
+
+    if let backgroundColors = (dictionary[DictionaryKey.BackgroundColors.rawValue] as? Dictionary<String, String>) {
+      for (levelName, colorName) in backgroundColors {
+        guard let level = LogLevel(levelName) else {
+          throw InvalidOrMissingParameterException("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+        }
+        guard let color = TTYColor(colorName) else {
+          throw InvalidOrMissingParameterException("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+        }
+        
+        self.backgroundColors[level] = color;
+      }
     }
   }
   
@@ -104,6 +132,32 @@ extension StdOutAppender {
     case Purple
     case lightPurple
     case DarkPurple
+    
+    init?(_ name: String) {
+      switch(name.lowercaseString) {
+      case "black" : self = .Black;
+      case "darkgrey" : self = .DarkGrey;
+      case "grey" : self = .Grey;
+      case "lightgrey" : self = .LightGrey;
+      case "white" : self = .White;
+      case "lightred" : self = .LightRed;
+      case "red" : self = .Red;
+      case "darkred" : self = .DarkRed;
+      case "lightgreen" : self = .LightGreen;
+      case "green" : self = .Green;
+      case "darkgreen" : self = .DarkGreen;
+      case "lightblue" : self = .LightBlue;
+      case "blue" : self = .Blue;
+      case "darkblue" : self = .DarkBlue;
+      case "lightyellow" : self = .LightYellow;
+      case "yellow" : self = .Yellow;
+      case "darkyellow" : self = .DarkYellow;
+      case "lightpurple" : self = .lightPurple;
+      case "purple" : self = .Purple;
+      case "darkpurple" : self = .DarkPurple;
+      default: return nil;
+      }
+    }
     
     private func xtermCode() -> Int {
       switch(self) {

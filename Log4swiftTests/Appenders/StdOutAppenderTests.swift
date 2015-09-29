@@ -95,6 +95,8 @@ class StdOutAppenderTests: XCTestCase {
     }
   }
   
+  // MARK: - Update from dictionary testing
+  
   func testUpdatingAppenderFromDictionaryWithNoThresholdDoesNotChangeIt() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender"];
     let appender = StdOutAppender("test appender");
@@ -163,7 +165,7 @@ class StdOutAppenderTests: XCTestCase {
     XCTAssertEqual(appender.errorThresholdLevel!, LogLevel.Info);
   }
   
-  func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
+  func testUpdatingAppenderFromDictionaryWithNonExistingFormatterIdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"];
     let appender = StdOutAppender("test appender");
@@ -171,7 +173,7 @@ class StdOutAppenderTests: XCTestCase {
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
   
-  func testUpdatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
+  func testUpdatingAppenderFromDictionaryWithExistingFormatterIdUsesIt() {
     let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern");
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       Appender.DictionaryKey.FormatterId.rawValue: "formatterId"];
@@ -182,6 +184,84 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithTextColorsUsesThem() {
+    let textColors = [LogLevel.Error.description: "red",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.TextColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.textColors, [LogLevel.Error: StdOutAppender.TTYColor.Red, LogLevel.Info: StdOutAppender.TTYColor.Green]);
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithInvalidTextColorsThrowsError() {
+    let textColors = [LogLevel.Error.description: "Invalide color",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.TextColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithInvalidLevelInTextColorsThrowsError() {
+    let textColors = ["Invalid level": "Red",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.TextColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithBackgroundColorsUsesThem() {
+    let textColors = [LogLevel.Error.description: "red",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.backgroundColors, [LogLevel.Error: StdOutAppender.TTYColor.Red, LogLevel.Info: StdOutAppender.TTYColor.Green]);
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithInvalidBackgroundColorsThrowsError() {
+    let textColors = [LogLevel.Error.description: "Invalide color",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithInvalidLevelInBackgroundColorsThrowsError() {
+    let textColors = ["Invalid level": "Red",
+      LogLevel.Info.description: "Green"];
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors];
+    let appender = StdOutAppender("test appender");
+    appender.thresholdLevel = .Debug;
+    
+    // Execute & validate
+    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) };
   }
 
   // MARK: - Colors testing
@@ -330,6 +410,28 @@ class StdOutAppenderTests: XCTestCase {
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
       XCTAssertEqual(stdoutContent, "log value\n");
     }
+  }
+  
+  func testCreateTTYColorFromStringIsCaseInsensitive() {
+    XCTAssertEqual(StdOutAppender.TTYColor("black"), StdOutAppender.TTYColor.Black);
+    XCTAssertEqual(StdOutAppender.TTYColor("DarKGrey"), StdOutAppender.TTYColor.DarkGrey);
+    XCTAssertEqual(StdOutAppender.TTYColor("greY"), StdOutAppender.TTYColor.Grey);
+    XCTAssertEqual(StdOutAppender.TTYColor("liGHTgREY"), StdOutAppender.TTYColor.LightGrey);
+    XCTAssertEqual(StdOutAppender.TTYColor("liGHTred"), StdOutAppender.TTYColor.LightRed);
+    XCTAssertEqual(StdOutAppender.TTYColor("ReD"), StdOutAppender.TTYColor.Red);
+    XCTAssertEqual(StdOutAppender.TTYColor("darkRed"), StdOutAppender.TTYColor.DarkRed);
+    XCTAssertEqual(StdOutAppender.TTYColor("lightGreEn"), StdOutAppender.TTYColor.LightGreen);
+    XCTAssertEqual(StdOutAppender.TTYColor("GreEn"), StdOutAppender.TTYColor.Green);
+    XCTAssertEqual(StdOutAppender.TTYColor("DarKGreEn"), StdOutAppender.TTYColor.DarkGreen);
+    XCTAssertEqual(StdOutAppender.TTYColor("lightblue"), StdOutAppender.TTYColor.LightBlue);
+    XCTAssertEqual(StdOutAppender.TTYColor("blue"), StdOutAppender.TTYColor.Blue);
+    XCTAssertEqual(StdOutAppender.TTYColor("dArkBlue"), StdOutAppender.TTYColor.DarkBlue);
+    XCTAssertEqual(StdOutAppender.TTYColor("lightYelloW"), StdOutAppender.TTYColor.LightYellow);
+    XCTAssertEqual(StdOutAppender.TTYColor("yellOw"), StdOutAppender.TTYColor.Yellow);
+    XCTAssertEqual(StdOutAppender.TTYColor("lightYellow"), StdOutAppender.TTYColor.LightYellow);
+    XCTAssertEqual(StdOutAppender.TTYColor("darkPurple"), StdOutAppender.TTYColor.DarkPurple);
+    XCTAssertEqual(StdOutAppender.TTYColor("purple"), StdOutAppender.TTYColor.Purple);
+    XCTAssertEqual(StdOutAppender.TTYColor("LightPurPLE"), StdOutAppender.TTYColor.lightPurple);
   }
   
   // MARK: - Private methods
