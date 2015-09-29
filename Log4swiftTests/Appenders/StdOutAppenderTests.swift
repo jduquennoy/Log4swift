@@ -183,19 +183,173 @@ class StdOutAppenderTests: XCTestCase {
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier);
   }
+
+  // MARK: - Colors testing
   
+  func testTextColorSetForErrorLevelIsAppliedWithResetAfterLogForXcodeTTY() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setTextColor(.Red, level: .Error);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "\u{1B}[fg255,0,0;log value\u{1B}[;\n");
+    }
+  }
+  
+  func testTextColorSetForInfoLevelIsAppliedWithResetAfterLogForXtermTTY() {
+    setenv("XcodeColors", "", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setTextColor(.Red, level: .Error);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "\u{1B}[38;5;9mlog value\u{1B}[0m\n");
+    }
+  }
+  
+  func testTextColorSetForInfoLevelDoesNotAffectOtherLevels() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setTextColor(.Red, level: .Info);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
+    }
+  }
+  
+  func testBackgroundColorSetForWarningLevelIsAppliedWithResetAfterLogForXcodeTTY() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setBackgroundColor(.Blue, level: .Warning);
+    
+    // Execute
+    appender.log("log value", level: .Warning, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "\u{1B}[bg0,0,255;log value\u{1B}[;\n");
+    }
+  }
+  
+  func testBackgroundColorSetForInfoLevelIsAppliedWithResetAfterLogForXtermTTY() {
+    setenv("XcodeColors", "", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setBackgroundColor(.Green, level: .Info);
+    
+    // Execute
+    appender.log("log value", level: .Info, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "\u{1B}[48;5;2mlog value\u{1B}[0m\n");
+    }
+  }
+  
+  func testBackgroundColorSetForInfoLevelDoesNotAffectOtherLevels() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setBackgroundColor(.Yellow, level: .Warning);
+    
+    // Execute
+    appender.log("log value", level: .Error, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
+    }
+  }
+  
+  func testSettingANilTextColorSetsNoColor() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setTextColor(.DarkGrey, level: .Warning);
+    appender.setTextColor(nil, level: .Warning);
+    
+    // Execute
+    appender.log("log value", level: .Warning, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
+    }
+  }
+  
+  func testSettingANilBackgroundColorSetsNoColor() {
+    setenv("XcodeColors", "YES", 1);
+    setenv("TERM", "xterm-256color", 1);
+    
+    let appender = StdOutAppender("appender");
+    appender.errorThresholdLevel = .Warning;
+    
+    appender.setBackgroundColor(.Grey, level: .Warning);
+    appender.setBackgroundColor(nil, level: .Warning);
+    
+    // Execute
+    appender.log("log value", level: .Warning, info: LogInfoDictionary());
+    
+    // Validate
+    if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
+      XCTAssertEqual(stdoutContent, "log value\n");
+    }
+  }
+  
+  // MARK: - Private methods
+
   private func getFileHandleContentAsString(fileHandle: NSFileHandle) -> String? {
     let expectation = expectationWithDescription("filHandle content received");
+    var expectationIsExpired = false;
     var stringContent: String?;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
       let data = fileHandle.availableData;
       stringContent = NSString(data: data, encoding: NSUTF8StringEncoding) as? String;
-      
-      expectation.fulfill();
+      if(!expectationIsExpired) {
+        expectation.fulfill();
+      }
     }
     
-    waitForExpectationsWithTimeout(1, handler: nil);
+    waitForExpectationsWithTimeout(1, handler: { error in
+      expectationIsExpired = true;
+    });
     return stringContent;
   }
 }

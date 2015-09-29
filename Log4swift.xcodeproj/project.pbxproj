@@ -11,7 +11,7 @@
 		024E2E051B3F470500457304 /* XCTestCase+noThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2E031B3F41D500457304 /* XCTestCase+noThrow.swift */; };
 		024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024FD79B1B2DD3FE00A8609C /* String+utilities.swift */; };
 		024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024FD79E1B2DE13300A8609C /* MemoryAppender.swift */; };
-		02568DAE1B3631FD00EDDFFE /* ConsoleAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02568DAD1B3631FD00EDDFFE /* ConsoleAppenderTests.swift */; };
+		02568DAE1B3631FD00EDDFFE /* StdOutAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02568DAD1B3631FD00EDDFFE /* StdOutAppenderTests.swift */; };
 		02664C0E1B2CE96500B695DE /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 02664C0D1B2CE96500B695DE /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02664C151B2CE96500B695DE /* Log4swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02664C0A1B2CE96500B695DE /* Log4swift.framework */; };
 		02664C251B2CEB2900B695DE /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C241B2CEB2900B695DE /* Logger.swift */; };
@@ -105,7 +105,7 @@
 		024E2E031B3F41D500457304 /* XCTestCase+noThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+noThrow.swift"; sourceTree = "<group>"; };
 		024FD79B1B2DD3FE00A8609C /* String+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = "String+utilities.swift"; sourceTree = "<group>"; };
 		024FD79E1B2DE13300A8609C /* MemoryAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryAppender.swift; sourceTree = "<group>"; };
-		02568DAD1B3631FD00EDDFFE /* ConsoleAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleAppenderTests.swift; sourceTree = "<group>"; };
+		02568DAD1B3631FD00EDDFFE /* StdOutAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StdOutAppenderTests.swift; sourceTree = "<group>"; };
 		02664C0A1B2CE96500B695DE /* Log4swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Log4swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02664C0D1B2CE96500B695DE /* log4swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log4swift.h; sourceTree = "<group>"; };
 		02664C0F1B2CE96500B695DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				02B8F6221B30B26A0077A8A6 /* FileAppenderTests.swift */,
-				02568DAD1B3631FD00EDDFFE /* ConsoleAppenderTests.swift */,
+				02568DAD1B3631FD00EDDFFE /* StdOutAppenderTests.swift */,
 				02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */,
 				5E6727CD1B6B5AB200BFFD93 /* ASLAppenderTests.swift */,
 			);
@@ -618,7 +618,7 @@
 				5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */,
 				5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */,
 				02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */,
-				02568DAE1B3631FD00EDDFFE /* ConsoleAppenderTests.swift in Sources */,
+				02568DAE1B3631FD00EDDFFE /* StdOutAppenderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
