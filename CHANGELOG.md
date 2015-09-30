@@ -1,6 +1,6 @@
 # Log4swift versions changelog
 
-## 1.0b3 (2015-xx-xx)
+## 1.0b3 (2015-10-01)
 
 ### Enhancements
 - Origin file and line number markers added to the PatternFormatter. When logging from Objective-C, this requires the use of specific methods with file and line arguments.
