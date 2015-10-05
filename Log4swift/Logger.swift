@@ -29,7 +29,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case AppenderIds = "AppenderIds"
   }
   
-  /// The UTI string that identifies the logger. Exemple : product.module.feature
+  /// The UTI string that identifies the logger. Example : product.module.feature
   public let identifier: String;
 
   internal var parent: Logger?;
@@ -38,7 +38,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   private var appendersStorage: [Appender];
 
   /// The threshold under which log messages will be ignored.
-  /// For exemple, if the threshold is Warning:
+  /// For example, if the threshold is Warning:
   /// * logs issued with a Debug or Info will be ignored
   /// * logs issued wiht a Warning, Error or Fatal level will be processed
   public var thresholdLevel: LogLevel {

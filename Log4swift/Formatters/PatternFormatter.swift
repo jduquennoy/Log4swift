@@ -33,7 +33,7 @@ Available markers are :
 * m : the message
 * % : the '%' character
 
-**Exemples**  
+**Examples**  
 "[%p] %m" -> "[Debug] log message"
 */
 @objc public final class PatternFormatter: NSObject, Formatter {
@@ -103,14 +103,15 @@ Available markers are :
       },
       "l": {(parameters, message, info) in
         if let logLevel = info[.LogLevel] {
-          return logLevel.description
-        } else {
+			return processPaddingParameters(logLevel, parameters: parameters)
+	    } else {
           return "-";
         }
       },
-      "n": {(parameters, message, info) in 
+      "n": {(parameters, message, info) in
+
         if let loggerName = info[.LoggerName] {
-          return loggerName.description;
+			return processPaddingParameters(loggerName, parameters: parameters)
         } else {
           return "-";
         }
@@ -229,4 +230,65 @@ Available markers are :
       }
     }
   }
+}
+
+
+/// Used internally by the `PatternFormatter` to pad strings left or right to a certain length.
+///
+/// - parameter value: The string value to pad
+/// - parameter width: The width of the final string.  Positive values left-justify the value, negative values right-justify it.  Default value is `0` and causes no padding to occur.
+///
+/// - returns: The padded string
+func _padString(value: String, _ width: Int = 0) -> String
+{
+  var str = value as NSString
+
+  if width == 0
+  {
+	return value
+  }
+
+  if str.length > abs(width)
+  {
+	str = str.substringWithRange(NSRange(location: 0, length: abs(width)))
+  }
+
+  if str.length < abs(width)
+  {
+	if width < 0
+	{
+		str = " ".stringByPaddingToLength(abs(width) - str.length, withString: " ", startingAtIndex: 0) + (str as String)
+	}
+	else
+	{
+	  str = str.stringByPaddingToLength(width, withString: " ", startingAtIndex: 0)
+	}
+  }
+
+  return str as String
+}
+
+
+/// Processes standard padding parameters; currently only accepts a single integer value and uses
+/// it to pad the width of the string value.
+/// - parameter value: The string value
+/// - parameter parameters: The formatting parameters if provided; Positive int left-justifies
+///   to that width, negative int right-justifies.
+///
+/// - returns: The processed value
+/// - seealso: `_padString()`
+func processPaddingParameters(value: CustomStringConvertible, parameters: String?) -> String
+{
+  if let parameters = parameters
+  {
+	let scanner = NSScanner(string: parameters)
+	var width: Int = 0
+
+	if scanner.scanInteger(&width)
+	{
+	  return _padString(value.description, width)
+	}
+  }
+
+  return value.description
 }
