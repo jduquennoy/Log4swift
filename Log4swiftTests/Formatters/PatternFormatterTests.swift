@@ -54,7 +54,49 @@ class PatternFormatterTests: XCTestCase {
     // validate
     XCTAssertEqual(formattedMessage, LogLevel.Error.description);
   }
+
+  func testFormatterAppliesLogLevelMarkerWithPadding() {
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{10}][%n] %m");
+	let info: LogInfoDictionary = [
+		LogInfoKeys.LoggerName: "nameOfTheLogger",
+		LogInfoKeys.LogLevel: LogLevel.Warning
+	];
+	
+	// Execute
+	let formattedMessage = formatter.format("Log message", info: info);
+	
+	// Validate
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)   ][nameOfTheLogger] Log message");
+  }
   
+  func testFormatterAppliesLogLevelMarkerWithNegativePadding() {
+	  let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{-10}][%n] %m");
+	  let info: LogInfoDictionary = [
+		  LogInfoKeys.LoggerName: "nameOfTheLogger",
+		  LogInfoKeys.LogLevel: LogLevel.Warning
+	  ];
+	  
+	  // Execute
+	  let formattedMessage = formatter.format("Log message", info: info);
+	  
+	  // Validate
+	  XCTAssertEqual(formattedMessage, "[   \(LogLevel.Warning)][nameOfTheLogger] Log message");
+  }
+
+  func testFormatterAppliesLogLevelMarkerWithZeroPadding() {
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{0}][%n] %m");
+	let info: LogInfoDictionary = [
+		LogInfoKeys.LoggerName: "nameOfTheLogger",
+		LogInfoKeys.LogLevel: LogLevel.Warning
+	];
+	
+	// Execute
+	let formattedMessage = formatter.format("Log message", info: info);
+	
+	// Validate
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message");
+  }
+	
   func testFormatterAppliesLoggerNameMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n");
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "loggername"];
@@ -66,6 +108,48 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "loggername");
   }
   
+  func testFormatterAppliesLoggerNameWithPadding() {
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{10}] %m");
+	let info: LogInfoDictionary = [
+		LogInfoKeys.LoggerName: "name",
+		LogInfoKeys.LogLevel: LogLevel.Warning
+	];
+	
+	// Execute
+	let formattedMessage = formatter.format("Log message", info: info);
+	
+	// Validate
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name      ] Log message");
+  }
+  
+  func testFormatterAppliesLoggerNameWithNegativePadding() {
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{-10}] %m");
+	let info: LogInfoDictionary = [
+		LogInfoKeys.LoggerName: "name",
+		LogInfoKeys.LogLevel: LogLevel.Warning
+	];
+	
+	// Execute
+	let formattedMessage = formatter.format("Log message", info: info);
+	
+	// Validate
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][      name] Log message");
+  }
+  
+  func testFormatterAppliesLoggerNameWithZeroPadding() {
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{0}] %m");
+	let info: LogInfoDictionary = [
+		LogInfoKeys.LoggerName: "name",
+		LogInfoKeys.LogLevel: LogLevel.Warning
+	];
+	
+	// Execute
+	let formattedMessage = formatter.format("Log message", info: info);
+	
+	// Validate
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name] Log message");
+  }
+
   func testFormatterAppliesDateMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d");
     let info = LogInfoDictionary();

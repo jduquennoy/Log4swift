@@ -25,15 +25,15 @@ The PatternFormatter will format the message according to a given pattern.
 The pattern is a regular string, with markers prefixed by '%', that might be passed options encapsulated in '{}'.
 Use '%%' to print a '%' character in the formatted message.
 Available markers are :
-* l : The name of the log level
-* n : The name of the logger
+* l{format} : The name of the log level. Format is TBD.
+* n{format} : The name of the logger. Format is TBD.
 * d{format} : The date of the log. The format is the one of the strftime function.
 * L : the number of the line where the log was issued
 * F : the name of the file where the log was issued
 * m : the message
 * % : the '%' character
 
-**Exemples**  
+**Examples**  
 "[%p] %m" -> "[Debug] log message"
 */
 @objc public final class PatternFormatter: NSObject, Formatter {
@@ -103,14 +103,15 @@ Available markers are :
       },
       "l": {(parameters, message, info) in
         if let logLevel = info[.LogLevel] {
-          return logLevel.description
-        } else {
+			return processPaddingParameters(logLevel, parameters: parameters)
+	    } else {
           return "-";
         }
       },
-      "n": {(parameters, message, info) in 
+      "n": {(parameters, message, info) in
+
         if let loggerName = info[.LoggerName] {
-          return loggerName.description;
+			return processPaddingParameters(loggerName, parameters: parameters)
         } else {
           return "-";
         }
@@ -229,4 +230,27 @@ Available markers are :
       }
     }
   }
+}
+
+
+/// Processes standard padding parameters; currently only accepts a single integer value and uses
+/// it to pad the width of the string value.
+/// - parameter value: The string value
+/// - parameter parameters: The formatting parameters if provided; Positive int left-justifies
+///   to that width, negative int right-justifies.
+///
+/// - returns: The processed value
+/// - seealso: `_padString()`
+func processPaddingParameters(value: CustomStringConvertible, parameters: String?) -> String
+{
+  if let parameters = parameters {
+    let scanner = NSScanner(string: parameters)
+    var width: Int = 0
+
+    if scanner.scanInteger(&width) {
+      return value.description.padtoWidth(width)
+    }
+  }
+
+  return value.description
 }
