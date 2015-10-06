@@ -39,13 +39,13 @@ extension String {
 
   /// Pads string left or right to a certain width.
   ///
-  /// - parameter width: The width of the final string.  Positive values left-justify the value,
+  /// :parameter: width: The width of the final string.  Positive values left-justify the value,
   ///                    negative values right-justify it.  Default value is `0` and causes no
   ///                    padding to occur.  If the string is longer than the specified width,
   ///                    it will be truncated.
   ///
-  /// - returns: The padded string
-  func padtoWidth(width: Int = 0) -> String {
+  /// :returns: The padded string
+  public func padToWidth(width: Int) -> String {
     var str = self as NSString
     
     if width == 0 {
@@ -53,7 +53,12 @@ extension String {
     }
     
     if str.length > abs(width) {
-      str = str.substringWithRange(NSRange(location: 0, length: abs(width)))
+      if width < 0 {
+        let offset = str.length - abs(width);
+        str = str.substringWithRange(NSRange(location:offset, length:abs(width)))
+      } else {
+        str = str.substringWithRange(NSRange(location:0, length:abs(width)))
+      }
     }
 
     if str.length < abs(width) {
