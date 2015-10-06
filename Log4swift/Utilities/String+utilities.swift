@@ -35,7 +35,39 @@ extension String {
   public func format(args: CVaListPointer) -> String {
     return NSString(format: self, arguments: args) as String
   }
+
+
+  /// Pads string left or right to a certain width.
+  ///
+  /// - parameter width: The width of the final string.  Positive values left-justify the value,
+  ///                    negative values right-justify it.  Default value is `0` and causes no
+  ///                    padding to occur.  If the string is longer than the specified width,
+  ///                    it will be truncated.
+  ///
+  /// - returns: The padded string
+  func padtoWidth(width: Int = 0) -> String {
+    var str = self as NSString
+    
+    if width == 0 {
+      return self
+    }
+    
+    if str.length > abs(width) {
+      str = str.substringWithRange(NSRange(location: 0, length: abs(width)))
+    }
+
+    if str.length < abs(width) {
+      if width < 0 {
+        str = " ".stringByPaddingToLength(abs(width) - str.length, withString: " ", startingAtIndex: 0) + (str as String)
+      } else {
+        str = str.stringByPaddingToLength(width, withString: " ", startingAtIndex: 0)
+      }
+    }
+    
+    return str as String
+  }
 }
+
 
 extension String : CustomStringConvertible {
   /// Returns the string itself (needed to conform to the CustomStringConvertible protocol)
