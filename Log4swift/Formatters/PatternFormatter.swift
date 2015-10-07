@@ -248,7 +248,7 @@ func processPaddingParameters(value: CustomStringConvertible, parameters: String
     var width: Int = 0
 
     if scanner.scanInteger(&width) {
-      return value.description.padtoWidth(width)
+      return value.description.padToWidth(width)
     }
   }
 
