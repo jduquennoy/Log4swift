@@ -23,14 +23,16 @@ import Foundation
 /**
 The PatternFormatter will format the message according to a given pattern.
 The pattern is a regular string, with markers prefixed by '%', that might be passed options encapsulated in '{}'.
+When the 'padding' option is provided, positive values left-justify that field to the specified width, negative values
+right-justify it to the specified width.
 Use '%%' to print a '%' character in the formatted message.
 Available markers are :
-* l{format} : The name of the log level. Format is TBD.
-* n{format} : The name of the logger. Format is TBD.
-* d{format} : The date of the log. The format is the one of the strftime function.
-* L : the number of the line where the log was issued
-* F : the name of the file where the log was issued
-* m : the message
+* l{'padding': 'padding value'} : The name of the log level.
+* n{'padding': 'padding value'} : The name of the logger.
+* d{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of the strftime function.
+* L{'padding': 'padding value'} : the number of the line where the log was issued
+* F{'padding': 'padding value'} : the name of the file where the log was issued
+* m{'padding': 'padding value'} : the message
 * % : the '%' character
 
 **Examples**  
@@ -81,57 +83,46 @@ Available markers are :
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: String?, message: String, info: LogInfoDictionary) -> String;
+    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String;
     // This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
     // Add an entry to this array to declare a new marker.
     private let markerClosures: Dictionary<String, MarkerClosure> = [
       "d": {(parameters, message, info) in
         let result: String;
-        if let parameters = parameters {
+        if let format = parameters["format"] as? String {
           let now = UnsafeMutablePointer<time_t>.alloc(1);
           time(now);
           let date = localtime(now);
           let buffer = UnsafeMutablePointer<Int8>.alloc(80);
-          strftime(buffer, 80, parameters , date);
+          strftime(buffer, 80, format , date);
           result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String;
           buffer.destroy();
           now.destroy();
         } else {
           result = NSDate().description;
         }
-        return result
+        return processCommonParameters(result, parameters: parameters)
       },
       "l": {(parameters, message, info) in
-        if let logLevel = info[.LogLevel] {
-			return processPaddingParameters(logLevel, parameters: parameters)
-	    } else {
-          return "-";
-        }
+        let logLevel = info[.LogLevel] ?? "-"
+        return processCommonParameters(logLevel, parameters: parameters)
       },
       "n": {(parameters, message, info) in
-
-        if let loggerName = info[.LoggerName] {
-			return processPaddingParameters(loggerName, parameters: parameters)
-        } else {
-          return "-";
-        }
+        let loggerName = info[.LoggerName] ?? "-"
+        return processCommonParameters(loggerName, parameters: parameters)
       },
       "L": {(parameters, message, info) in 
-        if let line = info[.FileLine] {
-          return line.description;
-        } else {
-          return "-";
-        }
+        let line = info[.FileLine] ?? "-"
+        return processCommonParameters(line, parameters: parameters)
       },
       "F": {(parameters, message, info) in 
-        if let filename = info[.FileName] {
-          return filename.description;
-        } else {
-          return "-";
-        }
+        let filename = info[.FileName] ?? "-"
+        return processCommonParameters(filename, parameters: parameters)
       },
-      "m": {(parameters, message, infos) in message },
-      "%": {(parameters, message, infos) in "%" }
+      "m": {(parameters, message, info) in
+        processCommonParameters(message as String, parameters: parameters)
+      },
+      "%": {(parameters, message, info) in "%" }
     ];
     
     
@@ -150,6 +141,11 @@ Available markers are :
     private struct ParserStatus {
       var machineState = ParserState.Text;
       var charactersAccumulator = [Character]();
+      var parameterValues: [String:AnyObject] {
+        get {
+          return ("{" + String(charactersAccumulator) + "}").toDictionary()
+        }
+      }
     };
     
     private var parserStatus = ParserStatus();
@@ -213,7 +209,7 @@ Available markers are :
         case .End:
           throw Error.NotClosedMarkerParameter;
         default:
-          processMarker(markerName, parameters: String(parserStatus.charactersAccumulator));
+          processMarker(markerName, parameters: parserStatus.parameterValues)
           parserStatus.charactersAccumulator.removeAll();
         }
       default:
@@ -222,7 +218,7 @@ Available markers are :
       parserStatus.machineState = newState;
     }
     
-    private func processMarker(markerName: String, parameters: String? = nil) {
+    private func processMarker(markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = markerClosures[markerName] {
         parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) });
       } else {
@@ -233,24 +229,18 @@ Available markers are :
 }
 
 
-/// Processes standard padding parameters; currently only accepts a single integer value and uses
-/// it to pad the width of the string value.
+/// Processes common parameters such as 'padding'.
 /// - parameter value: The string value
-/// - parameter parameters: The formatting parameters if provided; Positive int left-justifies
-///   to that width, negative int right-justifies.
+/// - parameter parameters: Dictionary of formatting key/values;
 ///
 /// - returns: The processed value
-/// - seealso: `_padString()`
-func processPaddingParameters(value: CustomStringConvertible, parameters: String?) -> String
+func processCommonParameters(value: CustomStringConvertible, parameters: [String:AnyObject]) -> String
 {
-  if let parameters = parameters {
-    let scanner = NSScanner(string: parameters)
-    var width: Int = 0
+  var width: Int = 0
 
-    if scanner.scanInteger(&width) {
-      return value.description.padToWidth(width)
-    }
+  if let widthString = parameters["padding"] as? NSString {
+    width = widthString.integerValue
   }
 
-  return value.description
+  return value.description.padToWidth(width)
 }

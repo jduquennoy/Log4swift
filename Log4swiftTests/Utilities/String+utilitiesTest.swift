@@ -79,4 +79,59 @@ class String_utilitiesTest: XCTestCase {
     // Validate
     XCTAssertEqual(truncatedString, "1234567890");
   }
+
+  func testToDictionaryWithValidPatterns() {
+    var dict: [String:AnyObject]
+    
+    // Execute
+    dict = "{\"padding\":\"-57\", \"case\": \"upper\"}".toDictionary()
+    
+    // Validate
+    XCTAssertEqual(dict.keys.count, 2);
+    XCTAssertEqual(dict["padding"] as! String?, "-57");
+    XCTAssertEqual(dict["case"] as! String?, "upper");
+    XCTAssertEqual(dict["missing"] as! String?, nil);
+    
+    
+    // Execute
+    dict = "{'padding':'-57', 'case': 'upper'}".toDictionary()
+    
+    // Validate
+    XCTAssertEqual(dict.keys.count, 2);
+    XCTAssertEqual(dict["padding"] as! String?, "-57");
+    XCTAssertEqual(dict["case"] as! String?, "upper");
+    XCTAssertEqual(dict["missing"] as! String?, nil);
+
+  
+    dict = "{\"padding\":'-57', 'case': \"upper\"}".toDictionary()
+    
+    // Validate
+    XCTAssertEqual(dict.keys.count, 2);
+    XCTAssertEqual(dict["padding"] as! String?, "-57");
+    XCTAssertEqual(dict["case"] as! String?, "upper");
+    XCTAssertEqual(dict["missing"] as! String?, nil);
+  }
+
+  func testToDictionaryWithInvalidPatterns() {
+    var dict: [String:AnyObject]
+    
+    // Execute
+    dict = "{\"padding\":-57, case: \"upper\"}".toDictionary()
+    
+    // Validate
+    XCTAssertEqual(dict.keys.count, 0);
+    XCTAssertEqual(dict["padding"] as! String?, nil);
+    XCTAssertEqual(dict["case"] as! String?, nil);
+    XCTAssertEqual(dict["missing"] as! String?, nil);
+
+  
+    // Execute
+    dict = "\"padding\":\"-57\", \"case\": \"upper\"".toDictionary()
+    
+    // Validate
+    XCTAssertEqual(dict.keys.count, 0);
+    XCTAssertEqual(dict["padding"] as! String?, nil);
+    XCTAssertEqual(dict["case"] as! String?, nil);
+    XCTAssertEqual(dict["missing"] as! String?, nil);
+  }
 }
