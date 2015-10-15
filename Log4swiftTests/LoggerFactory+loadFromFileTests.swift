@@ -231,6 +231,31 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     }
   }
   
+  func testAppendersClassesAreCaseInsensitive() {
+    let fileAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "FileAPPender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "FileAppender",
+      FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"];
+    let nsloggerAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogGerAppender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLoggerAppender",
+      NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost"];
+    let stdoutAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdouTappender",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "StdOutAppender"];
+    let nslogAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "NSLogappENder",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "NSLogAppender"];
+    let aslAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "ASLAppenDEr",
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "ASLAppender"];
+    
+    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]];
+    
+    // Execute
+    let (_, appenders, _) = try! factory.readConfigurationToTupple(dictionary);
+    
+    XCTAssertEqual(appenders.count, 5);
+    for currentAppender in appenders {
+      XCTAssertEqual(currentAppender.identifier, currentAppender.className.componentsSeparatedByString(".").last!);
+    }
+  }
+  
   // MARK: Logger tests
   
   func testReadConfigurationWithNewLoggerAddsItToLoggersPool() {

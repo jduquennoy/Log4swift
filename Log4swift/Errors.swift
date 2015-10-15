@@ -22,7 +22,7 @@ import Foundation
 
 class InvalidOrMissingParameterException: NSError {
   init(_ description: String) {
-    super.init(domain: "Log4swift", code: 0, userInfo: [NSLocalizedDescriptionKey: description]);
+    super.init(domain: "Log4swift", code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: description, NSLocalizedDescriptionKey: description]);
   }
 
   required init?(coder aDecoder: NSCoder) {

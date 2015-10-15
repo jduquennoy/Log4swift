@@ -1,5 +1,10 @@
 # Log4swift versions changelog
 
+## 1.0b4 (-)
+
+###  Enhancements
+- When configuring loggers with a dictionary (or a file), appenders class name are no longer case sensitive.
+
 ## 1.0b3 (2015-10-01)
 
 ### Enhancements
