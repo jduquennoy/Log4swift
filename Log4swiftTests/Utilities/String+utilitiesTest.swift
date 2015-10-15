@@ -84,7 +84,7 @@ class String_utilitiesTest: XCTestCase {
     var dict: [String:AnyObject]
     
     // Execute
-    dict = "{\"padding\":\"-57\", \"case\": \"upper\"}".toDictionary()
+    dict = try! "{\"padding\":\"-57\", \"case\": \"upper\"}".toDictionary()
     
     // Validate
     XCTAssertEqual(dict.keys.count, 2);
@@ -94,7 +94,7 @@ class String_utilitiesTest: XCTestCase {
     
     
     // Execute
-    dict = "{'padding':'-57', 'case': 'upper'}".toDictionary()
+    dict = try! "{'padding':'-57', 'case': 'upper'}".toDictionary()
     
     // Validate
     XCTAssertEqual(dict.keys.count, 2);
@@ -103,7 +103,8 @@ class String_utilitiesTest: XCTestCase {
     XCTAssertEqual(dict["missing"] as! String?, nil);
 
   
-    dict = "{\"padding\":'-57', 'case': \"upper\"}".toDictionary()
+    // Execute
+    dict = try! "{\"padding\":'-57', 'case': \"upper\"}".toDictionary()
     
     // Validate
     XCTAssertEqual(dict.keys.count, 2);
@@ -113,25 +114,11 @@ class String_utilitiesTest: XCTestCase {
   }
 
   func testToDictionaryWithInvalidPatterns() {
-    var dict: [String:AnyObject]
+    var dict: [String:AnyObject]? = nil
     
-    // Execute
-    dict = "{\"padding\":-57, case: \"upper\"}".toDictionary()
-    
-    // Validate
-    XCTAssertEqual(dict.keys.count, 0);
-    XCTAssertEqual(dict["padding"] as! String?, nil);
-    XCTAssertEqual(dict["case"] as! String?, nil);
-    XCTAssertEqual(dict["missing"] as! String?, nil);
-
-  
-    // Execute
-    dict = "\"padding\":\"-57\", \"case\": \"upper\"".toDictionary()
-    
-    // Validate
-    XCTAssertEqual(dict.keys.count, 0);
-    XCTAssertEqual(dict["padding"] as! String?, nil);
-    XCTAssertEqual(dict["case"] as! String?, nil);
-    XCTAssertEqual(dict["missing"] as! String?, nil);
+    // Execute/Validate
+    XCTAssertThrows { try dict = "{\"padding\":-57, case: \"upper\"}".toDictionary() }
+    XCTAssertThrows { try dict = "\"padding\":\"-57\", \"case\": \"upper\"".toDictionary() }
+    XCTAssertNil(dict)
   }
 }

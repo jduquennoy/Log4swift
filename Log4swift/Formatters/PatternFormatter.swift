@@ -141,12 +141,13 @@ Available markers are :
     private struct ParserStatus {
       var machineState = ParserState.Text;
       var charactersAccumulator = [Character]();
-      var parameterValues: [String:AnyObject] {
-        get {
-          return ("{" + String(charactersAccumulator) + "}").toDictionary()
+      
+      func getParameterValues() throws -> [String:AnyObject] {
+        do {
+          return try ("{" + String(charactersAccumulator) + "}").toDictionary()
         }
       }
-    };
+    }
     
     private var parserStatus = ParserStatus();
     private var parsedClosuresSequence = [FormattingClosure]();
@@ -209,7 +210,13 @@ Available markers are :
         case .End:
           throw Error.NotClosedMarkerParameter;
         default:
-          processMarker(markerName, parameters: parserStatus.parameterValues)
+          do {
+            try processMarker(markerName, parameters: parserStatus.getParameterValues())
+          }
+          catch {
+            throw Error.InvalidFormatSyntax
+          }
+
           parserStatus.charactersAccumulator.removeAll();
         }
       default:

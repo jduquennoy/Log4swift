@@ -218,7 +218,7 @@ class PatternFormatterTests: XCTestCase {
   }
 
   func testMarkerParametersAreInterpreted() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{param}");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{'padding':'0'}");
     let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug];
     
     // Execute
