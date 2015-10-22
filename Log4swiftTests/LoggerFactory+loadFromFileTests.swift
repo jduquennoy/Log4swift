@@ -122,7 +122,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
+    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithUnknownAppenderClassThrowsError() {
@@ -132,7 +132,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
+    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithNoAppenderIdentifierThrowsError() {
@@ -141,7 +141,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
+    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithEmptyAppenderIdentifierThrowsError() {
@@ -151,7 +151,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]];
     
     // Execute
-    XCTAssertThrows { try factory.readConfigurationToTupple(dictionary) };
+    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) };
   }
   
   func testLoadDictionaryWithStdOutAppenderAndFormatCreatesRequestedAppender() {
