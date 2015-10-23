@@ -71,7 +71,25 @@ extension String {
     
     return str as String
   }
+
+
+  /// Returns a dictionary if String contains proper JSON format for a single, non-nested object; a simple dictionary.
+  /// Keys and values should be surrounded with single or double quotes.
+  /// Ex: {"name":"value", 'name':'value'}
+  public func toDictionary() throws -> [String:AnyObject] {
+    var dict: [String:AnyObject] = Dictionary()
+    let s = (self as NSString).stringByReplacingOccurrencesOfString("'", withString: "\"")
+
+    if let data = s.dataUsingEncoding(NSUTF8StringEncoding) {
+      do {
+        dict = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
+      }
+    }
+
+    return dict
+  }
 }
+
 
 
 extension String : CustomStringConvertible {
