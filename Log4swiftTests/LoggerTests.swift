@@ -32,6 +32,8 @@ class LoggerTests: XCTestCase {
     super.tearDown()
   }
 
+  //MARK: Defaults
+  
   func testLoggerDefaultLevelIsDebug() {
     let logger = Logger();
     
@@ -42,6 +44,24 @@ class LoggerTests: XCTestCase {
     let logger = Logger();
     
     XCTAssertNil(logger.parent, "Logger should have not parentIdentifier by default");
+  }
+  
+  //MARK: Log closure
+  
+  func testLogWithClosureWillCallClosureIfNoThresholdPreventsLogging() {
+    var closureCalled = false;
+    let logger = Logger();
+    
+    logger.thresholdLevel = .Info;
+    
+    // Execute
+    logger.fatal(closure: {
+      closureCalled = true;
+      return "";
+    });
+    
+    // Validate
+    XCTAssertTrue(closureCalled);
   }
   
   func testLogWithClosureWillNotCallClosureIfLoggerThresholdsPreventsLogging() {
@@ -57,23 +77,23 @@ class LoggerTests: XCTestCase {
     });
     
     // Validate
-    XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached")
+    XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached");
   }
   
-  func testLogWithClosureWorksWithLeadingClosure() {
+  func testLogWithClosureWorksWithTrailingClosure() {
     var closureCalled = false;
     let logger = Logger();
     
     logger.thresholdLevel = .Info;
     
     // Execute
-    logger.debug {
+    logger.info {
       closureCalled = true;
       return "";
     };
     
     // Validate
-    XCTAssertFalse(closureCalled, "Closure should not be call if logger threshold is not reached")
+    XCTAssertTrue(closureCalled);
   }
   
   func testLogWithClosureWillNotCallClosureIfAppendersThresholdsPreventsLogging() {
@@ -93,7 +113,7 @@ class LoggerTests: XCTestCase {
     });
     
     // Validate
-    XCTAssertFalse(closureCalled, "Closure should not be call if no appender threshold is reached")
+    XCTAssertFalse(closureCalled, "Closure should not be call if no appender threshold is reached");
   }
   
   func testLogWithClosureWillCallClosureIfLogWillBeIssuedByAtLeastOneAppender() {
@@ -115,6 +135,8 @@ class LoggerTests: XCTestCase {
     // Validate
     XCTAssertTrue(closureCalled, "Closure should  have been called")
   }
+  
+  //MARK: Static log methods
   
   func testStaticLogDebugMessageMethodsLogToRootLogger() {
     let memoryAppender = MemoryAppender();
@@ -246,6 +268,8 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Fatal);
   }
   
+  //MARK: Configuration from dictionary
+
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
     let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "invalidLevel"];
@@ -329,6 +353,8 @@ class LoggerTests: XCTestCase {
     XCTAssertTrue(logger.appenders[0] === appender1);
     XCTAssertTrue(logger .appenders[1] === appender2);
   }
+  
+  //MARK: Misc
   
   func testCopyInitializerCreatesIdenticalLoggerWithNewIdentifierAndParentIdentifier() {
     let appender1 = StdOutAppender("id1");
@@ -418,6 +444,8 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
   }
   
+  //MARK: Parent relationship
+  
   func testLoggerWithParentUsesParentThreshold() {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
@@ -444,6 +472,19 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appenders.count, 2);
   }
   
+  func testLoggerIsAsynchronousIfParentIsAsynchronous() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    
+    parentLogger.isAsync = true;
+    
+    // Execute
+    let sonIsAsync = sonLogger.isAsync;
+    
+    // Validate
+    XCTAssertTrue(sonIsAsync);
+  }
+  
   func testChangingSonLoggerParameterBreakLinkWithParent() {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
@@ -468,5 +509,39 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(parentLogger.appenders.count, 1);
     XCTAssertEqual(sonLogger.appenders.count, 2);
     XCTAssertNil(sonLogger.parent);
+  }
+
+  
+  func testSettingSonLoggerAsyncStatusBreakLinkWithParent() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
+    parentLogger.isAsync = false;
+    
+    // Execute
+    sonLogger.isAsync = true;
+    
+    // Validate
+    XCTAssertNil(sonLogger.parent);
+    XCTAssertFalse(parentLogger.isAsync);
+    XCTAssertTrue(sonLogger.isAsync);
+  }
+  
+  func testLoggedTimeIsTakenWhenLogIsRequested() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'format':'%s'}");
+    let appender = MemoryAppender();
+    appender.thresholdLevel = .Debug;
+    appender.formatter = formatter;
+    let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender]);
+    
+    // Execute
+    let timestampBefore = NSDate().timeIntervalSince1970;
+    logger.debug {NSThread.sleepForTimeInterval(2); return "This is a debug message";};
+    
+    // Validate
+    if let loggedMessageTime = NSTimeInterval(appender.logMessages[0].message) {
+      XCTAssertEqualWithAccuracy(loggedMessageTime, timestampBefore, accuracy: 1.0);
+    } else {
+      XCTAssertTrue(false, "Could not read logged time");
+    }
   }
 }

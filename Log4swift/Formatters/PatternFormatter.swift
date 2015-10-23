@@ -89,15 +89,16 @@ Available markers are :
     private let markerClosures: Dictionary<String, MarkerClosure> = [
       "d": {(parameters, message, info) in
         let result: String;
-        if let format = parameters["format"] as? String {
-          let now = UnsafeMutablePointer<time_t>.alloc(1);
-          time(now);
-          let date = localtime(now);
+        if let format = parameters["format"] as? String,let timestamp = info[.Timestamp] as? NSTimeInterval {
+          var secondsSinceEpoch = Int(timestamp);
+          let date = withUnsafePointer(&secondsSinceEpoch) {
+            localtime($0);
+          }
           let buffer = UnsafeMutablePointer<Int8>.alloc(80);
           strftime(buffer, 80, format , date);
           result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String;
           buffer.destroy();
-          now.destroy();
+          //          now.destroy();
         } else {
           result = NSDate().description;
         }

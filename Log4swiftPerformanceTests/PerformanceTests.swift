@@ -33,12 +33,29 @@ class PerformanceTests: XCTestCase {
   }
   
   func testConsoleLoggerWithFormatterPerformanceTest() {
-    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{%D %R} %m");
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m");
     let stdOutAppender = StdOutAppender("appender");
     stdOutAppender.errorThresholdLevel = .Debug;
     stdOutAppender.formatter = formatter;
     let logger = Logger(identifier: "");
     logger.appenders = [stdOutAppender];
+    
+    // This is an example of a performance test case.
+    self.measureBlock() {
+      for _ in 0...5000 {
+        logger.error("This is a simple log");
+      }
+    }
+  }
+  
+  func testAsyncConsoleLoggerWithFormatterPerformanceTest() {
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m");
+    let stdOutAppender = StdOutAppender("appender");
+    stdOutAppender.errorThresholdLevel = .Debug;
+    stdOutAppender.formatter = formatter;
+    let logger = Logger(identifier: "");
+    logger.appenders = [stdOutAppender];
+    logger.isAsync = true;
     
     // This is an example of a performance test case.
     self.measureBlock() {

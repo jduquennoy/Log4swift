@@ -29,14 +29,37 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case AppenderIds = "AppenderIds"
   }
   
+  private static let loggingQueue: dispatch_queue_t = {
+    let createdQueue = dispatch_queue_create("log4swift.dispatchLoggingQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_set_target_queue(createdQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+    return createdQueue;
+  }()
+  
   /// The UTI string that identifies the logger. Example : product.module.feature
   public let identifier: String;
-
+  
   internal var parent: Logger?;
   
   private var thresholdLevelStorage: LogLevel;
   private var appendersStorage: [Appender];
+  private var isAsyncStorage = false;
 
+  /// If isAsync is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
+  /// The order of the messages will be preserved in async mode.
+  public var isAsync: Bool {
+    get {
+      if let parent = self.parent {
+        return parent.isAsync;
+      } else {
+        return self.isAsyncStorage;
+      }
+    }
+    set {
+      self.breakDependencyWithParent();
+      self.isAsyncStorage = newValue;
+    }
+  }
+  
   /// The threshold under which log messages will be ignored.
   /// For example, if the threshold is Warning:
   /// * logs issued with a Debug or Info will be ignored
@@ -117,6 +140,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   func resetConfiguration() {
     self.thresholdLevel = .Debug;
     self.appenders = Logger.createDefaultAppenders();
+    self.isAsyncStorage = false;
   }
   
   // MARK: Logging methods
@@ -142,27 +166,27 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.log(format.format(getVaList(args)), level: LogLevel.Fatal, file: file, line: line);
   }
   
-  /// Logs a the message returned by the closer with a debug level
+  /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func debug(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
     self.log(closure, level: LogLevel.Debug, file: file, line: line);
   }
-  /// Logs a the message returned by the closer with an info level
+  /// Logs a the message returned by the closure with an info level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func info(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
     self.log(closure, level: LogLevel.Info, file: file, line: line);
   }
-  /// Logs a the message returned by the closer with a warning level
+  /// Logs a the message returned by the closure with a warning level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func warning(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
     self.log(closure, level: LogLevel.Warning, file: file, line: line);
   }
-  /// Logs a the message returned by the closer with an error level
+  /// Logs a the message returned by the closure with an error level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func error(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
     self.log(closure, level: LogLevel.Error, file: file, line: line);
   }
-  /// Logs a the message returned by the closer with a fatal level
+  /// Logs a the message returned by the closure with a fatal level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func fatal(file: String = __FILE__, line: Int = __LINE__, closure: () -> String) {
     self.log(closure, level: LogLevel.Fatal, file: file, line: line);
@@ -178,8 +202,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   @nonobjc internal func log(message: String, level: LogLevel, file: String? = nil, line: Int? = nil) {
     if(self.willIssueLogForLevel(level)) {
       var info: LogInfoDictionary = [
-        LogInfoKeys.LoggerName: self.identifier,
-        LogInfoKeys.LogLevel: level,
+        .LoggerName: self.identifier,
+        .LogLevel: level,
+        .Timestamp: NSDate().timeIntervalSince1970
       ];
       if let file = file {
         info[.FileName] = file;
@@ -187,18 +212,23 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       if let line = line {
         info[.FileLine] = line;
       }
-      for currentAppender in self.appenders {
-        currentAppender.log(message, level:level, info: info);
-      }
+
+      let logClosure = {
+        for currentAppender in self.appenders {
+          currentAppender.log(message, level:level, info: info);
+        }
+      };
+
+      self.executeLogClosure(logClosure);
     }
   }
   
   @nonobjc internal func log(closure: () -> (String), level: LogLevel, file: String? = nil, line: Int? = nil) {
     if(self.willIssueLogForLevel(level)) {
-      let logMessage = closure();
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
+        .Timestamp: NSDate().timeIntervalSince1970
       ];
       if let file = file {
         info[.FileName] = file;
@@ -206,13 +236,25 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       if let line = line {
         info[.FileLine] = line;
       }
-      for currentAppender in self.appenders {
-        currentAppender.log(logMessage, level:level, info: info);
+      
+      let logClosure = {
+        let logMessage = closure();
+        for currentAppender in self.appenders {
+          currentAppender.log(logMessage, level:level, info: info);
+        }
       }
+      self.executeLogClosure(logClosure);
     }
   }
   
   // MARK: Private methods
+  private func executeLogClosure(logClosure: () -> ()) {
+    if(self.isAsync) {
+      dispatch_async(Logger.loggingQueue, logClosure);
+    } else {
+      logClosure();
+    }
+  }
   
   private func breakDependencyWithParent() {
     guard let parent = self.parent else {
