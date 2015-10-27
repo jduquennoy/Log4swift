@@ -74,7 +74,7 @@ Available markers are :
       let parser = PatternParser();
       self.formattingClosuresSequence = try parser.parsePattern(safePattern);
     } else {
-      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'");
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'");
     }
   }
   

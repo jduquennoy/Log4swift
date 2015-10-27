@@ -60,7 +60,7 @@ public class FileAppender : Appender {
       self.filePath = safeFilePath;
     } else {
       self.filePath = "placeholder";
-      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'");
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'");
     }
   }
   

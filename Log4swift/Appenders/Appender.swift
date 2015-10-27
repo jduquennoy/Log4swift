@@ -43,7 +43,7 @@ This class is the base class, from which all appenders should inherit.
       if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold;
       } else {
-        throw InvalidOrMissingParameterException("Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' for appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' for appender '\(self.identifier)'");
       }
     }
     
@@ -51,7 +51,7 @@ This class is the base class, from which all appenders should inherit.
       if let formatter = availableFormatters.find({ $0.identifier == safeFormatterId }) {
         self.formatter = formatter;
       } else {
-        throw InvalidOrMissingParameterException("No such formatter '\(safeFormatterId)' for appender \(self.identifier)");
+        throw NSError.Log4swiftErrorWithDescription("No such formatter '\(safeFormatterId)' for appender \(self.identifier)");
       }
     }
   }

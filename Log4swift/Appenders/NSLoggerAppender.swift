@@ -87,7 +87,7 @@ public class NSLoggerAppender : Appender {
       if let safeServiceName = (dictionary[DictionaryKey.BonjourServiceName.rawValue] as? String) {
         serviceName = safeServiceName;
       } else {
-        throw InvalidOrMissingParameterException("Missing 'BonjourServiceName' parameter for NSLogger appender '\(self.identifier)'")
+        throw NSError.Log4swiftErrorWithDescription("Missing 'BonjourServiceName' parameter for NSLogger appender '\(self.identifier)'")
       }
 
       setupBonjourLogger(serviceName, useLocalCache: useLocalCache, useSSL: useSSL);
@@ -99,7 +99,7 @@ public class NSLoggerAppender : Appender {
         remoteHost = safeRemoteHost;
       } else {
         remoteHost = "placeholder";
-        throw InvalidOrMissingParameterException("Missing 'RemoteHost' parameter for NSLogger appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Missing 'RemoteHost' parameter for NSLogger appender '\(self.identifier)'");
       }
 
       if let safeRemotePortString = (dictionary[DictionaryKey.RemotePort.rawValue] as? String) {
@@ -107,13 +107,13 @@ public class NSLoggerAppender : Appender {
           remotePort = safeRemotePort;
         } else {
           remotePort = 0;
-          throw InvalidOrMissingParameterException("Non numeric string 'RemotePort' parameter for NSLogger appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Non numeric string 'RemotePort' parameter for NSLogger appender '\(self.identifier)'");
         }
       } else {
         remotePort = 50000;
       }
       if(remotePort < 1024 || remotePort > 65535) {
-        throw InvalidOrMissingParameterException("RemotePort should be between 1024 and 65535 for NSLogger appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("RemotePort should be between 1024 and 65535 for NSLogger appender '\(self.identifier)'");
       }
       
       setupTcpLogger(remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL);

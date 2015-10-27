@@ -20,12 +20,8 @@
 
 import Foundation
 
-class InvalidOrMissingParameterException: NSError {
-  init(_ description: String) {
-    super.init(domain: "Log4swift", code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: description, NSLocalizedDescriptionKey: description]);
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder);
-  }
+extension NSError {
+  class func Log4swiftErrorWithDescription(description: String) -> NSError {
+    return NSError(domain: "Log4swift", code: 0, userInfo: [NSLocalizedFailureReasonErrorKey: description, NSLocalizedDescriptionKey: description]);
+  };
 }

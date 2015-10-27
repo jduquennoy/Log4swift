@@ -64,7 +64,7 @@ public class StdOutAppender: Appender {
       if let errorThreshold = LogLevel(errorThresholdString) {
         errorThresholdLevel = errorThreshold;
       } else {
-        throw InvalidOrMissingParameterException("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'");
       }
     } else {
       errorThresholdLevel = nil;
@@ -73,10 +73,10 @@ public class StdOutAppender: Appender {
     if let textColors = (dictionary[DictionaryKey.TextColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in textColors {
         guard let level = LogLevel(levelName) else {
-          throw InvalidOrMissingParameterException("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
         }
         guard let color = TTYColor(colorName) else {
-          throw InvalidOrMissingParameterException("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
         }
 
         self.textColors[level] = color;
@@ -86,10 +86,10 @@ public class StdOutAppender: Appender {
     if let backgroundColors = (dictionary[DictionaryKey.BackgroundColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in backgroundColors {
         guard let level = LogLevel(levelName) else {
-          throw InvalidOrMissingParameterException("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
         }
         guard let color = TTYColor(colorName) else {
-          throw InvalidOrMissingParameterException("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
         }
         
         self.backgroundColors[level] = color;

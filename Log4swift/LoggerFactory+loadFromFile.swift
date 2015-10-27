@@ -69,7 +69,7 @@ extension LoggerFactory {
     if let rootLoggerDictionary = configurationDictionary[DictionaryKey.RootLogger.rawValue] as? Dictionary<String, AnyObject> {
       try self.rootLogger.updateWithDictionary(rootLoggerDictionary, availableAppenders: appenders);
     } else if configurationDictionary[DictionaryKey.RootLogger.rawValue] != nil {
-      throw InvalidOrMissingParameterException("The '\(DictionaryKey.RootLogger.rawValue)' parameter should be a dictionary");
+      throw NSError.Log4swiftErrorWithDescription("The '\(DictionaryKey.RootLogger.rawValue)' parameter should be a dictionary");
     }
     
     // Loggers
@@ -102,10 +102,10 @@ extension LoggerFactory {
         formatter = formatterType.init(identifier);
         try formatter.updateWithDictionary(dictionary);
       } else {
-        throw InvalidOrMissingParameterException("Unknown formatter class '\(className)' for formatter '\(identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Unknown formatter class '\(className)' for formatter '\(identifier)'");
       }
     } else {
-      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.ClassName.rawValue) parameter for formatter '\(identifier)'");
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.ClassName.rawValue) parameter for formatter '\(identifier)'");
     }
     
     return formatter;
@@ -130,10 +130,10 @@ extension LoggerFactory {
         appender = appenderType.init(identifier);
         try appender.updateWithDictionary(dictionary, availableFormatters: formatters);
       } else {
-        throw InvalidOrMissingParameterException("Unknown appender class '\(className)' for appender '\(identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Unknown appender class '\(className)' for appender '\(identifier)'");
       }
     } else {
-      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.ClassName.rawValue) parameter for appender '\(identifier)'")
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.ClassName.rawValue) parameter for appender '\(identifier)'")
     }
     
     return appender;
@@ -171,11 +171,11 @@ extension LoggerFactory {
     let identifier: String;
     if let safeIdentifier = configurationDictionary[DictionaryKey.Identifier.rawValue] as? String {
       if(safeIdentifier.isEmpty) {
-        throw InvalidOrMissingParameterException("Empty '\(DictionaryKey.Identifier.rawValue)' parameter in dictionary");
+        throw NSError.Log4swiftErrorWithDescription("Empty '\(DictionaryKey.Identifier.rawValue)' parameter in dictionary");
       }
       identifier = safeIdentifier;
     } else {
-      throw InvalidOrMissingParameterException("Missing '\(DictionaryKey.Identifier.rawValue)' parameter in dictionary");
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Identifier.rawValue)' parameter in dictionary");
     }
     
     return identifier

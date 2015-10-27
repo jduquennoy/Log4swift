@@ -98,7 +98,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       if let safeLevel = LogLevel(safeLevelString) {
         self.thresholdLevel = safeLevel;
       } else {
-        throw InvalidOrMissingParameterException("Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' value for logger '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' value for logger '\(self.identifier)'");
       }
     }
     
@@ -108,7 +108,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         if let foundAppender = availableAppenders.find({$0.identifier == currentAppenderId}) {
           appendersStorage.append(foundAppender);
         } else {
-          throw InvalidOrMissingParameterException("No such appender '\(currentAppenderId)' for logger \(self.identifier)");
+          throw NSError.Log4swiftErrorWithDescription("No such appender '\(currentAppenderId)' for logger \(self.identifier)");
         }
       }
     }
