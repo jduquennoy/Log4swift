@@ -205,6 +205,23 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "11/29/73 22:33", "Formatted date '\(formattedMessage)' is not valid");
   }
 
+  
+  func testCurrentTimeIsUsedByFormatterIfTimeIsNotAvailableInInfo() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%s'}");
+    let info = LogInfoDictionary();
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    let expectedTimestamp = NSDate().timeIntervalSince1970;
+    if let loggedMessageTime = NSTimeInterval(formattedMessage) {
+      XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0);
+    } else {
+      XCTAssertTrue(false, "Could not read logged time");
+    }
+  }
+
   func testMarkerParametersAreInterpreted() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{'padding':'0'}");
     let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug];
