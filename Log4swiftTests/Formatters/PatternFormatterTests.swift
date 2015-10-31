@@ -150,71 +150,59 @@ class PatternFormatterTests: XCTestCase {
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name] Log message");
   }
 
-  func testFormatterAppliesDateMarker() {
+  func testFormatterAppliesDateMarkerWithDefaultFormatIfNoneIsSpecified() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d");
-    let info = LogInfoDictionary();
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
     // Validate
-    // TODO: the validation of this test is pretty weak.
-    let validationRegexp = try! NSRegularExpression(pattern: "^[\\d+-: ]{5,}$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    XCTAssertEqual(formattedMessage, "1973-11-29 22:33:09", "Formatted date '\(formattedMessage)' is not valid for default format");
   }
   
   func testFormatterAppliesDateMarkerWithFormat() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{\"format\":\"%D %R\"}");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{\"format\":\"%D %T\"}");
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
     // Validate
-    // TODO: the validation of this test is pretty weak.
-    let validationRegexp = try! NSRegularExpression(pattern: "^\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    XCTAssertEqual(formattedMessage, "11/29/73 22:33:09", "Formatted date '\(formattedMessage)' is not valid");
   }  
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'19', 'format':'%D %R'}");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'19', 'format':'%D %T'}");
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
     // Validate; Datetime is 14 chars...regex has 5 trailing spaces = 19 char width
-    let validationRegexp = try! NSRegularExpression(pattern: "^\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}     $", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    XCTAssertEqual(formattedMessage, "11/29/73 22:33:09  ", "Formatted date '\(formattedMessage)' is not valid");
   }
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersNegativePadding() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'-19', 'format':'%D %R'}");
-    let info = LogInfoDictionary();
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
     // Validate; Datetime is 14 chars...regex has 5 leading spaces = 19 char width
-    let validationRegexp = try! NSRegularExpression(pattern: "^     \\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    XCTAssertEqual(formattedMessage, "     11/29/73 22:33", "Formatted date '\(formattedMessage)' is not valid");
   }
   
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersZeroPadding() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%D %R'}");
-    let info = LogInfoDictionary();
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
     
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
     // Validate
-    let validationRegexp = try! NSRegularExpression(pattern: "^\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    XCTAssertEqual(formattedMessage, "11/29/73 22:33", "Formatted date '\(formattedMessage)' is not valid");
   }
 
   func testMarkerParametersAreInterpreted() {
