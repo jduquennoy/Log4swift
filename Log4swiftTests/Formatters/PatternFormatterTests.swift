@@ -157,8 +157,10 @@ class PatternFormatterTests: XCTestCase {
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
-    // Validate
-    XCTAssertEqual(formattedMessage, "1973-11-29 22:33:09", "Formatted date '\(formattedMessage)' is not valid for default format");
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
   
   func testFormatterAppliesDateMarkerWithFormat() {
@@ -168,9 +170,11 @@ class PatternFormatterTests: XCTestCase {
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
-    // Validate
-    XCTAssertEqual(formattedMessage, "11/29/73 22:33:09", "Formatted date '\(formattedMessage)' is not valid");
-  }  
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+  }
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersPadding() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'19', 'format':'%D %T'}");
@@ -179,8 +183,10 @@ class PatternFormatterTests: XCTestCase {
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
-    // Validate; Datetime is 14 chars...regex has 5 trailing spaces = 19 char width
-    XCTAssertEqual(formattedMessage, "11/29/73 22:33:09  ", "Formatted date '\(formattedMessage)' is not valid");
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersNegativePadding() {
@@ -190,8 +196,10 @@ class PatternFormatterTests: XCTestCase {
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
-    // Validate; Datetime is 14 chars...regex has 5 leading spaces = 19 char width
-    XCTAssertEqual(formattedMessage, "     11/29/73 22:33", "Formatted date '\(formattedMessage)' is not valid");
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
   
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersZeroPadding() {
@@ -201,8 +209,10 @@ class PatternFormatterTests: XCTestCase {
     // Execute
     let formattedMessage = formatter.format("", info: info);
     
-    // Validate
-    XCTAssertEqual(formattedMessage, "11/29/73 22:33", "Formatted date '\(formattedMessage)' is not valid");
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions());
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
   }
 
   
