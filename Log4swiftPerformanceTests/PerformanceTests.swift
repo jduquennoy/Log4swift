@@ -55,7 +55,7 @@ class PerformanceTests: XCTestCase {
     stdOutAppender.formatter = formatter;
     let logger = Logger(identifier: "");
     logger.appenders = [stdOutAppender];
-    logger.isAsync = true;
+    logger.asynchronous = true;
     
     // This is an example of a performance test case.
     self.measureBlock() {

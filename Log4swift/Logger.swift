@@ -27,6 +27,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   public enum DictionaryKey: String {
     case ThresholdLevel = "ThresholdLevel"
     case AppenderIds = "AppenderIds"
+    case Asynchronous = "Asynchronous"
   }
   
   private static let loggingQueue: dispatch_queue_t = {
@@ -42,21 +43,21 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   private var thresholdLevelStorage: LogLevel;
   private var appendersStorage: [Appender];
-  private var isAsyncStorage = false;
+  private var asynchronousStorage = false;
 
-  /// If isAsync is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
+  /// If asynchronous is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
   /// The order of the messages will be preserved in async mode.
-  public var isAsync: Bool {
+  public var asynchronous: Bool {
     get {
       if let parent = self.parent {
-        return parent.isAsync;
+        return parent.asynchronous;
       } else {
-        return self.isAsyncStorage;
+        return self.asynchronousStorage;
       }
     }
     set {
       self.breakDependencyWithParent();
-      self.isAsyncStorage = newValue;
+      self.asynchronousStorage = newValue;
     }
   }
   
@@ -135,12 +136,16 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         }
       }
     }
+    
+    if let asynchronous = dictionary[DictionaryKey.Asynchronous.rawValue] as? Bool {
+      self.asynchronous = asynchronous;
+    }
   }
   
   func resetConfiguration() {
     self.thresholdLevel = .Debug;
     self.appenders = Logger.createDefaultAppenders();
-    self.isAsyncStorage = false;
+    self.asynchronousStorage = false;
   }
   
   // MARK: Logging methods
@@ -249,7 +254,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   // MARK: Private methods
   private func executeLogClosure(logClosure: () -> ()) {
-    if(self.isAsync) {
+    if(self.asynchronous) {
       dispatch_async(Logger.loggingQueue, logClosure);
     } else {
       logClosure();

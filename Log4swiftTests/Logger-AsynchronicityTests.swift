@@ -23,18 +23,18 @@ class LoggerAsynchronicityTests: XCTestCase {
   func testLoggerIsSynchronousByDefault() {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
     
-    XCTAssertFalse(rootLogger.isAsync);
+    XCTAssertFalse(rootLogger.asynchronous);
   }
   
   func testResetConfigurationSetsLoggerSynchronous() {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    rootLogger.isAsync = true;
+    rootLogger.asynchronous = true;
     
     // Execute
     rootLogger.resetConfiguration()
     
     // Validate
-    XCTAssertFalse(rootLogger.isAsync);
+    XCTAssertFalse(rootLogger.asynchronous);
   }
   
   /// This test logs three message to an appender that takes 0.1 second to execute.
@@ -44,7 +44,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
     let slowAppender = MemoryAppender();
     slowAppender.loggingDelay = 0.1;
-    rootLogger.isAsync = false;
+    rootLogger.asynchronous = false;
     rootLogger.appenders = [slowAppender];
     
     // execute
@@ -64,7 +64,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
     let slowAppender = MemoryAppender();
     slowAppender.loggingDelay = 0.1;
-    rootLogger.isAsync = false;
+    rootLogger.asynchronous = false;
     rootLogger.appenders = [slowAppender];
     
     // execute
@@ -86,7 +86,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
     let slowAppender = MemoryAppender();
     slowAppender.loggingDelay = 0.1;
-    rootLogger.isAsync = true;
+    rootLogger.asynchronous = true;
     rootLogger.appenders = [slowAppender];
     
     // execute
@@ -112,7 +112,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     let rootLogger = LoggerFactory.sharedInstance.rootLogger;
     let slowAppender = MemoryAppender();
     slowAppender.loggingDelay = 0.1;
-    rootLogger.isAsync = true;
+    rootLogger.asynchronous = true;
     rootLogger.appenders = [slowAppender];
     
     // execute
@@ -131,9 +131,9 @@ class LoggerAsynchronicityTests: XCTestCase {
   
   func testMessagesSentToAsynchronousLoggersAreOrdered() {
     let logger1 = LoggerFactory.sharedInstance.getLogger("logger1");
-    logger1.isAsync = true;
+    logger1.asynchronous = true;
     let logger2 = LoggerFactory.sharedInstance.getLogger("logger2");
-    logger2.isAsync = true;
+    logger2.asynchronous = true;
 
     let slowAppender = MemoryAppender();
     logger1.appenders = [slowAppender];

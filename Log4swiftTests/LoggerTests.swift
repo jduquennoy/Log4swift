@@ -326,13 +326,26 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerWithNotAvailableAppenderIdThrowsError() {
-  let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]];
   
     let logger = Logger(identifier: "testLogger");
     
     // Execute
     XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>()) };
+  }
+  
+  func testUpdateLoggerWithAsynchronousKeyAppliesKey() {
+    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+      Logger.DictionaryKey.Asynchronous.rawValue: true];
+    
+    let logger = Logger(identifier: "testLogger");
+    
+    // Execute
+    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>());
+    
+    // Validate
+    XCTAssertTrue(logger.asynchronous);
   }
   
   func testUpdateLoggerWithExistingAppenderIdUsesThem() {
@@ -476,13 +489,13 @@ class LoggerTests: XCTestCase {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
     
-    parentLogger.isAsync = true;
+    parentLogger.asynchronous = true;
     
     // Execute
-    let sonIsAsync = sonLogger.isAsync;
+    let sonIsAsynchronous = sonLogger.asynchronous;
     
     // Validate
-    XCTAssertTrue(sonIsAsync);
+    XCTAssertTrue(sonIsAsynchronous);
   }
   
   func testChangingSonLoggerParameterBreakLinkWithParent() {
@@ -515,15 +528,15 @@ class LoggerTests: XCTestCase {
   func testSettingSonLoggerAsyncStatusBreakLinkWithParent() {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()]);
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger");
-    parentLogger.isAsync = false;
+    parentLogger.asynchronous = false;
     
     // Execute
-    sonLogger.isAsync = true;
+    sonLogger.asynchronous = true;
     
     // Validate
     XCTAssertNil(sonLogger.parent);
-    XCTAssertFalse(parentLogger.isAsync);
-    XCTAssertTrue(sonLogger.isAsync);
+    XCTAssertFalse(parentLogger.asynchronous);
+    XCTAssertTrue(sonLogger.asynchronous);
   }
   
   func testLoggedTimeIsTakenWhenLogIsRequested() {

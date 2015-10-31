@@ -381,6 +381,21 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       XCTAssertEqual(sonLogger.appenders[0].identifier, "first appender");
     }
   }
+  
+  func testLoggerConfiguredAsAsynchronousIsAsynchronous() {
+    let loggersDictionary = [[
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "test.asyncLogger",
+      Logger.DictionaryKey.Asynchronous.rawValue: true]];
+    let dictionary = [
+      LoggerFactory.DictionaryKey.Loggers.rawValue: loggersDictionary
+    ];
+    // Execute
+    try! factory.readConfiguration(dictionary);
+
+    // Validate
+    let asyncCreatedLogger = factory.getLogger("test.asyncLogger");
+    XCTAssertTrue(asyncCreatedLogger.asynchronous);
+  }
 
   // MARK: Root logger tests
 
