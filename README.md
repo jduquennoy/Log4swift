@@ -16,7 +16,7 @@ It is available as a cocoaPod for easy integration in your projects. Here is a s
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.0.0b1'
+pod 'Log4swift', '1.0.0b4'
 use_frameworks!
 ```
 And in an OS X project :
@@ -36,10 +36,8 @@ Here are the main features you can expect from Log4swift :
 * dynamically configurable by code
 * configurable by file
 * capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color
+* logs synchronously by default, but can log asynchronously on request. Async behavior can be configured per logger.
 
-### Not yet achieved goals
-* synchronous by default, but with the ability to request asynchronous behavior
-* should be useable on linux once Apple releases Swift for that OS
 
 Another goal, that I think we all share, is to have readable and tested code.
 
@@ -90,6 +88,11 @@ Providing a closure instead of a string is pretty handy if the code that generat
 ```
 Logger.debug { someHeavyCodeThatGeneratesTheLogMessage() }
 ```
+
+### Log asynchronously
+Loggers can be configured individualy to log asynchronously. Asynchronous logging will return almost immediately when a log is requested, while the real log will be issued in background on a low priority thread.
+
+Order of messages logged to asynchronous loggers is guaranteed.
 
 ### Flexible configuration
 Configuration of the logging system can be loaded from a file, or done in software.
