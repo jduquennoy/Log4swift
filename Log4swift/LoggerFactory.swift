@@ -92,3 +92,66 @@ The logger factory is responsible for
     }
   }
 }
+
+extension LoggerFactory {
+  
+  /**
+  Configures the root logger to output logs to the Xcode console.
+  Logs coloring will be enabled if you have XcodeColors installed.
+  This configuration is not meant to be used for production.
+  
+  **This method will replace your current configuration by a new one.**
+  */
+  public func configureForXcodeConsole(thresholdLevel: LogLevel = .Debug) {
+    self.resetConfiguration();
+    
+    let xcodeAppender = StdOutAppender("xcodeAppender");
+    xcodeAppender.thresholdLevel = thresholdLevel;
+    xcodeAppender.errorThresholdLevel = .Debug;
+    xcodeAppender.setTextColor(.DarkRed, level: .Fatal);
+    xcodeAppender.setTextColor(.Red, level: .Error);
+    xcodeAppender.setTextColor(.Orange, level: .Warning);
+    xcodeAppender.setTextColor(.Blue, level: .Info);
+    xcodeAppender.setTextColor(.LightGrey, level: .Debug);
+
+    do {
+      let formatter = try PatternFormatter(identifier: "xcodeFormatter", pattern: "%d{'format':'%F %T'} %m");
+      xcodeAppender.formatter = formatter;
+    } catch {
+      // we apply no formatter if an error occures (this should never happen)
+      NSLog("Could not set the formatter for the XCodeConsole configuration : \(error)");
+    }
+    
+    self.rootLogger.appenders = [xcodeAppender];
+  }
+
+  /**
+  Configures the root logger to output logs to the system logging system, making them available in the "Console" application.
+  This configuration is suitable for production use.
+  
+  **This method will replace your current configuration by a new one.**
+  */
+  public func configureForSystemConsole(thresholdLevel: LogLevel = .Warning) {
+    self.resetConfiguration();
+    
+    let systemConsoleAppender = ASLAppender("systemConsoleAppender");
+    systemConsoleAppender.thresholdLevel = thresholdLevel;
+    
+    self.rootLogger.appenders = [systemConsoleAppender];
+  }
+
+  /**
+  Configures the root logger to output logs to NSLogger. SSL and local cache will be enabled on the appender.
+  This configuration is not meant to be used for production.
+  
+  **This method will replace your current configuration by a new one.**
+  */
+  public func configureForNSLogger(remoteHost: String = "127.0.0.1", remotePort: UInt32 = 50000, thresholdLevel: LogLevel = .Debug) {
+    self.resetConfiguration();
+    
+    let nsloggerAppender = NSLoggerAppender(identifier: "nsloggerAppender", remoteHost: remoteHost, remotePort: remotePort, useLocalCache: true, useSSL: true);
+    nsloggerAppender.thresholdLevel = thresholdLevel
+    
+    self.rootLogger.appenders = [nsloggerAppender];
+  }
+}

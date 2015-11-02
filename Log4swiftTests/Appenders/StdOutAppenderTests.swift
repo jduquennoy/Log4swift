@@ -467,7 +467,10 @@ class StdOutAppenderTests: XCTestCase {
     XCTAssertEqual(StdOutAppender.TTYColor("lightYellow"), StdOutAppender.TTYColor.LightYellow);
     XCTAssertEqual(StdOutAppender.TTYColor("darkPurple"), StdOutAppender.TTYColor.DarkPurple);
     XCTAssertEqual(StdOutAppender.TTYColor("purple"), StdOutAppender.TTYColor.Purple);
-    XCTAssertEqual(StdOutAppender.TTYColor("LightPurPLE"), StdOutAppender.TTYColor.lightPurple);
+    XCTAssertEqual(StdOutAppender.TTYColor("LightPurPLE"), StdOutAppender.TTYColor.LightPurple);
+    XCTAssertEqual(StdOutAppender.TTYColor("DARKoRaNGE"), StdOutAppender.TTYColor.DarkOrange);
+    XCTAssertEqual(StdOutAppender.TTYColor("oRaNGE"), StdOutAppender.TTYColor.Orange);
+    XCTAssertEqual(StdOutAppender.TTYColor("LightoRaNGE"), StdOutAppender.TTYColor.LightOrange);
   }
   
   // MARK: - Private methods

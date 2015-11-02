@@ -39,7 +39,7 @@ class LoggerFactoryTests: XCTestCase {
     // Execute
     let sharedFactory1 = LoggerFactory.sharedInstance;
     let sharedFactory2 = LoggerFactory.sharedInstance;
-    
+    NSLog("ping");
     // Validate
     XCTAssert(sharedFactory1 === sharedFactory2, "Shared factory should always be the same object");
   }
@@ -157,30 +157,63 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssertTrue(registeredLogger1 === self.factory.getLogger("test.logger"));
   }
   
-  // MARK: Performance tests
+  // MARK: - Convenience config methods
   
-  func testGetLoggerForSamedIdentifierPerformance() {
-    for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]));
-    }
+  func testConfigureForXCodeReplacesCurrentConfiguration() {
+    self.factory.rootLogger.appenders = [MemoryAppender(), MemoryAppender()];
+    try! self.factory.registerLogger(Logger(identifier: "test.logger"));
     
-    self.measureBlock() {
-      for _ in 1...10000 {
-        self.factory.getLogger("test.identifier");
-      }
+    // Execute
+    self.factory.configureForXcodeConsole();
+    
+    // Validate
+    XCTAssertEqual(self.factory.rootLogger.appenders.count, 1);
+    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, StdOutAppender.className());
+    XCTAssertEqual(self.factory.loggers.count, 0);
+  }
+  
+  func testConfigureForXCodeConsoleSetsColorsForAllLevels() {
+    // Execute
+    self.factory.configureForXcodeConsole();
+    
+    // Validate
+    if let xcodeAppender = self.factory.rootLogger.appenders[0] as? StdOutAppender {
+      XCTAssertEqual(xcodeAppender.textColors.count, 5);
     }
   }
   
-  func testGetLoggerForDifferentIdentifierPerformance() {
-    for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]));
-    }
+  func testConfigureForXCodeConsoleSetsPattern() {
+    // Execute
+    self.factory.configureForXcodeConsole();
     
-    self.measureBlock() {
-      for index in 1...10000 {
-        self.factory.getLogger("test.identifier.\(index)");
-      }
-    }
+    // Validate
+    XCTAssertNotNil(self.factory.rootLogger.appenders[0].formatter, "Formatter was not set on the appender");
+  }
+  
+  func testConfigureForSystemConsoleReplacesCurrentConfiguration() {
+    self.factory.rootLogger.appenders = [MemoryAppender(), MemoryAppender()];
+    try! self.factory.registerLogger(Logger(identifier: "test.logger"));
+    
+    // Execute
+    self.factory.configureForSystemConsole();
+    
+    // Validate
+    XCTAssertEqual(self.factory.rootLogger.appenders.count, 1);
+    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, ASLAppender.className());
+    XCTAssertEqual(self.factory.loggers.count, 0);
+  }
+  
+  func testConfigureForNSLoggerReplacesCurrentConfiguration() {
+    self.factory.rootLogger.appenders = [MemoryAppender(), MemoryAppender()];
+    try! self.factory.registerLogger(Logger(identifier: "test.logger"));
+    
+    // Execute
+    self.factory.configureForNSLogger();
+    
+    // Validate
+    XCTAssertEqual(self.factory.rootLogger.appenders.count, 1);
+    XCTAssertEqual(self.factory.rootLogger.appenders[0].className, NSLoggerAppender.className());
+    XCTAssertEqual(self.factory.loggers.count, 0);
   }
   
 }

@@ -95,6 +95,32 @@ class PerformanceTests: XCTestCase {
       }
     }
   }
+    
+  // MARK: LoggerFactory performances
+  
+  func testGetLoggerForSamedIdentifierPerformance() {
+    for index in 1...10 {
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]));
+    }
+    
+    self.measureBlock() {
+      for _ in 1...10000 {
+        self.factory.getLogger("test.identifier");
+      }
+    }
+  }
+  
+  func testGetLoggerForDifferentIdentifierPerformance() {
+    for index in 1...10 {
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]));
+    }
+    
+    self.measureBlock() {
+      for index in 1...10000 {
+        self.factory.getLogger("test.identifier.\(index)");
+      }
+    }
+  }
 
   private func createTemporaryFileUrl() throws -> String {
     let temporaryDirectoryUrl = NSURL(fileURLWithPath:NSTemporaryDirectory());

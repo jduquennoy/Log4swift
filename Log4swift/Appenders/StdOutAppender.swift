@@ -133,8 +133,11 @@ extension StdOutAppender {
     case Yellow
     case DarkYellow
     case Purple
-    case lightPurple
+    case LightPurple
     case DarkPurple
+    case LightOrange
+    case Orange
+    case DarkOrange
     
     init?(_ name: String) {
       switch(name.lowercaseString) {
@@ -155,9 +158,12 @@ extension StdOutAppender {
       case "lightyellow" : self = .LightYellow;
       case "yellow" : self = .Yellow;
       case "darkyellow" : self = .DarkYellow;
-      case "lightpurple" : self = .lightPurple;
+      case "lightpurple" : self = .LightPurple;
       case "purple" : self = .Purple;
       case "darkpurple" : self = .DarkPurple;
+      case "lightorange" : self = .LightOrange;
+      case "orange" : self = .Orange;
+      case "darkorange" : self = .DarkOrange;
       default: return nil;
       }
     }
@@ -182,8 +188,11 @@ extension StdOutAppender {
       case Yellow : return 11;
       case DarkYellow : return 3;
       case Purple : return 93;
-      case lightPurple : return 135;
+      case LightPurple : return 135;
       case DarkPurple : return 55;
+      case LightOrange: return 215;
+      case Orange: return 208;
+      case DarkOrange: return 166;
       }
     }
     
@@ -207,8 +216,11 @@ extension StdOutAppender {
       case Yellow : return "255,255,56";
       case DarkYellow : return "206,203,43";
       case Purple : return "131,46,252";
-      case lightPurple : return "172,105,252";
+      case LightPurple : return "172,105,252";
       case DarkPurple : return "92,28,173";
+      case LightOrange: return "255,176,95";
+      case Orange: return "255,135,0";
+      case DarkOrange: return "216,96,0";
       }
     }
     

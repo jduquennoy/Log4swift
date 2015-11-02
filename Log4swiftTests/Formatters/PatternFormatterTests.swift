@@ -42,7 +42,7 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
-    XCTAssertThrows { try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") };
+    XCTAssertThrows { let _ = try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") };
   }
   
   func testFormatterAppliesLogLevelMarker() {
