@@ -23,7 +23,7 @@ And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.0.0b1'
+pod 'Log4swift', '1.0.0b4'
 use_frameworks!
 ```
 
@@ -35,7 +35,7 @@ Here are the main features you can expect from Log4swift :
 * ability to log over the network, using an NSLogger backend.
 * dynamically configurable by code
 * configurable by file
-* capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color
+* capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color256
 * logs synchronously by default, but can log asynchronously on request. Async behavior can be configured per logger.
 
 

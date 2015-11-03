@@ -1,9 +1,9 @@
 # Log4swift versions changelog
 
-## 1.0b4 (-)
+## 1.0b4 (2015-11-03)
 
 ### Loggers enhancements
-- Loggers can log asynchronously if requested. This new behavior is opt-in, using the configuration key
+- Loggers can log asynchronously. This new behavior is opt-in, using the configuration key *Asynchronous* in a configuration dictionary or the property *asynchronous* in code
 
 ### Pattern formatter enhancements
 - Markers now receives json-formatted options (**This can break your existing configuration**)
@@ -11,8 +11,8 @@
 
 ###  Misc Enhancements
 - When configuring loggers with a dictionary (or a file), appenders class name are no longer case sensitive.
-- Errors are reported with description in Objective-C. The use of a custom error type was causing all helpful informations to be lost when catching them in the objective-c world. (as of swift 2.1, this has been reported to Apple as rdar://23287003)
-- Some convenience one-line configuration method added to LoggerFactory (configureFor... methods). Available in swift only, because of the use of default values for parameters.
+- Errors are reported with description in Objective-C. The use of a custom error type was causing all helpful informations to be lost when catching them in the objective-c world (as of swift 2.1, this has been reported to Apple as rdar://23287003)
+- Some convenience one-line configuration method are added to LoggerFactory (*configureFor...* methods). This is available in swift only, because of the use of default values for parameters.
 
 ## 1.0b3 (2015-10-01)
 
