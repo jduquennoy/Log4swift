@@ -5,7 +5,7 @@
 ### Loggers enhancements
 - Loggers can log asynchronously. This new behavior is opt-in, using the configuration key *Asynchronous* in a configuration dictionary or the property *asynchronous* in code
 
-### Pattern formatter enhancements
+### Pattern formatter enhancements (thanks to RegalMedia for those improvements)
 - Markers now receives json-formatted options (**This can break your existing configuration**)
 - New padding option is added to all markers
 
