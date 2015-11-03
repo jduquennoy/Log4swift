@@ -30,7 +30,7 @@ use_frameworks!
 ## Features
 Here are the main features you can expect from Log4swift :
 
-* straitforward to use for simple cases : default configuration should just work, one-line configuration for typical uses like logging to IDE console or to system logs
+* straightforward to use for simple cases : default configuration should just work, one-line configuration for typical uses like logging to IDE console or to system logs
 * powerful for more complexe cases, with multi-destination logging for exemple
 * ability to log over the network, using an NSLogger backend.
 * dynamically configurable by code
