@@ -146,7 +146,7 @@ class NSLoggerAppenderTests: XCTestCase {
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) };
   }
 
-  func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortUsesProvidedValue () {
+  func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortAsStringUsesProvidedValue () {
     let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
       NSLoggerAppender.DictionaryKey.RemotePort.rawValue: "1234"];
     let appender = NSLoggerAppender("testAppender");
@@ -156,6 +156,19 @@ class NSLoggerAppenderTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(appender.logger.memory.port, 1234);
+    XCTAssertEqual(appender.logger.memory.host.takeUnretainedValue() as String, "remoteHost");
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortAsIntUsesProvidedValue () {
+    let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
+      NSLoggerAppender.DictionaryKey.RemotePort.rawValue: 1235];
+    let appender = NSLoggerAppender("testAppender");
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.logger.memory.port, 1235);
     XCTAssertEqual(appender.logger.memory.host.takeUnretainedValue() as String, "remoteHost");
   }
   

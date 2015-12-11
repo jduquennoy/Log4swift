@@ -102,7 +102,9 @@ public class NSLoggerAppender : Appender {
         throw NSError.Log4swiftErrorWithDescription("Missing 'RemoteHost' parameter for NSLogger appender '\(self.identifier)'");
       }
 
-      if let safeRemotePortString = (dictionary[DictionaryKey.RemotePort.rawValue] as? String) {
+      if let safeRemotePort = dictionary[DictionaryKey.RemotePort.rawValue] as? Int {
+        remotePort = UInt32(safeRemotePort);
+      } else if let safeRemotePortString = (dictionary[DictionaryKey.RemotePort.rawValue] as? String) {
         if let safeRemotePort = UInt32(safeRemotePortString) {
           remotePort = safeRemotePort;
         } else {
