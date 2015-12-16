@@ -287,6 +287,50 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "test 12345");
   }
   
+  func testFormatterAppliesShortFileNameMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f");
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/testFileName.txt"];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test testFileName.txt");
+  }
+  
+  func testFormatterAppliesShortFileNameMarkerWithCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'10'}");
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 12345     ");
+  }
+  
+  func testFormatterAppliesShortFileNameMarkerWithCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'-10'}");
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test      12345");
+  }
+  
+  func testFormatterAppliesShortFileNameMarkerWithCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'0'}");
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 12345");
+  }
+  
   func testFormatterAppliesFileLineMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L");
     let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
@@ -330,7 +374,51 @@ class PatternFormatterTests: XCTestCase {
     // Validate
     XCTAssertEqual(formattedMessage, "test 42");
   }
-  
+
+  func testFormatterAppliesFunctionMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M");
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "testFunction"];
+
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test testFunction");
+  }
+
+  func testFormatterAppliesFunctionMarkerWithCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'10'}");
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 12345     ");
+  }
+
+  func testFormatterAppliesFunctionMarkerWithCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'-10'}");
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test      12345");
+  }
+
+  func testFormatterAppliesFunctionMarkerWithCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'0'}");
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+
+    // Execute
+    let formattedMessage = formatter.format("", info: info);
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 12345");
+  }
+
   func testFormatterAppliesPercentageMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%");
     let info = LogInfoDictionary();
@@ -368,14 +456,14 @@ class PatternFormatterTests: XCTestCase {
   }
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
-    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n][%F][%L] %m");
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n][%F][%f][%L][%M] %m");
     let info = LogInfoDictionary();
     
     // Execute
     let formattedMessage = formatter.format("Log message", info: info);
     
     // Validate
-    XCTAssertEqual(formattedMessage, "[-][-][-][-] Log message");
+    XCTAssertEqual(formattedMessage, "[-][-][-][-][-][-] Log message");
   }
 
   func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {

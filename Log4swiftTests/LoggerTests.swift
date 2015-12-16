@@ -133,11 +133,27 @@ class LoggerTests: XCTestCase {
     };
     
     // Validate
-    XCTAssertTrue(closureCalled, "Closure should  have been called")
+    XCTAssertTrue(closureCalled, "Closure should have been called")
   }
   
   //MARK: Static log methods
-  
+
+  func testStaticLogTraceMessageMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    memoryAppender.thresholdLevel = .Trace;
+
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    LoggerFactory.sharedInstance.rootLogger.thresholdLevel = .Trace;
+
+    //Execute
+    Logger.trace("ping");
+
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Trace);
+  }
+
   func testStaticLogDebugMessageMethodsLogToRootLogger() {
     let memoryAppender = MemoryAppender();
     LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
@@ -202,7 +218,23 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(memoryAppender.logMessages.count, 1);
     XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Fatal);
   }
-  
+
+  func testStaticLogTraceClosureMethodsLogToRootLogger() {
+    let memoryAppender = MemoryAppender();
+    memoryAppender.thresholdLevel = .Trace;
+
+    LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
+    LoggerFactory.sharedInstance.rootLogger.appenders.append(memoryAppender);
+    LoggerFactory.sharedInstance.rootLogger.thresholdLevel = .Trace;
+
+    //Execute
+    Logger.trace{ return "ping"; };
+
+    // Validate
+    XCTAssertEqual(memoryAppender.logMessages.count, 1);
+    XCTAssertEqual(memoryAppender.logMessages[0].level, LogLevel.Trace);
+  }
+
   func testStaticLogDebugClosureMethodsLogToRootLogger() {
     let memoryAppender = MemoryAppender();
     LoggerFactory.sharedInstance.rootLogger.appenders.removeAll();
@@ -421,9 +453,12 @@ class LoggerTests: XCTestCase {
   
   func testLoggerMethodsFormatsString() {
     let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    appender.thresholdLevel = .Trace;
+
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender]);
     
     // Execute
+    logger.trace("ping %@ %02x", "blabla", 12);
     logger.debug("ping %@ %02x", "blabla", 12);
     logger.info("ping %@ %02x", "blabla", 12);
     logger.warning("ping %@ %02x", "blabla", 12);
@@ -436,13 +471,18 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appender.logMessages[2].message, "ping blabla 0c");
     XCTAssertEqual(appender.logMessages[3].message, "ping blabla 0c");
     XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[5].message, "ping blabla 0c");
   }
   
   func testLoggerConvenienceMethodsFormatsMessages() {
     let appender = MemoryAppender();
+    appender.thresholdLevel = .Trace;
+
     LoggerFactory.sharedInstance.rootLogger.appenders = [appender];
-    
+    LoggerFactory.sharedInstance.rootLogger.thresholdLevel = .Trace;
+
     // Execute
+    Logger.trace("ping %@ %02x", "blabla", 12);
     Logger.debug("ping %@ %02x", "blabla", 12);
     Logger.info("ping %@ %02x", "blabla", 12);
     Logger.warning("ping %@ %02x", "blabla", 12);
@@ -455,6 +495,7 @@ class LoggerTests: XCTestCase {
     XCTAssertEqual(appender.logMessages[2].message, "ping blabla 0c");
     XCTAssertEqual(appender.logMessages[3].message, "ping blabla 0c");
     XCTAssertEqual(appender.logMessages[4].message, "ping blabla 0c");
+    XCTAssertEqual(appender.logMessages[5].message, "ping blabla 0c");
   }
   
   //MARK: Parent relationship

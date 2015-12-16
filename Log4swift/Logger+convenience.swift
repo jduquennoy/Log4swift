@@ -28,7 +28,11 @@ extension Logger {
   }
   
   // MARK: Logging class methods
-  
+
+  /// Logs the provided message with a trace level using the root logger of the shared logger factory
+  public class func trace(format: String, _ args: CVarArgType...) {
+    LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Trace);
+  }
   /// Logs the provided message with a debug level using the root logger of the shared logger factory
   public class func debug(format: String, _ args: CVarArgType...) {
     LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Debug);
@@ -49,7 +53,12 @@ extension Logger {
   public class func fatal(format: String, _ args: CVarArgType...) {
     LoggerFactory.sharedInstance.rootLogger.log(format.format(getVaList(args)), level: LogLevel.Fatal);
   }
-  
+
+  /// Logs a the message returned by the closer with a trace level using the root logger of the shared logger factory
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public class func trace(closure: () -> (String)) {
+    LoggerFactory.sharedInstance.rootLogger.log(closure, level: .Trace);
+  }
   /// Logs a the message returned by the closer with a debug level using the root logger of the shared logger factory
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public class func debug(closure: () -> (String)) {

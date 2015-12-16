@@ -38,12 +38,14 @@ class LogLevelTests: XCTestCase {
   }
   
   func testLogLevelFromStringCanConvertAllLogLevels() {
+    let parsedTrace = LogLevel("trace");
     let parsedDebug = LogLevel("debug");
     let parsedInfo = LogLevel("info");
     let parsedWarning = LogLevel("warning");
     let parsedError = LogLevel("error");
     let parsedFatal = LogLevel("fatal");
-    
+
+    XCTAssertEqual(parsedTrace!, LogLevel.Trace);
     XCTAssertEqual(parsedDebug!, LogLevel.Debug);
     XCTAssertEqual(parsedInfo!, LogLevel.Info);
     XCTAssertEqual(parsedWarning!, LogLevel.Warning);

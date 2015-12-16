@@ -61,13 +61,14 @@ class FunctionalTests: XCTestCase {
     XCTAssertEqual(appender2.logMessages[0].message, "[test.identifier][\(LogLevel.Fatal)] this log should be printed to both appenders");
   }
   
-  func testCurrentFileNameAndFileIsSentWhenLoggingString() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+  func testCurrentFileNameAndLineAndFunctionIsSentWhenLoggingString() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m");
     let appender = MemoryAppender();
     appender.thresholdLevel = .Debug;
     appender.formatter = formatter;
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender]);
     let file = __FILE__;
+    let function = __FUNCTION__;
     let previousLine: Int;
     
     // Execute
@@ -75,16 +76,17 @@ class FunctionalTests: XCTestCase {
     logger.debug("This is a debug message");
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)] This is a debug message");
+    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)]:[\(function)] This is a debug message");
   }
   
-  func testCurrentFileNameAndFileIsSentWhenLoggingStringWithFormat() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+  func testCurrentFileNameAndLineAndFunctionIsSentWhenLoggingStringWithFormat() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m");
     let appender = MemoryAppender();
     appender.thresholdLevel = .Debug;
     appender.formatter = formatter;
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender]);
     let file = __FILE__;
+    let function = __FUNCTION__;
     let previousLine: Int;
     
     // Execute
@@ -92,16 +94,17 @@ class FunctionalTests: XCTestCase {
     logger.debug("This is a %@ message", LogLevel.Debug.description);
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)] This is a \(LogLevel.Debug.description) message");
+    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)]:[\(function)] This is a \(LogLevel.Debug.description) message");
   }
   
-  func testCurrentFileNameAndFileIsSentWhenLoggingClosure() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+  func testCurrentFileNameAndLineAndFunctionIsSentWhenLoggingClosure() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m");
     let appender = MemoryAppender();
     appender.thresholdLevel = .Debug;
     appender.formatter = formatter;
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender]);
     let file = __FILE__;
+    let function = __FUNCTION__;
     let previousLine: Int;
     
     // Execute
@@ -109,6 +112,6 @@ class FunctionalTests: XCTestCase {
     logger.debug {"This is a debug message"};
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)] This is a debug message");
+    XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)]:[\(function)] This is a debug message");
   }
 }

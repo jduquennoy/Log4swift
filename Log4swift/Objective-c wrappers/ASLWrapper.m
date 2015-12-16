@@ -106,6 +106,7 @@
 - (int)_logLevelToAslLevel:(LogLevel)logLevel {
   int aslLogLevel = ASL_LEVEL_DEBUG;
   switch(logLevel) {
+    case LogLevelTrace:
     case LogLevelDebug:
       aslLogLevel = ASL_LEVEL_DEBUG;
       break;
@@ -121,6 +122,11 @@
     case LogLevelFatal:
       aslLogLevel = ASL_LEVEL_CRIT;
       break;
+    case LogLevelOff:
+      // If the LogLevel is OFF this piece of code should have never been reached in the first place
+      // Mapping it to ASL_LEVEL_CRIT if does nevertheless.
+      aslLogLevel = ASL_LEVEL_CRIT;
+          break;
   }
   return aslLogLevel;
 }

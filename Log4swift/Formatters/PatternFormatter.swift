@@ -32,6 +32,8 @@ Available markers are :
 * d{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of the strftime function.
 * L{'padding': 'padding value'} : the number of the line where the log was issued
 * F{'padding': 'padding value'} : the name of the file where the log was issued
+* f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
+* M{'padding': 'padding value'} : the name of the function in which the log was issued
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
@@ -117,6 +119,14 @@ Available markers are :
       "F": {(parameters, message, info) in 
         let filename = info[.FileName] ?? "-"
         return processCommonParameters(filename, parameters: parameters)
+      },
+      "f": {(parameters, message, info) in
+        let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent;
+        return processCommonParameters(filename, parameters: parameters)
+      },
+      "M": {(parameters, message, info) in
+        let function = info[.Function] ?? "-"
+        return processCommonParameters(function, parameters: parameters)
       },
       "m": {(parameters, message, info) in
         processCommonParameters(message as String, parameters: parameters)

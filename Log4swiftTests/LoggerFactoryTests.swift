@@ -178,7 +178,7 @@ class LoggerFactoryTests: XCTestCase {
     
     // Validate
     if let xcodeAppender = self.factory.rootLogger.appenders[0] as? StdOutAppender {
-      XCTAssertEqual(xcodeAppender.textColors.count, 5);
+      XCTAssertEqual(xcodeAppender.textColors.count, 6);
     }
   }
   
