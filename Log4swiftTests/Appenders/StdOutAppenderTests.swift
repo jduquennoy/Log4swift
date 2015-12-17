@@ -240,6 +240,45 @@ class StdOutAppenderTests: XCTestCase {
     XCTAssertEqual(appender.backgroundColors, [LogLevel.Error: StdOutAppender.TTYColor.Red, LogLevel.Info: StdOutAppender.TTYColor.Green]);
   }
   
+  func testUpdatingAppenderFromDictionaryWithForcedXtermTTYTypeUsesSpecifiedType() {
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "xTeRm"];
+    let appender = StdOutAppender("test appender");
+    appender.ttyType = .XcodeColors;
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.XtermColor);
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithForcedXcodeColorsTTYTypeUsesSpecifiedType() {
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "xCoDEcolors"];
+    let appender = StdOutAppender("test appender");
+    appender.ttyType = .XtermColor;
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.XcodeColors);
+  }
+  
+  func testUpdatingAppenderFromDictionaryWithUnknownTTYTypeUsesOtherType() {
+    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+      StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "UnknownType"];
+    let appender = StdOutAppender("test appender");
+    appender.ttyType = .XtermColor;
+    
+    // Execute
+    try! appender.updateWithDictionary(dictionary, availableFormatters:[]);
+    
+    // Validate
+    XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.Other);
+  }
+  
   func testUpdatingAppenderFromDictionaryWithInvalidBackgroundColorsThrowsError() {
     let textColors = [LogLevel.Error.description: "Invalide color",
       LogLevel.Info.description: "Green"];

@@ -28,25 +28,40 @@ public class StdOutAppender: Appender {
     case ErrorThreshold = "ErrorThresholdLevel"
     case TextColors = "TextColors"
     case BackgroundColors = "BackgroundColors"
+    case ForcedTTYType = "ForcedTTYType"
   };
   
-  internal enum TTYType {
-    case Xcode
+  public enum TTYType {
+    /// Xcode with XcodeColors plugin
+    case XcodeColors
+    /// xterm-256color terminal
     case XtermColor
+    /// non color-compatible tty
     case Other
+
+    init(_ name: String) {
+      switch(name.lowercaseString) {
+      case "xterm" : self = .XtermColor;
+      case "xcodecolors" : self = .XcodeColors;
+      default: self = .Other;
+      }
+    }
   }
   
+  /// ttyType will determine what color codes should be used if colors are enabled.
+  /// This is supposed to be automatically detected when creating the logger.
+  /// Change that only if you need to override the automatic detection.
+  public var ttyType: TTYType;
   public var errorThresholdLevel: LogLevel? = .Error;
   internal private(set) var textColors = [LogLevel: TTYColor]();
   internal private(set) var backgroundColors = [LogLevel: TTYColor]();
-  internal let ttyType: TTYType;
   
   public required init(_ identifier: String) {
     let xcodeColors = NSProcessInfo().environment["XcodeColors"];
     let terminalType = NSProcessInfo().environment["TERM"];
     switch (xcodeColors, terminalType) {
     case (.Some("YES"), _):
-      self.ttyType = .Xcode;
+      self.ttyType = .XcodeColors;
     case (_, .Some("xterm-256color")):
       self.ttyType = .XtermColor;
     default:
@@ -94,6 +109,10 @@ public class StdOutAppender: Appender {
         
         self.backgroundColors[level] = color;
       }
+    }
+    
+    if let forcedTtyType = (dictionary[DictionaryKey.ForcedTTYType.rawValue] as? String) {
+      self.ttyType = TTYType(forcedTtyType);
     }
   }
   
@@ -227,7 +246,7 @@ extension StdOutAppender {
     private func codeForTTYType(type: TTYType) -> String {
       switch(type) {
       case .XtermColor: return String(self.xtermCode());
-      case .Xcode: return self.xcodeCode();
+      case .XcodeColors: return self.xcodeCode();
       case .Other: return "";
       }
     }
@@ -235,7 +254,7 @@ extension StdOutAppender {
   
   private var textColorPrefix: String {
     switch(self.ttyType) {
-    case .Xcode: return "\u{1B}[fg";
+    case .XcodeColors: return "\u{1B}[fg";
     case .XtermColor: return "\u{1B}[38;5;";
     case .Other: return "";
     }
@@ -243,7 +262,7 @@ extension StdOutAppender {
   
   private var backgroundColorPrefix: String {
     switch(self.ttyType) {
-    case .Xcode: return "\u{1B}[bg";
+    case .XcodeColors: return "\u{1B}[bg";
     case .XtermColor: return "\u{1B}[48;5;";
     case .Other: return "";
     }
@@ -251,7 +270,7 @@ extension StdOutAppender {
   
   private var colorSuffix: String {
     switch(self.ttyType) {
-    case .Xcode: return ";";
+    case .XcodeColors: return ";";
     case .XtermColor: return "m";
     case .Other: return "";
     }
@@ -259,7 +278,7 @@ extension StdOutAppender {
   
   private var resetColorSequence: String {
     switch(self.ttyType) {
-    case .Xcode: return "\u{1B}[;";
+    case .XcodeColors: return "\u{1B}[;";
     case .XtermColor: return "\u{1B}[0m";
     case .Other: return "";
     }
