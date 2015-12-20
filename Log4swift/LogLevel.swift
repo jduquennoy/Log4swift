@@ -24,20 +24,24 @@ import Foundation
 Log level defines the importance of the log : is it just a debug log, an informational notice, or an error.
 Order of the levels is :
 
-Debug < Info < Warning < Error < Fatal
+Trace < Debug < Info < Warning < Error < Fatal < Off
 */
 @objc public enum LogLevel: Int, CustomStringConvertible {
   
-  case Debug = 0
-  case Info = 1
-  case Warning = 2
-  case Error = 3
-  case Fatal = 4
+  case Trace = 0
+  case Debug = 1
+  case Info = 2
+  case Warning = 3
+  case Error = 4
+  case Fatal = 5
+  case Off = 6
   
   /// Converts a string to a log level if possible.
   /// This initializer is not case sensitive
   public init?(_ stringValue: String) {
     switch(stringValue.lowercaseString) {
+    case LogLevel.Trace.description.lowercaseString:
+      self = .Trace;
     case LogLevel.Debug.description.lowercaseString:
       self = .Debug;
     case LogLevel.Info.description.lowercaseString:
@@ -48,6 +52,8 @@ Debug < Info < Warning < Error < Fatal
       self = .Error;
     case LogLevel.Fatal.description.lowercaseString:
       self = .Fatal;
+    case LogLevel.Off.description.lowercaseString:
+      self = .Off;
     default:
       return nil;
     }
@@ -57,6 +63,8 @@ Debug < Info < Warning < Error < Fatal
   public var description : String {
     get {
       switch(self) {
+      case .Trace:
+        return "Trace";
       case .Debug:
         return "Debug";
       case .Info:
@@ -67,6 +75,8 @@ Debug < Info < Warning < Error < Fatal
         return "Error";
       case .Fatal:
         return "Fatal";
+      case .Off:
+        return "Off";
       }
     }
   }

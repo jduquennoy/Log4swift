@@ -25,7 +25,12 @@ This extension of the Logger class adds logging methods that can be exported to 
 There are multiple functions to accomodate the limitations of Objective-C (no default values for parameters notably).
 */
 extension Logger {
-  
+
+  /// Logs a trace message. This method is meant to be used from Objective-C.
+  /// When in swift, prefer the "trace" method.
+  @objc public func logTrace(message: String) {
+    self.log(message, level: LogLevel.Trace);
+  }
   /// Logs a debug message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "debug" method.
   @objc public func logDebug(message: String) {
@@ -51,33 +56,43 @@ extension Logger {
   @objc public func logFatal(message: String) {
     self.log(message, level: LogLevel.Fatal);
   }
-  
-  /// Logs a debug message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+
+  /// Logs a trace message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
+  /// When in swift, prefer the "trace" method.
+  @objc public func logTrace(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Trace, file: file, line: line, function: function);
+  }
+  /// Logs a debug message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "debug" method.
-  @objc public func logDebug(message: String, file: String, line: Int) {
-    self.log(message, level: LogLevel.Debug, file: file, line: line);
+  @objc public func logDebug(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Debug, file: file, line: line, function: function);
   }
-  /// Logs a info message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a info message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "info" method.
-  @objc public func logInfo(message: String, file: String, line: Int) {
-    self.log(message, level: LogLevel.Info, file: file, line: line);
+  @objc public func logInfo(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Info, file: file, line: line, function: function);
   }
-  /// Logs a warning message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a warning message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "warning" method.
-  @objc public func logWarning(message: String, file: String, line: Int) {
-    self.log(message, level: LogLevel.Warning, file: file, line: line);
+  @objc public func logWarning(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Warning, file: file, line: line, function: function);
   }
-  /// Logs a error message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a error message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "error" method.
-  @objc public func logError(message: String, file: String, line: Int) {
-    self.log(message, level: LogLevel.Error, file: file, line: line);
+  @objc public func logError(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Error, file: file, line: line, function: function);
   }
-  /// Logs a fatal message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a fatal message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "fatal" method.
-  @objc public func logFatal(message: String, file: String, line: Int) {
-    self.log(message, level: LogLevel.Fatal, file: file, line: line);
+  @objc public func logFatal(message: String, file: String, line: Int, function: String) {
+    self.log(message, level: LogLevel.Fatal, file: file, line: line, function: function);
   }
-  
+
+  /// Logs a trace message. This method is meant to be used from Objective-C.
+  /// When in swift, prefer the "trace" method.
+  @objc public func logTraceBloc(closure:() -> (String)) {
+    self.log(closure, level: LogLevel.Trace);
+  }
   /// Logs a debug message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "debug" method.
   @objc public func logDebugBloc(closure:() -> (String)) {
@@ -104,30 +119,35 @@ extension Logger {
     self.log(closure, level: LogLevel.Fatal);
   }
 
-  /// Logs a debug message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a trace message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
+  /// When in swift, prefer the "trace" method.
+  @objc public func logTraceBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Trace, file: file, line: line, function: function);
+  }
+  /// Logs a debug message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "debug" method.
-  @objc public func logDebugBloc(closure:() -> (String), file: String, line: Int) {
-    self.log(closure, level: LogLevel.Debug, file: file, line: line);
+  @objc public func logDebugBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Debug, file: file, line: line, function: function);
   }
-  /// Logs a info message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a info message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "info" method.
-  @objc public func logInfoBloc(closure:() -> (String), file: String, line: Int) {
-    self.log(closure, level: LogLevel.Info, file: file, line: line);
+  @objc public func logInfoBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Info, file: file, line: line, function: function);
   }
-  /// Logs a warning message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a warning message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "warning" method.
-  @objc public func logWarningBloc(closure:() -> (String), file: String, line: Int) {
-    self.log(closure, level: LogLevel.Warning, file: file, line: line);
+  @objc public func logWarningBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Warning, file: file, line: line, function: function);
   }
-  /// Logs a error message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a error message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "error" method.
-  @objc public func logErrorBloc(closure:() -> (String), file: String, line: Int) {
-    self.log(closure, level: LogLevel.Error, file: file, line: line);
+  @objc public func logErrorBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Error, file: file, line: line, function: function);
   }
-  /// Logs a fatal message. This method is meant to be used in macros when using Objective-C, to provide the file and line using the __FILE__ and __LINE__ macros.
+  /// Logs a fatal message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "fatal" method.
-  @objc public func logFatalBloc(closure:() -> (String), file: String, line: Int) {
-    self.log(closure, level: LogLevel.Fatal, file: file, line: line);
+  @objc public func logFatalBloc(closure:() -> (String), file: String, line: Int, function: String) {
+    self.log(closure, level: LogLevel.Fatal, file: file, line: line, function: function);
   }
   
 }

@@ -26,6 +26,7 @@ public enum LogInfoKeys {
   case LoggerName
   case FileName
   case FileLine
+  case Function
   case Timestamp
 }
 

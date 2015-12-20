@@ -112,7 +112,8 @@ extension LoggerFactory {
     xcodeAppender.setTextColor(.Red, level: .Error);
     xcodeAppender.setTextColor(.Orange, level: .Warning);
     xcodeAppender.setTextColor(.Blue, level: .Info);
-    xcodeAppender.setTextColor(.LightGrey, level: .Debug);
+    xcodeAppender.setTextColor(.DarkGrey, level: .Debug);
+    xcodeAppender.setTextColor(.LightGrey, level: .Trace);
 
     do {
       let formatter = try PatternFormatter(identifier: "xcodeFormatter", pattern: "%d{'format':'%F %T'} %m");

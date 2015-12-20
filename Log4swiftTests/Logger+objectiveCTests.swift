@@ -25,9 +25,11 @@ class LoggerObjectiveCTests: XCTestCase {
   
   func testLoggerObjectiveCLogStringMethodsLogsAtExpectedLevel() {
     let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    appender.thresholdLevel = .Trace;
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender]);
     
     // Execute
+    logger.logTrace("trace");
     logger.logDebug("debug");
     logger.logInfo("info");
     logger.logWarning("warning");
@@ -35,18 +37,21 @@ class LoggerObjectiveCTests: XCTestCase {
     logger.logFatal("fatal");
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].level, LogLevel.Debug);
-    XCTAssertEqual(appender.logMessages[1].level, LogLevel.Info);
-    XCTAssertEqual(appender.logMessages[2].level, LogLevel.Warning);
-    XCTAssertEqual(appender.logMessages[3].level, LogLevel.Error);
-    XCTAssertEqual(appender.logMessages[4].level, LogLevel.Fatal);
+    XCTAssertEqual(appender.logMessages[0].level, LogLevel.Trace);
+    XCTAssertEqual(appender.logMessages[1].level, LogLevel.Debug);
+    XCTAssertEqual(appender.logMessages[2].level, LogLevel.Info);
+    XCTAssertEqual(appender.logMessages[3].level, LogLevel.Warning);
+    XCTAssertEqual(appender.logMessages[4].level, LogLevel.Error);
+    XCTAssertEqual(appender.logMessages[5].level, LogLevel.Fatal);
   }
   
   func testLoggerObjectiveCLogBlocMethodsLogsAtExpectedLevel() {
     let appender = MemoryAppender();
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    appender.thresholdLevel = .Trace;
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender]);
     
     // Execute
+    logger.logTraceBloc({"Trace"});
     logger.logDebugBloc({"Debug"});
     logger.logInfoBloc({"info"});
     logger.logWarningBloc({"warning"});
@@ -54,53 +59,60 @@ class LoggerObjectiveCTests: XCTestCase {
     logger.logFatalBloc({"fatal"});
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].level, LogLevel.Debug);
-    XCTAssertEqual(appender.logMessages[1].level, LogLevel.Info);
-    XCTAssertEqual(appender.logMessages[2].level, LogLevel.Warning);
-    XCTAssertEqual(appender.logMessages[3].level, LogLevel.Error);
-    XCTAssertEqual(appender.logMessages[4].level, LogLevel.Fatal);
+    XCTAssertEqual(appender.logMessages[0].level, LogLevel.Trace);
+    XCTAssertEqual(appender.logMessages[1].level, LogLevel.Debug);
+    XCTAssertEqual(appender.logMessages[2].level, LogLevel.Info);
+    XCTAssertEqual(appender.logMessages[3].level, LogLevel.Warning);
+    XCTAssertEqual(appender.logMessages[4].level, LogLevel.Error);
+    XCTAssertEqual(appender.logMessages[5].level, LogLevel.Fatal);
   }
   
   func testLoggerObjectiveCLogBlocWithFileAndLineMethodsLogsWithFileAndLine() {
     let appender = MemoryAppender();
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+    appender.thresholdLevel = .Trace;
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m");
     appender.formatter = formatter;
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender]);
     
     // Execute
-    logger.logDebugBloc({"message"}, file: "filename", line: 42);
-    logger.logInfoBloc({"message"}, file: "filename", line: 42);
-    logger.logWarningBloc({"message"}, file: "filename", line: 42);
-    logger.logErrorBloc({"message"}, file: "filename", line: 42);
-    logger.logFatalBloc({"message"}, file: "filename", line: 42);
+    logger.logTraceBloc({"message"}, file: "filename", line: 42, function: "function");
+    logger.logDebugBloc({"message"}, file: "filename", line: 42, function: "function");
+    logger.logInfoBloc({"message"}, file: "filename", line: 42, function: "function");
+    logger.logWarningBloc({"message"}, file: "filename", line: 42, function: "function");
+    logger.logErrorBloc({"message"}, file: "filename", line: 42, function: "function");
+    logger.logFatalBloc({"message"}, file: "filename", line: 42, function: "function");
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[5].message, "[filename]:[42]:[function] message");
   }
   
   
   func testLoggerObjectiveCLogMessageWithFileAndLineMethodsLogsWithFileAndLine() {
     let appender = MemoryAppender();
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L] %m");
+    appender.thresholdLevel = .Trace;
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m");
     appender.formatter = formatter;
-    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender]);
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender]);
     
     // Execute
-    logger.logDebug("message", file: "filename", line: 42);
-    logger.logInfo("message", file: "filename", line: 42);
-    logger.logWarning("message", file: "filename", line: 42);
-    logger.logError("message", file: "filename", line: 42);
-    logger.logFatal("message", file: "filename", line: 42);
+    logger.logTrace("message", file: "filename", line: 42, function: "function");
+    logger.logDebug("message", file: "filename", line: 42, function: "function");
+    logger.logInfo("message", file: "filename", line: 42, function: "function");
+    logger.logWarning("message", file: "filename", line: 42, function: "function");
+    logger.logError("message", file: "filename", line: 42, function: "function");
+    logger.logFatal("message", file: "filename", line: 42, function: "function");
     
     // Validate
-    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42] message");
-    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42] message");
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42]:[function] message");
+    XCTAssertEqual(appender.logMessages[5].message, "[filename]:[42]:[function] message");
   }
 }
