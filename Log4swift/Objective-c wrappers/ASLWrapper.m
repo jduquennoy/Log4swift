@@ -126,7 +126,7 @@
       // If the LogLevel is OFF this piece of code should have never been reached in the first place
       // Mapping it to ASL_LEVEL_CRIT if does nevertheless.
       aslLogLevel = ASL_LEVEL_CRIT;
-          break;
+      break;
   }
   return aslLogLevel;
 }

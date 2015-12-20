@@ -1,5 +1,23 @@
 # Log4swift versions changelog
 
+## 1.0 (not yet released)
+
+### Appenders enhancements
+- TTY type for coloration can be forced if auto-detection does not work. This can be useful when debugging a module that will be loaded by another application (such as sytem extensions).
+
+### Pattern formatter enhancements (thanks to Darkdah for those improvements)
+
+- Added two marker to the pattern formatter :
+  - %f : displays the name of the file where the log was issued (%F displays the full path)
+  - %M : the name of the method in which the log message was sent
+
+###  Added log levels (thanks to Darkdah for those)
+
+- Off log level added. No messages can be logged with that level, it can only be used as a threshold level in the configuration, to mute a logger or an appender
+- Trace level added bellow debug
+
+
+
 ## 1.0b4 (2015-11-03)
 
 ### Loggers enhancements

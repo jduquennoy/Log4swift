@@ -44,6 +44,7 @@ class LogLevelTests: XCTestCase {
     let parsedWarning = LogLevel("warning");
     let parsedError = LogLevel("error");
     let parsedFatal = LogLevel("fatal");
+    let parsedOff = LogLevel("oFf");
 
     XCTAssertEqual(parsedTrace!, LogLevel.Trace);
     XCTAssertEqual(parsedDebug!, LogLevel.Debug);
@@ -51,6 +52,7 @@ class LogLevelTests: XCTestCase {
     XCTAssertEqual(parsedWarning!, LogLevel.Warning);
     XCTAssertEqual(parsedError!, LogLevel.Error);
     XCTAssertEqual(parsedFatal!, LogLevel.Fatal);
+    XCTAssertEqual(parsedOff!, LogLevel.Off);
   }
   
 }
