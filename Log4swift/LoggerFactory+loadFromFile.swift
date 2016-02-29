@@ -20,7 +20,7 @@
 
 import Foundation
 
-extension LoggerFactory {
+extension LoggerFactory : FileObserverDelegate {
   public enum DictionaryKey: String {
     case ClassName = "Class"
     case Formatters = "Formatters"
@@ -30,10 +30,17 @@ extension LoggerFactory {
     case Identifier = "Identifier"
   };
   
-  public func readConfigurationFromPlistFile(filePath: String) throws {
+  /// Load configuration file in plist format.
+  /// - parameter filePath: the path to the file to load
+  /// - parameter autoReload: true if the configuration file should be reloaded automatically when modified. If file does not exist, it will be loaded when created. Only one file can be auto-reloaded at a time. If a second file is marked as such, the first one will no longer be.
+  public func readConfigurationFromPlistFile(filePath: String, autoReload: Bool = false, reloadInterval: NSTimeInterval = 5.0) throws {
     let configurationNSDictionary = NSDictionary(contentsOfFile: filePath);
     if let configurationDictionary = configurationNSDictionary as? Dictionary<String, AnyObject> {
       try self.readConfiguration(configurationDictionary);
+    }
+    if autoReload {
+      self.configurationFileObserver = FileObserver(filePath: filePath, poolInterval: reloadInterval);
+      self.configurationFileObserver?.delegate = self;
     }
   }
   
@@ -179,5 +186,16 @@ extension LoggerFactory {
     }
     
     return identifier
+  }
+  
+  public func fileChanged(atPath: String) {
+    do {
+      NSLog("file \(atPath) changed, reloadging");
+      try self.readConfigurationFromPlistFile(atPath);
+    } catch (let error){
+      // We dont't want to throw here, as it might be a temporary error until next edit.
+      // So We just print out the error to the console, with description.
+      NSLog("Failed to reload file \(atPath) : \(error)")
+    }
   }
 }

@@ -37,6 +37,7 @@ Here are the main features you can expect from Log4swift :
 * configurable by file
 * capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color256
 * logs synchronously by default, but can log asynchronously on request. Async behavior can be configured per logger.
+* possibility to auto-reload configuration file automatically (disabled by default)
 
 
 Another goal, that I think we all share, is to have readable and tested code.
