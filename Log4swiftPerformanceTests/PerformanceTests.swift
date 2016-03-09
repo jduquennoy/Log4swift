@@ -67,7 +67,7 @@ class PerformanceTests: XCTestCase {
   
   func testFileLoggerWithFormatterPerformanceTest() {
     let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d %m");
-    let tempFilePath = try! self.createTemporaryFileUrl();
+    let tempFilePath = try! self.createTemporaryFilePath("log");
     let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
     fileAppender.formatter = formatter;
     let logger = Logger(identifier: "");
@@ -121,11 +121,4 @@ class PerformanceTests: XCTestCase {
       }
     }
   }
-
-  private func createTemporaryFileUrl() throws -> String {
-    let temporaryDirectoryUrl = NSURL(fileURLWithPath:NSTemporaryDirectory());
-    let temporaryFileUrl = temporaryDirectoryUrl.URLByAppendingPathComponent(NSUUID().UUIDString + ".log");
-    return temporaryFileUrl.path!
-  }
-
 }

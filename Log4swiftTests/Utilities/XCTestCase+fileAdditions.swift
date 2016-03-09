@@ -1,8 +1,8 @@
 //
-//  log4swift.h
-//  log4swift
+//  XCTestCase+noThrow.swift
+//  Log4swift
 //
-//  Created by Jérôme Duquennoy on 14/06/2015.
+//  Created by jerome on 27/06/2015.
 //  Copyright © 2015 Jérôme Duquennoy. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,11 @@
 // limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+import XCTest
 
-//! Project version number for log4swift.
-FOUNDATION_EXPORT double log4swiftVersionNumber;
-
-//! Project version string for log4swift.
-FOUNDATION_EXPORT const unsigned char log4swiftVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <log4swift/PublicHeader.h>
-#import "NSLogger.h"
-#import "LoggerClient.h"
-#import "LoggerCommon.h"
-
-#import "ASLWrapper.h"
+extension XCTestCase {
+  func createTemporaryFilePath(fileExtension: String) throws -> String {
+    let temporaryFilePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(NSUUID().UUIDString + "." + fileExtension);
+    return temporaryFilePath;
+  }
+}

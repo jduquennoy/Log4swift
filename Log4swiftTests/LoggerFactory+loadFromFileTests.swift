@@ -450,6 +450,28 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     XCTAssertTrue(logger1Appender1 === logger2Appender1);
   }
   
+  // Mark: Configuration file observing
+  func testLoadedConfigFileIsReloadedWhenModifiedIfRequested() {
+    let configurationFilePath = try! self.createTemporaryFilePath("plist");
+    let loggerDictionary = [
+      LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger"];
+    let configuration: NSDictionary = [LoggerFactory.DictionaryKey.Loggers.rawValue: [loggerDictionary]];
+    NSDictionary().writeToFile(configurationFilePath, atomically: true);
+    try! self.factory.readConfigurationFromPlistFile(configurationFilePath, autoReload: true, reloadInterval: 0.5);
+
+    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1.0));
+    
+    // Execute
+    configuration.writeToFile(configurationFilePath, atomically: true);
+
+    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1.0));
+    
+
+    // Validate
+    XCTAssertEqual(self.factory.loggers.count, 1);
+    XCTAssertNotNil(self.factory.loggers["test.logger"]);
+  }
+  
   // MARK: Utility methods
   
   private func classNameAsString(obj: Any) -> String {

@@ -11,12 +11,12 @@
   - %f : displays the name of the file where the log was issued (%F displays the full path)
   - %M : the name of the method in which the log message was sent
 
-###  Added log levels (thanks to Darkdah for those)
+### Log configuration
 
-- Off log level added. No messages can be logged with that level, it can only be used as a threshold level in the configuration, to mute a logger or an appender
-- Trace level added bellow debug
-
-
+- Added log levels (thanks to Darkdah for those)
+ - Off log level added. No messages can be logged with that level, it can only be used as a threshold level in the configuration, to mute a logger or an appender
+ - Trace level added bellow debug
+- Added possibility to automatically reload configuration file when modified
 
 ## 1.0b4 (2015-11-03)
 

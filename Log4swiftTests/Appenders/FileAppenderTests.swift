@@ -30,11 +30,9 @@ class FileAppenderTests: XCTestCase {
   
   override func setUp() {
     super.setUp()
-    // Put setup code here. This method is called before the invocation of each test method in the class.
   }
   
   override func tearDown() {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     super.tearDown()
   }
   
@@ -61,7 +59,7 @@ class FileAppenderTests: XCTestCase {
   
   func testFileAppenderCreatesFileIfItDoesNotExist()  {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
@@ -82,7 +80,7 @@ class FileAppenderTests: XCTestCase {
   
   func testFileAppenderReCreatesFileIfItDeletedAfterFirstLog()  {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
@@ -105,7 +103,7 @@ class FileAppenderTests: XCTestCase {
   
   func testFileAppenderAddsEndOfLineToLogsIfNotPresentAtEndOfMessage()  {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping";
       defer {
@@ -128,7 +126,7 @@ class FileAppenderTests: XCTestCase {
   
   func testFileAppenderDoesNotAddEndOfLineToLogsIfAlreadyPresent()  {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent = "ping\n";
       defer {
@@ -151,8 +149,8 @@ class FileAppenderTests: XCTestCase {
   
   func testLogsAreRedirectedToNewLogFileIfPathIsChanged()  {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
-      let tempFilePath2 = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
+      let tempFilePath2 = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       let logContent1 = "ping1";
       let logContent2 = "ping2";
@@ -225,7 +223,7 @@ class FileAppenderTests: XCTestCase {
   
   func testFileAppenderPerformanceWhenFileIsNotDeleted() {
     do {
-      let tempFilePath = try self.createTemporaryFileUrl();
+      let tempFilePath = try self.createTemporaryFilePath("log");
       let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
       defer {
         unlink((tempFilePath as NSString).fileSystemRepresentation);
@@ -239,10 +237,5 @@ class FileAppenderTests: XCTestCase {
     } catch let error {
       XCTAssert(false, "Error in test : \(error)");
     }
-  }
-  
-  private func createTemporaryFileUrl() throws -> String {
-    let temporaryFilePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(NSUUID().UUIDString + ".log");
-    return temporaryFilePath;
   }
 }

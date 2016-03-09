@@ -8,7 +8,7 @@
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
 [![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
 
-Log4Swift is a logging library written in swift 2. Therefore, **it requires xCode 7 to compile**.
+Log4Swift is a logging library written in swift 2. Therefore, **it requires Xcode 7 to compile**.
 
 It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift 2 or objective-C (or a mix of those two).
 
@@ -37,6 +37,7 @@ Here are the main features you can expect from Log4swift :
 * configurable by file
 * capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color256
 * logs synchronously by default, but can log asynchronously on request. Async behavior can be configured per logger.
+* possibility to auto-reload configuration file automatically (disabled by default)
 
 
 Another goal, that I think we all share, is to have readable and tested code.

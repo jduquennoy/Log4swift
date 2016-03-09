@@ -34,6 +34,8 @@ The logger factory is responsible for
     case InvalidLoggerIdentifier
   }
   
+  internal var configurationFileObserver: FileObserver?;
+  
   /// The root logger is the catchall logger used when no other logger matches. It is the only non-optional logger of the factory.
   public let rootLogger = Logger();
   internal var loggers = Dictionary<String, Logger>();
