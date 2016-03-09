@@ -174,6 +174,64 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   @nonobjc public func fatal(format: String, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: CVarArgType...) {
     self.log(format.format(getVaList(args)), level: LogLevel.Fatal, file: file, line: line, function: function);
   }
+  /// Logs the entering of a function and its parameters with a trace level
+  @nonobjc public func entering(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: [Any?]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return;
+    }
+
+    var message = "ENTERING - ";
+
+    let numArgs = args.count;
+
+    if (numArgs == 0) {
+      message += "without parameters";
+    } else if (numArgs == 1) {
+      message += "with 1 parameter";
+    } else {
+      message += "with \(numArgs) parameters";
+    }
+
+    if dumpParameters && numArgs > 0 {
+      message += "\n";
+      debugPrint(args, separator: "\n", terminator: "\n", toStream: &message);
+    }
+
+    self.log(message, level: .Trace, file: file, line: line, function: function);
+  }
+  /// Logs the entering of a function and its parameters with a trace level
+  @nonobjc public func entering(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: Any?...) {
+    entering(dumpParameters, file: file, line: line, function: function, args);
+  }
+  /// Logs the exiting of a function and its return values with a trace level
+  @nonobjc public func exiting(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: [Any?]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return;
+    }
+
+    var message = "EXITING - ";
+
+    let numArgs = args.count;
+
+    if (numArgs == 0) {
+      message += "without return value";
+    } else if (numArgs == 1) {
+      message += "with 1 return value";
+    } else {
+      message += "with \(numArgs) return values";
+    }
+
+    if dumpParameters && numArgs > 0 {
+      message += "\n";
+      debugPrint(args, separator: "\n", terminator: "\n", toStream: &message);
+    }
+
+    self.log(message, level: LogLevel.Trace, file: file, line: line, function: function);
+  }
+  /// Logs the exiting of a function and its return values with a trace level
+  @nonobjc public func exiting(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: Any?...) {
+    exiting(dumpParameters, file: file, line: line, function: function, args);
+  }
 
   /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
