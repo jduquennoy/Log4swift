@@ -121,4 +121,21 @@ class String_utilitiesTest: XCTestCase {
     XCTAssertThrows { try dict = "\"padding\":\"-57\", \"case\": \"upper\"".toDictionary() }
     XCTAssertNil(dict)
   }
+
+  func testFormatLongStringWithPercentCharsButNoArguments() {
+    let appender = MemoryAppender();
+    appender.thresholdLevel = .Debug;
+    let pattern = "This is a string \"with\" special %characters including escapes : %x %2C %d %s %2C %s %2C"
+    var logString = ""
+    
+    for index in 0...10000 {
+      logString += "pattern #\(index): \(pattern)"
+    }
+    
+    // Execute
+    logString.format([])
+    
+    // Validate
+    // Nothing to do, it should just not crash
+  }
 }
