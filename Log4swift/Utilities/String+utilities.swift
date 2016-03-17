@@ -32,8 +32,14 @@ extension String {
     return result;
   }
 
-  public func format(args: CVaListPointer) -> String {
-    return NSString(format: self, arguments: args) as String
+  public func format(args: [CVarArgType]) -> String {
+    guard args.count > 0 else {
+      return self
+    }
+    
+    return withVaList(args) { (argsListPointer) in
+      NSString(format: self, arguments: argsListPointer) as String
+    }
   }
 
 

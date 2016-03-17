@@ -598,4 +598,17 @@ class LoggerTests: XCTestCase {
       XCTAssertTrue(false, "Could not read logged time");
     }
   }
+
+  
+  func testLoggingStringWithPercentAndNoParametersDoesNotCrash() {
+    let appender = MemoryAppender();
+    appender.thresholdLevel = .Debug;
+    let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender]);
+    
+    // Execute
+    logger.debug("test %s %d %2C log with missing parameter");
+    
+    // Validate
+    // nothing to test, it should just not crash
+  }
 }
