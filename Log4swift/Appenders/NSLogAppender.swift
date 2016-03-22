@@ -25,6 +25,6 @@ The NSLog appender uses NSLog to issue the logs. It is not extermely performant,
 */
 public class NSLogAppender: Appender {
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    NSLog(log);
+    NSLog(log)
   }
 }

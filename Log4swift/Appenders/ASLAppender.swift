@@ -24,20 +24,20 @@ import Foundation
 This appender will send messages to ASL, the Apple System Log.
 */
 public class ASLAppender : Appender {
-  internal let aslClient = ASLWrapper ();
+  internal let aslClient = ASLWrapper ()
   
   required public init(_ identifier: String) {
-    super.init(identifier);
+    super.init(identifier)
     
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    let category: String;
+    let category: String
     if let categoryFromInfo = info[LogInfoKeys.LoggerName] {
-      category = categoryFromInfo.description;
+      category = categoryFromInfo.description
     } else {
-      category = "Undefined";
+      category = "Undefined"
     }
-    aslClient.logMessage(log, level: Int32(level.rawValue), category: category);
+    aslClient.logMessage(log, level: Int32(level.rawValue), category: category)
   }
 }

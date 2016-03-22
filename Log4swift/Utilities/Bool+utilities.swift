@@ -28,12 +28,12 @@ extension Bool {
     if let stringValue = stringValue {
       switch(stringValue.lowercaseString) {
       case "true", "yes":
-        self = true;
+        self = true
       default:
-        self = false;
+        self = false
       }
     } else {
-      self = false;
+      self = false
     }
   }
 }

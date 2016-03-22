@@ -45,62 +45,62 @@ Available markers are :
   public enum Error : ErrorType {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
-  };
+  }
   
   /// Definition of the keys that will be used when initializing a PatternFormatter with a dictionary.
   public enum DictionaryKey: String {
     case Pattern = "Pattern"
-  };
+  }
   
-  public let identifier: String;
+  public let identifier: String
   
-  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String;
-  private var formattingClosuresSequence = [FormattingClosure]();
+  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String
+  private var formattingClosuresSequence = [FormattingClosure]()
   
   /// This initialiser will throw an error if the pattern is not valid.
   public init(identifier: String, pattern: String) throws {
-    self.identifier = identifier;
-    let parser = PatternParser();
-    super.init();
-    self.formattingClosuresSequence = try parser.parsePattern(pattern);
+    self.identifier = identifier
+    let parser = PatternParser()
+    super.init()
+    self.formattingClosuresSequence = try parser.parsePattern(pattern)
   }
 
   public required convenience init(_ identifier: String) {
-    try! self.init(identifier: identifier, pattern: "%m");
+    try! self.init(identifier: identifier, pattern: "%m")
   }
   
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
   public func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
-      let parser = PatternParser();
-      self.formattingClosuresSequence = try parser.parsePattern(safePattern);
+      let parser = PatternParser()
+      self.formattingClosuresSequence = try parser.parsePattern(safePattern)
     } else {
-      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'");
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'")
     }
   }
   
   public func format(message: String, info: LogInfoDictionary) -> String {
-    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) };
+    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) }
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String;
+    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String
     // This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
     // Add an entry to this array to declare a new marker.
     private let markerClosures: Dictionary<String, MarkerClosure> = [
       "d": {(parameters, message, info) in
-        let result: String;
-        let format = parameters["format"] as? String ?? "%F %T";
-        let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970;
-        var secondsSinceEpoch = Int(timestamp);
+        let result: String
+        let format = parameters["format"] as? String ?? "%F %T"
+        let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+        var secondsSinceEpoch = Int(timestamp)
         let date = withUnsafePointer(&secondsSinceEpoch) {
-          localtime($0);
+          localtime($0)
         }
-        let buffer = UnsafeMutablePointer<Int8>.alloc(80);
-        strftime(buffer, 80, format , date);
-        result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String;
-        buffer.destroy();
+        let buffer = UnsafeMutablePointer<Int8>.alloc(80)
+        strftime(buffer, 80, format , date)
+        result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
+        buffer.destroy()
 
         return processCommonParameters(result, parameters: parameters)
       },
@@ -121,7 +121,7 @@ Available markers are :
         return processCommonParameters(filename, parameters: parameters)
       },
       "f": {(parameters, message, info) in
-        let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent;
+        let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent
         return processCommonParameters(filename, parameters: parameters)
       },
       "M": {(parameters, message, info) in
@@ -132,7 +132,7 @@ Available markers are :
         processCommonParameters(message as String, parameters: parameters)
       },
       "%": {(parameters, message, info) in "%" }
-    ];
+    ]
     
     
     // MARK: Formater parser state machine
@@ -145,11 +145,11 @@ Available markers are :
       case PostMarker(String)
       case Parameters(String)
       case End
-    };
+    }
     
     private struct ParserStatus {
-      var machineState = ParserState.Text;
-      var charactersAccumulator = [Character]();
+      var machineState = ParserState.Text
+      var charactersAccumulator = [Character]()
       
       func getParameterValues() throws -> [String:AnyObject] {
         do {
@@ -158,66 +158,66 @@ Available markers are :
       }
     }
     
-    private var parserStatus = ParserStatus();
-    private var parsedClosuresSequence = [FormattingClosure]();
+    private var parserStatus = ParserStatus()
+    private var parsedClosuresSequence = [FormattingClosure]()
     
     // Converts a textual pattern into a sequence of closure that can be executed to render a messaage.
     private func parsePattern(pattern: String) throws -> [FormattingClosure] {
-      parsedClosuresSequence = [FormattingClosure]();
+      parsedClosuresSequence = [FormattingClosure]()
       
       for currentCharacter in pattern.characters
       {
         switch(parserStatus.machineState) {
         case .Text where currentCharacter == "%":
-          try setParserState(.Marker);
+          try setParserState(.Marker)
         case .Text:
-          parserStatus.charactersAccumulator.append(currentCharacter);
+          parserStatus.charactersAccumulator.append(currentCharacter)
           
         case .Marker:
-          try setParserState(.PostMarker(String(currentCharacter)));
+          try setParserState(.PostMarker(String(currentCharacter)))
           
         case .PostMarker(let markerName) where currentCharacter == "{":
-          try setParserState(.Parameters(markerName));
+          try setParserState(.Parameters(markerName))
         case .PostMarker:
-          try setParserState(.Text);
-          parserStatus.charactersAccumulator.append(currentCharacter);
+          try setParserState(.Text)
+          parserStatus.charactersAccumulator.append(currentCharacter)
           
         case .Parameters where currentCharacter == "}":
-          try setParserState(.Text);
+          try setParserState(.Text)
         case .Parameters:
-          parserStatus.charactersAccumulator.append(currentCharacter);
+          parserStatus.charactersAccumulator.append(currentCharacter)
         case .End:
-          throw Error.InvalidFormatSyntax;
+          throw Error.InvalidFormatSyntax
         }
       }
-      try setParserState(.End);
+      try setParserState(.End)
       
-      return parsedClosuresSequence;
+      return parsedClosuresSequence
     }
     
     private func setParserState(newState: ParserState) throws {
       switch(parserStatus.machineState) {
       case .Text where parserStatus.charactersAccumulator.count > 0:
-        let parsedString = String(parserStatus.charactersAccumulator);
+        let parsedString = String(parserStatus.charactersAccumulator)
         if(!parsedString.isEmpty) {
-          parsedClosuresSequence.append({(_, _ ) in return parsedString});
-          parserStatus.charactersAccumulator.removeAll();
+          parsedClosuresSequence.append({(_, _ ) in return parsedString})
+          parserStatus.charactersAccumulator.removeAll()
         }
       case .PostMarker(let markerName):
         switch(newState) {
         case .Text, .End:
-          parserStatus.charactersAccumulator.removeAll();
-          processMarker(markerName);
+          parserStatus.charactersAccumulator.removeAll()
+          processMarker(markerName)
         case .Parameters:
-          break;
+          break
         default:
-          break;
+          break
         }
         
       case .Parameters(let markerName):
         switch(newState) {
         case .End:
-          throw Error.NotClosedMarkerParameter;
+          throw Error.NotClosedMarkerParameter
         default:
           do {
             try processMarker(markerName, parameters: parserStatus.getParameterValues())
@@ -226,19 +226,19 @@ Available markers are :
             throw Error.InvalidFormatSyntax
           }
 
-          parserStatus.charactersAccumulator.removeAll();
+          parserStatus.charactersAccumulator.removeAll()
         }
       default:
-        break;
+        break
       }
-      parserStatus.machineState = newState;
+      parserStatus.machineState = newState
     }
     
     private func processMarker(markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = markerClosures[markerName] {
-        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) });
+        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) })
       } else {
-        parserStatus.charactersAccumulator += "%\(markerName)".characters;
+        parserStatus.charactersAccumulator += "%\(markerName)".characters
       }
     }
   }
@@ -247,7 +247,7 @@ Available markers are :
 
 /// Processes common parameters such as 'padding'.
 /// - parameter value: The string value
-/// - parameter parameters: Dictionary of formatting key/values;
+/// - parameter parameters: Dictionary of formatting key/values
 ///
 /// - returns: The processed value
 func processCommonParameters(value: CustomStringConvertible, parameters: [String:AnyObject]) -> String

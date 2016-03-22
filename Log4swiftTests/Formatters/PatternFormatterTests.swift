@@ -35,458 +35,458 @@ class PatternFormatterTests: XCTestCase {
   
   func testDefaultPatternForFormatterReturnsTheUnmodifiedMessage() {
     // Execute
-    let formatter = PatternFormatter("identifier");
+    let formatter = PatternFormatter("identifier")
     
-    let message = "test message";
-    XCTAssertEqual(formatter.format(message, info: LogInfoDictionary()), message);
+    let message = "test message"
+    XCTAssertEqual(formatter.format(message, info: LogInfoDictionary()), message)
   }
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
-    XCTAssertThrows { let _ = try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") };
+    XCTAssertThrows { let _ = try PatternFormatter(identifier:"testFormatter", pattern: "%d{ blablabla") }
   }
   
   func testFormatterAppliesLogLevelMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%l");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%l")
 
     // Execute
-    let formattedMessage = formatter.format("", info: [LogInfoKeys.LogLevel: LogLevel.Error]);
+    let formattedMessage = formatter.format("", info: [LogInfoKeys.LogLevel: LogLevel.Error])
     
     // validate
-    XCTAssertEqual(formattedMessage, LogLevel.Error.description);
+    XCTAssertEqual(formattedMessage, LogLevel.Error.description)
   }
 
   func testFormatterAppliesLogLevelMarkerWithPadding() {
-	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"10\"}][%n] %m");
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"10\"}][%n] %m")
 	let info: LogInfoDictionary = [
 		LogInfoKeys.LoggerName: "nameOfTheLogger",
 		LogInfoKeys.LogLevel: LogLevel.Warning
-	];
+	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info);
+	let formattedMessage = formatter.format("Log message", info: info)
 	
 	// Validate
-	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)   ][nameOfTheLogger] Log message");
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)   ][nameOfTheLogger] Log message")
   }
   
   func testFormatterAppliesLogLevelMarkerWithNegativePadding() {
-	  let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"-10\"}][%n] %m");
+	  let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"-10\"}][%n] %m")
 	  let info: LogInfoDictionary = [
 		  LogInfoKeys.LoggerName: "nameOfTheLogger",
 		  LogInfoKeys.LogLevel: LogLevel.Warning
-	  ];
+	  ]
 	  
 	  // Execute
-	  let formattedMessage = formatter.format("Log message", info: info);
+	  let formattedMessage = formatter.format("Log message", info: info)
 	  
 	  // Validate
-	  XCTAssertEqual(formattedMessage, "[   \(LogLevel.Warning)][nameOfTheLogger] Log message");
+	  XCTAssertEqual(formattedMessage, "[   \(LogLevel.Warning)][nameOfTheLogger] Log message")
   }
 
   func testFormatterAppliesLogLevelMarkerWithZeroPadding() {
-	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"0\"}][%n] %m");
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l{\"padding\":\"0\"}][%n] %m")
 	let info: LogInfoDictionary = [
 		LogInfoKeys.LoggerName: "nameOfTheLogger",
 		LogInfoKeys.LogLevel: LogLevel.Warning
-	];
+	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info);
+	let formattedMessage = formatter.format("Log message", info: info)
 	
 	// Validate
-	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message");
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message")
   }
 	
   func testFormatterAppliesLoggerNameMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n");
-    let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "loggername"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n")
+    let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "loggername"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
 
     // Validate
-    XCTAssertEqual(formattedMessage, "loggername");
+    XCTAssertEqual(formattedMessage, "loggername")
   }
   
   func testFormatterAppliesLoggerNameWithPadding() {
-	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"10\"}] %m");
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"10\"}] %m")
 	let info: LogInfoDictionary = [
 		LogInfoKeys.LoggerName: "name",
 		LogInfoKeys.LogLevel: LogLevel.Warning
-	];
+	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info);
+	let formattedMessage = formatter.format("Log message", info: info)
 	
 	// Validate
-	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name      ] Log message");
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name      ] Log message")
   }
   
   func testFormatterAppliesLoggerNameWithNegativePadding() {
-	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"-10\"}] %m");
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"-10\"}] %m")
 	let info: LogInfoDictionary = [
 		LogInfoKeys.LoggerName: "name",
 		LogInfoKeys.LogLevel: LogLevel.Warning
-	];
+	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info);
+	let formattedMessage = formatter.format("Log message", info: info)
 	
 	// Validate
-	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][      name] Log message");
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][      name] Log message")
   }
   
   func testFormatterAppliesLoggerNameWithZeroPadding() {
-	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"0\"}] %m");
+	let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n{\"padding\":\"0\"}] %m")
 	let info: LogInfoDictionary = [
 		LogInfoKeys.LoggerName: "name",
 		LogInfoKeys.LogLevel: LogLevel.Warning
-	];
+	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info);
+	let formattedMessage = formatter.format("Log message", info: info)
 	
 	// Validate
-	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name] Log message");
+	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name] Log message")
   }
 
   func testFormatterAppliesDateMarkerWithDefaultFormatIfNoneIsSpecified() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d");
-    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
   func testFormatterAppliesDateMarkerWithFormat() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{\"format\":\"%D %T\"}");
-    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{\"format\":\"%D %T\"}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'19', 'format':'%D %T'}");
-    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'19', 'format':'%D %T'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersNegativePadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'-19', 'format':'%D %R'}");
-    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'-19', 'format':'%D %R'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
   func testFormatterAppliesDateMarkerWithFormatAndCommonParametersZeroPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%D %R'}");
-    let info: LogInfoDictionary = [.Timestamp: 123456789.0];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%D %R'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions());
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)));
-    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid");
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
   
   func testCurrentTimeIsUsedByFormatterIfTimeIsNotAvailableInInfo() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%s'}");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'padding':'0', 'format':'%s'}")
+    let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    let expectedTimestamp = NSDate().timeIntervalSince1970;
+    let expectedTimestamp = NSDate().timeIntervalSince1970
     if let loggedMessageTime = NSTimeInterval(formattedMessage) {
-      XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0);
+      XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
     } else {
-      XCTAssertTrue(false, "Could not read logged time");
+      XCTAssertTrue(false, "Could not read logged time")
     }
   }
 
   func testMarkerParametersAreInterpreted() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{'padding':'0'}");
-    let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{'padding':'0'}")
+    let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test \(LogLevel.Debug)");
+    XCTAssertEqual(formattedMessage, "test \(LogLevel.Debug)")
   }
   
   func testFormatterAppliesFileNameMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "testFileName"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "testFileName"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test testFileName");
+    XCTAssertEqual(formattedMessage, "test testFileName")
   }
   
   func testFormatterAppliesFileNameMarkerWithCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345     ");
+    XCTAssertEqual(formattedMessage, "test 12345     ")
   }
   
   func testFormatterAppliesFileNameMarkerWithCommonParametersNegativePadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'-10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'-10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test      12345");
+    XCTAssertEqual(formattedMessage, "test      12345")
   }
   
   func testFormatterAppliesFileNameMarkerWithCommonParametersZeroPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'0'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %F{'padding':'0'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345");
+    XCTAssertEqual(formattedMessage, "test 12345")
   }
   
   func testFormatterAppliesShortFileNameMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/testFileName.txt"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/testFileName.txt"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test testFileName.txt");
+    XCTAssertEqual(formattedMessage, "test testFileName.txt")
   }
   
   func testFormatterAppliesShortFileNameMarkerWithCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345     ");
+    XCTAssertEqual(formattedMessage, "test 12345     ")
   }
   
   func testFormatterAppliesShortFileNameMarkerWithCommonParametersNegativePadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'-10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'-10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test      12345");
+    XCTAssertEqual(formattedMessage, "test      12345")
   }
   
   func testFormatterAppliesShortFileNameMarkerWithCommonParametersZeroPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'0'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %f{'padding':'0'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345");
+    XCTAssertEqual(formattedMessage, "test 12345")
   }
   
   func testFormatterAppliesFileLineMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L");
-    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L")
+    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 42");
+    XCTAssertEqual(formattedMessage, "test 42")
   }
   
   func testFormatterAppliesFileLineMarkerWithCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'5'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'5'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 42   ");
+    XCTAssertEqual(formattedMessage, "test 42   ")
   }
   
   func testFormatterAppliesFileLineMarkerWithCommonParametersNegativePadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'-5'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'-5'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test    42");
+    XCTAssertEqual(formattedMessage, "test    42")
   }
   
   func testFormatterAppliesFileLineMarkerWithCommonParametersZeroPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'0'}");
-    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %L{'padding':'0'}")
+    let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test 42");
+    XCTAssertEqual(formattedMessage, "test 42")
   }
 
   func testFormatterAppliesFunctionMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M");
-    let info: LogInfoDictionary = [LogInfoKeys.Function: "testFunction"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M")
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "testFunction"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test testFunction");
+    XCTAssertEqual(formattedMessage, "test testFunction")
   }
 
   func testFormatterAppliesFunctionMarkerWithCommonParametersPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345     ");
+    XCTAssertEqual(formattedMessage, "test 12345     ")
   }
 
   func testFormatterAppliesFunctionMarkerWithCommonParametersNegativePadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'-10'}");
-    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'-10'}")
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test      12345");
+    XCTAssertEqual(formattedMessage, "test      12345")
   }
 
   func testFormatterAppliesFunctionMarkerWithCommonParametersZeroPadding() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'0'}");
-    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"];
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %M{'padding':'0'}")
+    let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test 12345");
+    XCTAssertEqual(formattedMessage, "test 12345")
   }
 
   func testFormatterAppliesPercentageMarker() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%")
+    let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "test %");
+    XCTAssertEqual(formattedMessage, "test %")
   }
   
   func testFormatterDoesNotReplaceUnknownMarkers() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%x %y %z are unknown markers");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%x %y %z are unknown markers")
+    let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info);
+    let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "%x %y %z are unknown markers");
+    XCTAssertEqual(formattedMessage, "%x %y %z are unknown markers")
   }
   
   func testFormatterWithComplexFormatting() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n] %m")
     let info: LogInfoDictionary = [
       LogInfoKeys.LoggerName: "nameOfTheLogger",
       LogInfoKeys.LogLevel: LogLevel.Warning
-    ];
+    ]
     
     // Execute
-    let formattedMessage = formatter.format("Log message", info: info);
+    let formattedMessage = formatter.format("Log message", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message");
+    XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message")
   }
   
   func testFormatterReturnsDashIfDataUnavailableForMarkers() {
-    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n][%F][%f][%L][%M] %m");
-    let info = LogInfoDictionary();
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "[%l][%n][%F][%f][%L][%M] %m")
+    let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("Log message", info: info);
+    let formattedMessage = formatter.format("Log message", info: info)
     
     // Validate
-    XCTAssertEqual(formattedMessage, "[-][-][-][-][-][-] Log message");
+    XCTAssertEqual(formattedMessage, "[-][-][-][-][-][-] Log message")
   }
 
   func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>();
-    let formatter = PatternFormatter("testFormatter");
+    let dictionary = Dictionary<String, AnyObject>()
+    let formatter = PatternFormatter("testFormatter")
     
-    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) };
+    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) }
   }
 
   func testUpdatingFormatterFromDictionaryWithInvalidPatternThrowsError() {
-    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"];
-    let formatter = PatternFormatter("testFormatter");
+    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"]
+    let formatter = PatternFormatter("testFormatter")
     
-    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) };
+    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) }
   }
   
   func testUpdatingFormatterFromDictionaryWithValidParametersCreatesFormatter() {
-    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"];
-    let formatter = PatternFormatter("testFormatter");
+    let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"]
+    let formatter = PatternFormatter("testFormatter")
 
-    XCTAssertNoThrow { try formatter.updateWithDictionary(dictionary); };
+    XCTAssertNoThrow { try formatter.updateWithDictionary(dictionary); }
 
-    let formattedMessage = formatter.format("", info: LogInfoDictionary());
-    XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!);
+    let formattedMessage = formatter.format("", info: LogInfoDictionary())
+    XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!)
   }
 }

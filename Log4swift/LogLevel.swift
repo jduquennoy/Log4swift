@@ -41,21 +41,21 @@ Trace < Debug < Info < Warning < Error < Fatal < Off
   public init?(_ stringValue: String) {
     switch(stringValue.lowercaseString) {
     case LogLevel.Trace.description.lowercaseString:
-      self = .Trace;
+      self = .Trace
     case LogLevel.Debug.description.lowercaseString:
-      self = .Debug;
+      self = .Debug
     case LogLevel.Info.description.lowercaseString:
-      self = .Info;
+      self = .Info
     case LogLevel.Warning.description.lowercaseString:
-      self = .Warning;
+      self = .Warning
     case LogLevel.Error.description.lowercaseString:
-      self = .Error;
+      self = .Error
     case LogLevel.Fatal.description.lowercaseString:
-      self = .Fatal;
+      self = .Fatal
     case LogLevel.Off.description.lowercaseString:
-      self = .Off;
+      self = .Off
     default:
-      return nil;
+      return nil
     }
   }
   
@@ -64,19 +64,19 @@ Trace < Debug < Info < Warning < Error < Fatal < Off
     get {
       switch(self) {
       case .Trace:
-        return "Trace";
+        return "Trace"
       case .Debug:
-        return "Debug";
+        return "Debug"
       case .Info:
-        return "Info";
+        return "Info"
       case .Warning:
-        return "Warning";
+        return "Warning"
       case .Error:
-        return "Error";
+        return "Error"
       case .Fatal:
-        return "Fatal";
+        return "Fatal"
       case .Off:
-        return "Off";
+        return "Off"
       }
     }
   }

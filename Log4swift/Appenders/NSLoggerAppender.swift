@@ -32,7 +32,7 @@ public class NSLoggerAppender : Appender {
     case RemotePort = "RemotePort"
   }
 
-  let logger: UnsafeMutablePointer<NSLogger>;
+  let logger: UnsafeMutablePointer<NSLogger>
   
   /// This initializer will configure the NSLogger client to send the messages to a specific host, with a specific port.
   /// Parameters are :
@@ -41,8 +41,8 @@ public class NSLoggerAppender : Appender {
   /// * useLocalCache : keep messages in memory as long as the remote viewer is not reachable Default value is true.
   /// * useSSL: as you can expect, the client will initiate an SSL connection. Default value is true.
   public convenience init(identifier: String, remoteHost: String = "127.0.0.1", remotePort: UInt32 = 50000, useLocalCache: Bool = true, useSSL: Bool = true) {
-    self.init(identifier);
-    setupTcpLogger(remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL);
+    self.init(identifier)
+    setupTcpLogger(remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL)
   }
   
   /// This initializer will configure the NSLogger client to send the message to a Bonjour service provider.
@@ -50,117 +50,117 @@ public class NSLoggerAppender : Appender {
   /// * useLocalCache : keep messages in memory as long as the remote viewer is not reachable Default value is true.
   /// * useSSL: as you can expect, the client will initiate an SSL connection. Default value is true.
   public convenience init(identifier: String, bonjourServiceName: String, useLocalCache: Bool = true, useSSL: Bool = true) {
-    self.init(identifier);
-    setupBonjourLogger(bonjourServiceName, useLocalCache: useLocalCache, useSSL: useSSL);
+    self.init(identifier)
+    setupBonjourLogger(bonjourServiceName, useLocalCache: useLocalCache, useSSL: useSSL)
   }
 
   public required init(_ identifier: String) {
-    self.logger = LoggerInit();
-    super.init(identifier);
+    self.logger = LoggerInit()
+    super.init(identifier)
   }
 
   public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
     
-    let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil);
+    let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil)
 
-    let useLocalCache: Bool;
-    let useSSL: Bool;
+    let useLocalCache: Bool
+    let useSSL: Bool
 
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
     
     if let safeUseLocalCache = (dictionary[DictionaryKey.UseLocalCache.rawValue] as? String) {
-      useLocalCache = Bool(safeUseLocalCache);
+      useLocalCache = Bool(safeUseLocalCache)
     } else {
-      useLocalCache = true;
+      useLocalCache = true
     }
     
     if let safeUseSSLString = (dictionary[DictionaryKey.UseSSL.rawValue] as? String) {
-      useSSL = Bool(safeUseSSLString);
+      useSSL = Bool(safeUseSSLString)
     } else {
-      useSSL = true;
+      useSSL = true
     }
     
     if(bonjourMode) {
-      let serviceName: String;
+      let serviceName: String
 
       if let safeServiceName = (dictionary[DictionaryKey.BonjourServiceName.rawValue] as? String) {
-        serviceName = safeServiceName;
+        serviceName = safeServiceName
       } else {
         throw NSError.Log4swiftErrorWithDescription("Missing 'BonjourServiceName' parameter for NSLogger appender '\(self.identifier)'")
       }
 
-      setupBonjourLogger(serviceName, useLocalCache: useLocalCache, useSSL: useSSL);
+      setupBonjourLogger(serviceName, useLocalCache: useLocalCache, useSSL: useSSL)
     } else {
-      let remoteHost: String;
-      let remotePort: UInt32;
+      let remoteHost: String
+      let remotePort: UInt32
 
       if let safeRemoteHost = (dictionary[DictionaryKey.RemoteHost.rawValue] as? String) {
-        remoteHost = safeRemoteHost;
+        remoteHost = safeRemoteHost
       } else {
-        remoteHost = "placeholder";
-        throw NSError.Log4swiftErrorWithDescription("Missing 'RemoteHost' parameter for NSLogger appender '\(self.identifier)'");
+        remoteHost = "placeholder"
+        throw NSError.Log4swiftErrorWithDescription("Missing 'RemoteHost' parameter for NSLogger appender '\(self.identifier)'")
       }
 
       if let safeRemotePort = dictionary[DictionaryKey.RemotePort.rawValue] as? Int {
-        remotePort = UInt32(safeRemotePort);
+        remotePort = UInt32(safeRemotePort)
       } else if let safeRemotePortString = (dictionary[DictionaryKey.RemotePort.rawValue] as? String) {
         if let safeRemotePort = UInt32(safeRemotePortString) {
-          remotePort = safeRemotePort;
+          remotePort = safeRemotePort
         } else {
-          remotePort = 0;
-          throw NSError.Log4swiftErrorWithDescription("Non numeric string 'RemotePort' parameter for NSLogger appender '\(self.identifier)'");
+          remotePort = 0
+          throw NSError.Log4swiftErrorWithDescription("Non numeric string 'RemotePort' parameter for NSLogger appender '\(self.identifier)'")
         }
       } else {
-        remotePort = 50000;
+        remotePort = 50000
       }
       if(remotePort < 1024 || remotePort > 65535) {
-        throw NSError.Log4swiftErrorWithDescription("RemotePort should be between 1024 and 65535 for NSLogger appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("RemotePort should be between 1024 and 65535 for NSLogger appender '\(self.identifier)'")
       }
       
-      setupTcpLogger(remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL);
+      setupTcpLogger(remoteHost, remotePort: remotePort, useLocalCache: useLocalCache, useSSL: useSSL)
     }
   }
   
   deinit {
-    LoggerStop(self.logger);
+    LoggerStop(self.logger)
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    var loggerId = "";
+    var loggerId = ""
     if let safeLoggerId = info[LogInfoKeys.LoggerName] {
-      loggerId = safeLoggerId.description;
+      loggerId = safeLoggerId.description
     }
-    LogMessageRawToF(self.logger, nil, 0, nil, loggerId, Int32(level.rawValue), log);
+    LogMessageRawToF(self.logger, nil, 0, nil, loggerId, Int32(level.rawValue), log)
   }
   
   private func setupBonjourLogger(bonjourServiceName: String, useLocalCache: Bool, useSSL: Bool) {
-    var options = UInt32(kLoggerOption_BrowseBonjour);
+    var options = UInt32(kLoggerOption_BrowseBonjour)
     if(useLocalCache) {
-      options |= UInt32(kLoggerOption_BufferLogsUntilConnection);
+      options |= UInt32(kLoggerOption_BufferLogsUntilConnection)
     }
     if(useSSL) {
-      options |= UInt32(kLoggerOption_UseSSL);
+      options |= UInt32(kLoggerOption_UseSSL)
     }
-    LoggerSetOptions(self.logger, options);
+    LoggerSetOptions(self.logger, options)
     
-    LoggerSetupBonjour(self.logger, nil, bonjourServiceName);
+    LoggerSetupBonjour(self.logger, nil, bonjourServiceName)
 
-    LoggerStart(self.logger);
+    LoggerStart(self.logger)
 }
   
   private func setupTcpLogger(remoteHost: String, remotePort: UInt32, useLocalCache: Bool, useSSL: Bool) {
-    var options = UInt32(0);
+    var options = UInt32(0)
     if(useLocalCache) {
-      options |= UInt32(kLoggerOption_BufferLogsUntilConnection);
+      options |= UInt32(kLoggerOption_BufferLogsUntilConnection)
     }
     if(useSSL) {
-      options |= UInt32(kLoggerOption_UseSSL);
+      options |= UInt32(kLoggerOption_UseSSL)
     }
-    LoggerSetOptions(self.logger, options);
+    LoggerSetOptions(self.logger, options)
     
-    LoggerSetViewerHost(self.logger, remoteHost, remotePort);
+    LoggerSetViewerHost(self.logger, remoteHost, remotePort)
     
-    LoggerStart(self.logger);
+    LoggerStart(self.logger)
   }
 }

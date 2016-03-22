@@ -11,73 +11,73 @@ import XCTest
 class String_utilitiesTest: XCTestCase {
 
   func testRemovingLastComponentWitDelimiterRemovesLastComponent() {
-    let exempleString = "This is a string";
+    let exempleString = "This is a string"
     
     // Execute
-    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(" ");
+    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(" ")
     
     // Validate
-    XCTAssertEqual(truncatedString, "This is a");
+    XCTAssertEqual(truncatedString, "This is a")
   }
   
   func testRemovingLastComponentWitDelimiterReturnsEmptyStringIfDelimiterIsNotFound() {
-    let exempleString = "This is a string";
+    let exempleString = "This is a string"
     
     // Execute
-    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(",");
+    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(",")
     
     // Validate
-    XCTAssertEqual(truncatedString, "");
+    XCTAssertEqual(truncatedString, "")
   }
   
   func testPadToWidthTruncatesEndOfStringIfWidthIsSmallerThanStringLength() {
-    let exempleString = "1234567890";
+    let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(5);
+    let truncatedString = exempleString.padToWidth(5)
     
     // Validate
-    XCTAssertEqual(truncatedString, "12345");
+    XCTAssertEqual(truncatedString, "12345")
   }
   
   func testPadToWidthTruncatesBeginingOfStringIfWidthIsSmallerThanStringLengthAndNegative() {
-    let exempleString = "1234567890";
+    let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(-5);
+    let truncatedString = exempleString.padToWidth(-5)
     
     // Validate
-    XCTAssertEqual(truncatedString, "67890");
+    XCTAssertEqual(truncatedString, "67890")
   }
   
   func testPadToWidthFillsWithTrailingSpacesIfWidthIsBiggerThanStringLength() {
-    let exempleString = "1234567890";
+    let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(12);
+    let truncatedString = exempleString.padToWidth(12)
     
     // Validate
-    XCTAssertEqual(truncatedString, "1234567890  ");
+    XCTAssertEqual(truncatedString, "1234567890  ")
   }
   
   func testPadToWidthFillsWithLeadingSpacesIfWidthIsBiggerThanStringLengthAndNegative() {
-    let exempleString = "1234567890";
+    let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(-12);
+    let truncatedString = exempleString.padToWidth(-12)
     
     // Validate
-    XCTAssertEqual(truncatedString, "  1234567890");
+    XCTAssertEqual(truncatedString, "  1234567890")
   }
   
   func testPadWithZeroWidthReturnsOriginalString() {
-    let exempleString = "1234567890";
+    let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(0);
+    let truncatedString = exempleString.padToWidth(0)
     
     // Validate
-    XCTAssertEqual(truncatedString, "1234567890");
+    XCTAssertEqual(truncatedString, "1234567890")
   }
 
   func testToDictionaryWithValidPatterns() {
@@ -87,30 +87,30 @@ class String_utilitiesTest: XCTestCase {
     dict = try! "{\"padding\":\"-57\", \"case\": \"upper\"}".toDictionary()
     
     // Validate
-    XCTAssertEqual(dict.keys.count, 2);
-    XCTAssertEqual(dict["padding"] as! String?, "-57");
-    XCTAssertEqual(dict["case"] as! String?, "upper");
-    XCTAssertEqual(dict["missing"] as! String?, nil);
+    XCTAssertEqual(dict.keys.count, 2)
+    XCTAssertEqual(dict["padding"] as! String?, "-57")
+    XCTAssertEqual(dict["case"] as! String?, "upper")
+    XCTAssertEqual(dict["missing"] as! String?, nil)
     
     
     // Execute
     dict = try! "{'padding':'-57', 'case': 'upper'}".toDictionary()
     
     // Validate
-    XCTAssertEqual(dict.keys.count, 2);
-    XCTAssertEqual(dict["padding"] as! String?, "-57");
-    XCTAssertEqual(dict["case"] as! String?, "upper");
-    XCTAssertEqual(dict["missing"] as! String?, nil);
+    XCTAssertEqual(dict.keys.count, 2)
+    XCTAssertEqual(dict["padding"] as! String?, "-57")
+    XCTAssertEqual(dict["case"] as! String?, "upper")
+    XCTAssertEqual(dict["missing"] as! String?, nil)
 
   
     // Execute
     dict = try! "{\"padding\":'-57', 'case': \"upper\"}".toDictionary()
     
     // Validate
-    XCTAssertEqual(dict.keys.count, 2);
-    XCTAssertEqual(dict["padding"] as! String?, "-57");
-    XCTAssertEqual(dict["case"] as! String?, "upper");
-    XCTAssertEqual(dict["missing"] as! String?, nil);
+    XCTAssertEqual(dict.keys.count, 2)
+    XCTAssertEqual(dict["padding"] as! String?, "-57")
+    XCTAssertEqual(dict["case"] as! String?, "upper")
+    XCTAssertEqual(dict["missing"] as! String?, nil)
   }
 
   func testToDictionaryWithInvalidPatterns() {
@@ -123,8 +123,8 @@ class String_utilitiesTest: XCTestCase {
   }
 
   func testFormatLongStringWithPercentCharsButNoArguments() {
-    let appender = MemoryAppender();
-    appender.thresholdLevel = .Debug;
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Debug
     let pattern = "This is a string \"with\" special %characters including escapes : %x %2C %d %s %2C %s %2C"
     var logString = ""
     
