@@ -413,7 +413,7 @@ class StdOutAppenderTests: XCTestCase {
     }
   }
   
-  func testBackgroundColorSetForInfoLevelIsAppliedWithResetAfterLogForOtherTTY() {
+  func testBackgroundColorSetForInfoLevelIsNotAppliedForOtherTTY() {
     setenv("XcodeColors", "", 1);
     setenv("TERM", "xterm", 1);
     
@@ -445,7 +445,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n");
+      XCTAssertEqual(stdoutContent, "log value\n", "stdoutContent is '\(stdoutContent)'");
     }
   }
   
