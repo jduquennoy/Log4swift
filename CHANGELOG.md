@@ -1,6 +1,6 @@
 # Log4swift versions changelog
 
-## 1.0b5 (not yet released)
+## 1.0b5 (2016-03-22)
 
 ### General changes
 - Code base updated to remove use of features deprecated as of swift 2.2
