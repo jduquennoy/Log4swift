@@ -24,35 +24,35 @@ import Log4swift
 class LogLevelTests: XCTestCase {
 
   func testLogLevelFromStringConvertsInvalidValuesToNil() {
-    let parsedLevel = LogLevel("value that does not exist");
+    let parsedLevel = LogLevel("value that does not exist")
     
-    XCTAssertTrue(parsedLevel == nil);
+    XCTAssertTrue(parsedLevel == nil)
   }
   
   func testLogLevelFromStringIsCaseInsensitive() {
-    let parsedLevel1 = LogLevel("debug");
-    let parsedLevel2 = LogLevel("DEBUg");
+    let parsedLevel1 = LogLevel("debug")
+    let parsedLevel2 = LogLevel("DEBUg")
     
-    XCTAssertEqual(parsedLevel1!, LogLevel.Debug);
-    XCTAssertEqual(parsedLevel2!, LogLevel.Debug);
+    XCTAssertEqual(parsedLevel1!, LogLevel.Debug)
+    XCTAssertEqual(parsedLevel2!, LogLevel.Debug)
   }
   
   func testLogLevelFromStringCanConvertAllLogLevels() {
-    let parsedTrace = LogLevel("trace");
-    let parsedDebug = LogLevel("debug");
-    let parsedInfo = LogLevel("info");
-    let parsedWarning = LogLevel("warning");
-    let parsedError = LogLevel("error");
-    let parsedFatal = LogLevel("fatal");
-    let parsedOff = LogLevel("oFf");
+    let parsedTrace = LogLevel("trace")
+    let parsedDebug = LogLevel("debug")
+    let parsedInfo = LogLevel("info")
+    let parsedWarning = LogLevel("warning")
+    let parsedError = LogLevel("error")
+    let parsedFatal = LogLevel("fatal")
+    let parsedOff = LogLevel("oFf")
 
-    XCTAssertEqual(parsedTrace!, LogLevel.Trace);
-    XCTAssertEqual(parsedDebug!, LogLevel.Debug);
-    XCTAssertEqual(parsedInfo!, LogLevel.Info);
-    XCTAssertEqual(parsedWarning!, LogLevel.Warning);
-    XCTAssertEqual(parsedError!, LogLevel.Error);
-    XCTAssertEqual(parsedFatal!, LogLevel.Fatal);
-    XCTAssertEqual(parsedOff!, LogLevel.Off);
+    XCTAssertEqual(parsedTrace!, LogLevel.Trace)
+    XCTAssertEqual(parsedDebug!, LogLevel.Debug)
+    XCTAssertEqual(parsedInfo!, LogLevel.Info)
+    XCTAssertEqual(parsedWarning!, LogLevel.Warning)
+    XCTAssertEqual(parsedError!, LogLevel.Error)
+    XCTAssertEqual(parsedFatal!, LogLevel.Fatal)
+    XCTAssertEqual(parsedOff!, LogLevel.Off)
   }
   
 }

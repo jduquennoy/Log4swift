@@ -1,6 +1,9 @@
 # Log4swift versions changelog
 
-## 1.0 (not yet released)
+## 1.0b5 (2016-03-22)
+
+### General changes
+- Code base updated to remove use of features deprecated as of swift 2.2
 
 ### Appenders enhancements
 - TTY type for coloration can be forced if auto-detection does not work. This can be useful when debugging a module that will be loaded by another application (such as sytem extensions).

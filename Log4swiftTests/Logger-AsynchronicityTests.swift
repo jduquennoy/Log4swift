@@ -12,69 +12,69 @@ import XCTest
 class LoggerAsynchronicityTests: XCTestCase {
   
   override func setUp() {
-    super.setUp();
-    LoggerFactory.sharedInstance.resetConfiguration();
+    super.setUp()
+    LoggerFactory.sharedInstance.resetConfiguration()
   }
   
   override func tearDown() {
-    super.tearDown();
+    super.tearDown()
   }  
 
   func testLoggerIsSynchronousByDefault() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
     
-    XCTAssertFalse(rootLogger.asynchronous);
+    XCTAssertFalse(rootLogger.asynchronous)
   }
   
   func testResetConfigurationSetsLoggerSynchronous() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    rootLogger.asynchronous = true;
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
+    rootLogger.asynchronous = true
     
     // Execute
     rootLogger.resetConfiguration()
     
     // Validate
-    XCTAssertFalse(rootLogger.asynchronous);
+    XCTAssertFalse(rootLogger.asynchronous)
   }
   
   /// This test logs three message to an appender that takes 0.1 second to execute.
   /// It then counts the number of logged messages as soon as possible.
   /// If the logger is synchronous, the three logs should already be recorded.
   func testSynchronousLoggerLogsMessagesSynchronously() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    let slowAppender = MemoryAppender();
-    slowAppender.loggingDelay = 0.1;
-    rootLogger.asynchronous = false;
-    rootLogger.appenders = [slowAppender];
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
+    let slowAppender = MemoryAppender()
+    slowAppender.loggingDelay = 0.1
+    rootLogger.asynchronous = false
+    rootLogger.appenders = [slowAppender]
     
     // execute
-    rootLogger.error("log1");
-    rootLogger.error("log2");
-    rootLogger.error("log3");
+    rootLogger.error("log1")
+    rootLogger.error("log2")
+    rootLogger.error("log3")
     
     // Validate
-    let loggedMessagesCount = slowAppender.logMessages.count;
-    XCTAssertEqual(loggedMessagesCount, 3, "Logged messages were not recorded synchronously (3 messages sent, \(loggedMessagesCount) recorded");
+    let loggedMessagesCount = slowAppender.logMessages.count
+    XCTAssertEqual(loggedMessagesCount, 3, "Logged messages were not recorded synchronously (3 messages sent, \(loggedMessagesCount) recorded")
   }
   
   /// This test logs three message to an appender that takes 0.1 second to execute.
   /// It then counts the number of logged messages as soon as possible.
   /// If the logger is synchronous, the three logs should already be recorded.
   func testSynchronousLoggerLogsBlocsSynchronously() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    let slowAppender = MemoryAppender();
-    slowAppender.loggingDelay = 0.1;
-    rootLogger.asynchronous = false;
-    rootLogger.appenders = [slowAppender];
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
+    let slowAppender = MemoryAppender()
+    slowAppender.loggingDelay = 0.1
+    rootLogger.asynchronous = false
+    rootLogger.appenders = [slowAppender]
     
     // execute
-    rootLogger.error{"log1"};
-    rootLogger.error{"log2"};
-    rootLogger.error{"log3"};
+    rootLogger.error{"log1"}
+    rootLogger.error{"log2"}
+    rootLogger.error{"log3"}
     
     // Validate
-    let loggedMessagesCount = slowAppender.logMessages.count;
-    XCTAssertEqual(loggedMessagesCount, 3, "Logged messages were not recorded synchronously (3 messages sent, \(loggedMessagesCount) recorded");
+    let loggedMessagesCount = slowAppender.logMessages.count
+    XCTAssertEqual(loggedMessagesCount, 3, "Logged messages were not recorded synchronously (3 messages sent, \(loggedMessagesCount) recorded")
   }
 
   /// This test logs three message to an appender that takes 0.1 second to execute.
@@ -83,24 +83,24 @@ class LoggerAsynchronicityTests: XCTestCase {
   /// If the logger is synchronous, no message should have been logged right after,
   /// 3 should have been after the delay.
   func testAsynchronousLoggerLogsMessagesAsynchronously() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    let slowAppender = MemoryAppender();
-    slowAppender.loggingDelay = 0.1;
-    rootLogger.asynchronous = true;
-    rootLogger.appenders = [slowAppender];
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
+    let slowAppender = MemoryAppender()
+    slowAppender.loggingDelay = 0.1
+    rootLogger.asynchronous = true
+    rootLogger.appenders = [slowAppender]
     
     // execute
-    rootLogger.error("log1");
-    rootLogger.error("log2");
-    rootLogger.error("log3");
+    rootLogger.error("log1")
+    rootLogger.error("log2")
+    rootLogger.error("log3")
 
-    let immediateLoggedMessagesCount = slowAppender.logMessages.count;
-    self.waitUntilTrue{slowAppender.logMessages.count == 3};
-    let delayedLoggedMessagesCount = slowAppender.logMessages.count;
+    let immediateLoggedMessagesCount = slowAppender.logMessages.count
+    self.waitUntilTrue{slowAppender.logMessages.count == 3}
+    let delayedLoggedMessagesCount = slowAppender.logMessages.count
 
     // Validate
-    XCTAssertEqual(immediateLoggedMessagesCount, 0, "Some messages were not logged asynchronously");
-    XCTAssertEqual(delayedLoggedMessagesCount, 3, "Some messages were not logged after");
+    XCTAssertEqual(immediateLoggedMessagesCount, 0, "Some messages were not logged asynchronously")
+    XCTAssertEqual(delayedLoggedMessagesCount, 3, "Some messages were not logged after")
   }
 
   /// This test logs three message to an appender that takes 0.1 second to execute.
@@ -109,66 +109,66 @@ class LoggerAsynchronicityTests: XCTestCase {
   /// If the logger is synchronous, no message should have been logged right after,
   /// 3 should have been after the delay.
   func testAsynchronousLoggerLogsBlocsAsynchronously() {
-    let rootLogger = LoggerFactory.sharedInstance.rootLogger;
-    let slowAppender = MemoryAppender();
-    slowAppender.loggingDelay = 0.1;
-    rootLogger.asynchronous = true;
-    rootLogger.appenders = [slowAppender];
+    let rootLogger = LoggerFactory.sharedInstance.rootLogger
+    let slowAppender = MemoryAppender()
+    slowAppender.loggingDelay = 0.1
+    rootLogger.asynchronous = true
+    rootLogger.appenders = [slowAppender]
     
     // execute
-    rootLogger.error{"log1"};
-    rootLogger.error{"log2"};
-    rootLogger.error{"log3"};
+    rootLogger.error{"log1"}
+    rootLogger.error{"log2"}
+    rootLogger.error{"log3"}
     
-    let immediateLoggedMessagesCount = slowAppender.logMessages.count;
-    self.waitUntilTrue{slowAppender.logMessages.count == 3};
-    let delayedLoggedMessagesCount = slowAppender.logMessages.count;
+    let immediateLoggedMessagesCount = slowAppender.logMessages.count
+    self.waitUntilTrue{slowAppender.logMessages.count == 3}
+    let delayedLoggedMessagesCount = slowAppender.logMessages.count
         
     // Validate
-    XCTAssertEqual(immediateLoggedMessagesCount, 0, "Some messages were not logged asynchronously");
-    XCTAssertEqual(delayedLoggedMessagesCount, 3, "Some messages were not logged after delay");
+    XCTAssertEqual(immediateLoggedMessagesCount, 0, "Some messages were not logged asynchronously")
+    XCTAssertEqual(delayedLoggedMessagesCount, 3, "Some messages were not logged after delay")
   }
   
   func testMessagesSentToAsynchronousLoggersAreOrdered() {
-    let logger1 = LoggerFactory.sharedInstance.getLogger("logger1");
-    logger1.asynchronous = true;
-    let logger2 = LoggerFactory.sharedInstance.getLogger("logger2");
-    logger2.asynchronous = true;
+    let logger1 = LoggerFactory.sharedInstance.getLogger("logger1")
+    logger1.asynchronous = true
+    let logger2 = LoggerFactory.sharedInstance.getLogger("logger2")
+    logger2.asynchronous = true
 
-    let slowAppender = MemoryAppender();
-    logger1.appenders = [slowAppender];
-    logger2.appenders = [slowAppender];
+    let slowAppender = MemoryAppender()
+    logger1.appenders = [slowAppender]
+    logger2.appenders = [slowAppender]
     
     // Execute
-    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "1"; };
-    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "2"; };
-    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "3"; };
-    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "4"; };
+    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "1"; }
+    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "2"; }
+    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "3"; }
+    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "4"; }
     
-    self.waitUntilTrue{slowAppender.logMessages.count == 4};
+    self.waitUntilTrue{slowAppender.logMessages.count == 4}
     
     // Validate
     let expectedOrderedMessages: [LoggedMessage] = [
       ("1", .Info),
       ("2", .Info),
       ("3", .Info),
-      ("4", .Info)];
+      ("4", .Info)]
     
-    XCTAssertEqual(slowAppender.logMessages.count, expectedOrderedMessages.count, "All messages were not logged");
+    XCTAssertEqual(slowAppender.logMessages.count, expectedOrderedMessages.count, "All messages were not logged")
     for index in 0...expectedOrderedMessages.count - 1 {
-      XCTAssertTrue(slowAppender.logMessages[index] == expectedOrderedMessages[index], "Order of logged messages is not correct");
+      XCTAssertTrue(slowAppender.logMessages[index] == expectedOrderedMessages[index], "Order of logged messages is not correct")
     }
   }
   
   //MARK: private methods
   
   private func waitUntilTrue(conditionClosure: () -> Bool) {
-    let timeout = 5.0;
+    let timeout = 5.0
     let loopDelay = 0.1
-    var loopCounter = 0;
+    var loopCounter = 0
     while(conditionClosure() == false && timeout > (loopDelay * Double(loopCounter))) {
-      NSThread.sleepForTimeInterval(loopDelay);
-      loopCounter += 1;
+      NSThread.sleepForTimeInterval(loopDelay)
+      loopCounter += 1
     }
   }
 }

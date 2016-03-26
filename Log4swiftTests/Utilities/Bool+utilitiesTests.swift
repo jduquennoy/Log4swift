@@ -24,21 +24,21 @@ import Log4swift
 class BoolUtilitiesTests: XCTestCase {
 
   func testBoolParsesYesOrTrueAsTrueCaseInsensitively() {
-    XCTAssertTrue(Bool("yes"));
-    XCTAssertTrue(Bool("YES"));
-    XCTAssertTrue(Bool("true"));
-    XCTAssertTrue(Bool("TruE"));
+    XCTAssertTrue(Bool("yes"))
+    XCTAssertTrue(Bool("YES"))
+    XCTAssertTrue(Bool("true"))
+    XCTAssertTrue(Bool("TruE"))
   }
   
   func testBoolParsesNoOrFalseAsFalseCaseInsensitively() {
-    XCTAssertFalse(Bool("no"));
-    XCTAssertFalse(Bool("nO"));
-    XCTAssertFalse(Bool("false"));
-    XCTAssertFalse(Bool("fALse"));
+    XCTAssertFalse(Bool("no"))
+    XCTAssertFalse(Bool("nO"))
+    XCTAssertFalse(Bool("false"))
+    XCTAssertFalse(Bool("fALse"))
   }
   
   func testBoolParsesNilStringAsFalse() {
-    XCTAssertFalse(Bool(nil as String?));
+    XCTAssertFalse(Bool(nil as String?))
   }
   
 }

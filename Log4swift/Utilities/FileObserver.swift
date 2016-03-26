@@ -12,7 +12,7 @@ import Foundation
 This protocol should be implemented to register as a delegate of a FileObserver object.
 */
 public protocol FileObserverDelegate {
-  func fileChanged(atPath: String);
+  func fileChanged(atPath: String)
 }
 
 /**
@@ -21,52 +21,53 @@ It does not use FSEvent, to keep the complexity low while being compatible with 
 It only observes a single file, which will make the cost of pooling for changes very low.
 */
 public class FileObserver {
-  public var delegate: FileObserverDelegate?;
-  public let filePath: String;
-  public let poolInterval: NSTimeInterval;
-  private var lastModificationTime = timespec(tv_sec: 0, tv_nsec: 0);
+  public var delegate: FileObserverDelegate?
+  public let filePath: String
+  public let poolInterval: NSTimeInterval
+  private var lastModificationTime = timespec(tv_sec: 0, tv_nsec: 0)
   
   init(filePath: String, poolInterval: NSTimeInterval = 2.0) {
-    self.filePath = filePath;
-    self.poolInterval = poolInterval;
-    self.lastModificationTime = self.getFileModificationDate();
-    self.scheduleNextPooling();
+    self.filePath = filePath
+    self.poolInterval = poolInterval
+    self.lastModificationTime = self.getFileModificationDate()
+    self.scheduleNextPooling()
   }
   
   private func getFileModificationDate() -> timespec {
-    var fileStat = stat();
-    let statResult = stat(filePath, &fileStat);
+    var fileStat = stat()
+    let statResult = stat(filePath, &fileStat)
     
-    var modificationTimestamp = timespec(tv_sec: 0, tv_nsec: 0);
+    var modificationTimestamp = timespec(tv_sec: 0, tv_nsec: 0)
     if statResult == 0 {
-      modificationTimestamp = fileStat.st_mtimespec;
+      modificationTimestamp = fileStat.st_mtimespec
     }
     
-    return modificationTimestamp;
+    return modificationTimestamp
   }
   
   func poolForChange() {
-    let modificationDate = self.getFileModificationDate();
+    let modificationDate = self.getFileModificationDate()
     if modificationDate > self.lastModificationTime {
-      delegate?.fileChanged(self.filePath);
+      delegate?.fileChanged(self.filePath)
+      self.lastModificationTime = modificationDate
     }
-    self.scheduleNextPooling();
+    self.scheduleNextPooling()
   }
   
   private func scheduleNextPooling() {
-    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(Float(self.poolInterval) * Float(NSEC_PER_SEC)));
+    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(Float(self.poolInterval) * Float(NSEC_PER_SEC)))
     dispatch_after(time, dispatch_get_main_queue(), { [weak self] in
-      self?.poolForChange();
-    });
+      self?.poolForChange()
+    })
   }
 }
 
 private func >(left: timespec, right: timespec) -> Bool {
   if left.tv_sec > right.tv_sec {
-    return true;
+    return true
   } else if left.tv_sec == right.tv_sec && left.tv_nsec > right.tv_nsec {
-    return true;
+    return true
   }
   
-  return false;
+  return false
 }

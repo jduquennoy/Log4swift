@@ -23,13 +23,13 @@ This protocol defines a formatter, that will format log messages on the fly.
 */
 public protocol Formatter {
   /// A string identifier that should uniquely identify a formatter.
-  var identifier: String { get };
+  var identifier: String { get }
   
-  init (_ identifier: String);
+  init (_ identifier: String)
   
-  func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws;
+  func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws
   
   /// Formats the given message, using the provided info dictionary.
   /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.
-  func format(message: String, info: LogInfoDictionary) -> String;
+  func format(message: String, info: LogInfoDictionary) -> String
 }

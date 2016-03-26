@@ -22,18 +22,24 @@ extension String {
   /// Return a new string by removing everything after the last occurence of the provided marker and including the marker.  
   /// If the marker is not found, an empty string is returned.
   public func stringByRemovingLastComponentWithDelimiter(delimiter: String) -> String {
-    let markerIndex = self.rangeOfString(delimiter, options: NSStringCompareOptions.BackwardsSearch, range: nil);
-    let result: String;
+    let markerIndex = self.rangeOfString(delimiter, options: NSStringCompareOptions.BackwardsSearch, range: nil)
+    let result: String
     if let markerIndex = markerIndex {
-      result = self.substringToIndex(markerIndex.startIndex);
+      result = self.substringToIndex(markerIndex.startIndex)
     } else {
-      result = "";
+      result = ""
     }
-    return result;
+    return result
   }
 
-  public func format(args: CVaListPointer) -> String {
-    return NSString(format: self, arguments: args) as String
+  public func format(args: [CVarArgType]) -> String {
+    guard args.count > 0 else {
+      return self
+    }
+    
+    return withVaList(args) { (argsListPointer) in
+      NSString(format: self, arguments: argsListPointer) as String
+    }
   }
 
 
@@ -54,7 +60,7 @@ extension String {
     
     if str.length > abs(width) {
       if width < 0 {
-        let offset = str.length - abs(width);
+        let offset = str.length - abs(width)
         str = str.substringWithRange(NSRange(location:offset, length:abs(width)))
       } else {
         str = str.substringWithRange(NSRange(location:0, length:abs(width)))

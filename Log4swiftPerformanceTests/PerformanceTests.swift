@@ -27,71 +27,71 @@ class PerformanceTests: XCTestCase {
     // This is an example of a performance test case.
     self.measureBlock() {
       for _ in 0...5000 {
-        NSLog("This is a simple log");
+        NSLog("This is a simple log")
       }
     }
   }
   
   func testConsoleLoggerWithFormatterPerformanceTest() {
-    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m");
-    let stdOutAppender = StdOutAppender("appender");
-    stdOutAppender.errorThresholdLevel = .Debug;
-    stdOutAppender.formatter = formatter;
-    let logger = Logger(identifier: "");
-    logger.appenders = [stdOutAppender];
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m")
+    let stdOutAppender = StdOutAppender("appender")
+    stdOutAppender.errorThresholdLevel = .Debug
+    stdOutAppender.formatter = formatter
+    let logger = Logger(identifier: "")
+    logger.appenders = [stdOutAppender]
     
     // This is an example of a performance test case.
     self.measureBlock() {
       for _ in 0...5000 {
-        logger.error("This is a simple log");
+        logger.error("This is a simple log")
       }
     }
   }
   
   func testAsyncConsoleLoggerWithFormatterPerformanceTest() {
-    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m");
-    let stdOutAppender = StdOutAppender("appender");
-    stdOutAppender.errorThresholdLevel = .Debug;
-    stdOutAppender.formatter = formatter;
-    let logger = Logger(identifier: "");
-    logger.appenders = [stdOutAppender];
-    logger.asynchronous = true;
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d{'format':'%D %R'} %m")
+    let stdOutAppender = StdOutAppender("appender")
+    stdOutAppender.errorThresholdLevel = .Debug
+    stdOutAppender.formatter = formatter
+    let logger = Logger(identifier: "")
+    logger.appenders = [stdOutAppender]
+    logger.asynchronous = true
     
     // This is an example of a performance test case.
     self.measureBlock() {
       for _ in 0...5000 {
-        logger.error("This is a simple log");
+        logger.error("This is a simple log")
       }
     }
   }
   
   func testFileLoggerWithFormatterPerformanceTest() {
-    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d %m");
-    let tempFilePath = try! self.createTemporaryFilePath("log");
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath);
-    fileAppender.formatter = formatter;
-    let logger = Logger(identifier: "");
-    logger.appenders = [fileAppender];
+    let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d %m")
+    let tempFilePath = try! self.createTemporaryFilePath("log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath)
+    fileAppender.formatter = formatter
+    let logger = Logger(identifier: "")
+    logger.appenders = [fileAppender]
     
     // This is an example of a performance test case.
     self.measureBlock() {
       for _ in 0...5000 {
-        logger.error("This is a simple log");
+        logger.error("This is a simple log")
       }
     }
 
-    unlink((tempFilePath as NSString).fileSystemRepresentation);
+    unlink((tempFilePath as NSString).fileSystemRepresentation)
   }
   
   func testASLLoggerWithFormatterPerformanceTest() {
-    let aslAppender = ASLAppender("appender");
-    let logger = Logger(identifier: "");
-    logger.appenders = [aslAppender];
+    let aslAppender = ASLAppender("appender")
+    let logger = Logger(identifier: "")
+    logger.appenders = [aslAppender]
     
     // This is an example of a performance test case.
     self.measureBlock() {
       for _ in 0...5000 {
-        logger.error("This is a perf test log");
+        logger.error("This is a perf test log")
       }
     }
   }
@@ -100,24 +100,24 @@ class PerformanceTests: XCTestCase {
   
   func testGetLoggerForSamedIdentifierPerformance() {
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
     self.measureBlock() {
       for _ in 1...10000 {
-        self.factory.getLogger("test.identifier");
+        self.factory.getLogger("test.identifier")
       }
     }
   }
   
   func testGetLoggerForDifferentIdentifierPerformance() {
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]));
+      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
     self.measureBlock() {
       for index in 1...10000 {
-        self.factory.getLogger("test.identifier.\(index)");
+        self.factory.getLogger("test.identifier.\(index)")
       }
     }
   }

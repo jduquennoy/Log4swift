@@ -21,33 +21,33 @@
 import Foundation
 @testable import Log4swift
 
-typealias LoggedMessage = (message: String, level: LogLevel);
+typealias LoggedMessage = (message: String, level: LogLevel)
 
 /**
  This test appender will store logs in memory for latter validation.
  It can also add a delay when logging messages.
 */
 class MemoryAppender: Appender {
-  var loggingDelay: NSTimeInterval? = nil;
-  var logMessages = [LoggedMessage]();
+  var loggingDelay: NSTimeInterval? = nil
+  var logMessages = [LoggedMessage]()
   
   init() {
-    super.init("test.memoryAppender");
+    super.init("test.memoryAppender")
   }
 
   required init(_ identifier: String) {
-    super.init(identifier);
+    super.init(identifier)
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
     if let loggingDelay = self.loggingDelay {
-      NSThread.sleepForTimeInterval(loggingDelay);
+      NSThread.sleepForTimeInterval(loggingDelay)
     }
-    logMessages.append((message: log, level: level));
+    logMessages.append((message: log, level: level))
   }
   
 }
 
 func ==(left: LoggedMessage, right: LoggedMessage) -> Bool {
-  return (left.message == right.message) && (left.level == right.level);
+  return (left.message == right.message) && (left.level == right.level)
 }

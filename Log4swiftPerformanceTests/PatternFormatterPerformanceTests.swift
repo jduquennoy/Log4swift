@@ -12,15 +12,15 @@ import Log4swift
 class PatternFormatterPerformanceTests: XCTestCase {
   
   func testFormatterPerformance() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m");
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m")
     let info: LogInfoDictionary = [
       LogInfoKeys.LoggerName: "nameOfTheLogger",
       LogInfoKeys.LogLevel: LogLevel.Info
-    ];
+    ]
     
     self.measureBlock() {
       for _ in 1...1000 {
-        formatter.format("Log message", info: info);
+        formatter.format("Log message", info: info)
       }
     }
   }

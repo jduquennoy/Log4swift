@@ -29,7 +29,7 @@ public class StdOutAppender: Appender {
     case TextColors = "TextColors"
     case BackgroundColors = "BackgroundColors"
     case ForcedTTYType = "ForcedTTYType"
-  };
+  }
   
   public enum TTYType {
     /// Xcode with XcodeColors plugin
@@ -41,9 +41,9 @@ public class StdOutAppender: Appender {
 
     init(_ name: String) {
       switch(name.lowercaseString) {
-      case "xterm" : self = .XtermColor;
-      case "xcodecolors" : self = .XcodeColors;
-      default: self = .Other;
+      case "xterm" : self = .XtermColor
+      case "xcodecolors" : self = .XcodeColors
+      default: self = .Other
       }
     }
   }
@@ -51,82 +51,82 @@ public class StdOutAppender: Appender {
   /// ttyType will determine what color codes should be used if colors are enabled.
   /// This is supposed to be automatically detected when creating the logger.
   /// Change that only if you need to override the automatic detection.
-  public var ttyType: TTYType;
-  public var errorThresholdLevel: LogLevel? = .Error;
-  internal private(set) var textColors = [LogLevel: TTYColor]();
-  internal private(set) var backgroundColors = [LogLevel: TTYColor]();
+  public var ttyType: TTYType
+  public var errorThresholdLevel: LogLevel? = .Error
+  internal private(set) var textColors = [LogLevel: TTYColor]()
+  internal private(set) var backgroundColors = [LogLevel: TTYColor]()
   
   public required init(_ identifier: String) {
-    let xcodeColors = NSProcessInfo().environment["XcodeColors"];
-    let terminalType = NSProcessInfo().environment["TERM"];
+    let xcodeColors = NSProcessInfo().environment["XcodeColors"]
+    let terminalType = NSProcessInfo().environment["TERM"]
     switch (xcodeColors, terminalType) {
     case (.Some("YES"), _):
-      self.ttyType = .XcodeColors;
+      self.ttyType = .XcodeColors
     case (_, .Some("xterm-256color")):
-      self.ttyType = .XtermColor;
+      self.ttyType = .XtermColor
     default:
       self.ttyType = .Other
     }
     
-    super.init(identifier);
+    super.init(identifier)
   }
   
   public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
     
     if let errorThresholdString = (dictionary[DictionaryKey.ErrorThreshold.rawValue] as? String) {
       if let errorThreshold = LogLevel(errorThresholdString) {
-        errorThresholdLevel = errorThreshold;
+        errorThresholdLevel = errorThreshold
       } else {
-        throw NSError.Log4swiftErrorWithDescription("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'");
+        throw NSError.Log4swiftErrorWithDescription("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'")
       }
     } else {
-      errorThresholdLevel = nil;
+      errorThresholdLevel = nil
     }
     
     if let textColors = (dictionary[DictionaryKey.TextColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in textColors {
         guard let level = LogLevel(levelName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         guard let color = TTYColor(colorName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
 
-        self.textColors[level] = color;
+        self.textColors[level] = color
       }
     }
 
     if let backgroundColors = (dictionary[DictionaryKey.BackgroundColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in backgroundColors {
         guard let level = LogLevel(levelName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         guard let color = TTYColor(colorName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'");
+          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         
-        self.backgroundColors[level] = color;
+        self.backgroundColors[level] = color
       }
     }
     
     if let forcedTtyType = (dictionary[DictionaryKey.ForcedTTYType.rawValue] as? String) {
-      self.ttyType = TTYType(forcedTtyType);
+      self.ttyType = TTYType(forcedTtyType)
     }
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    var destinationFile = stdout;
+    var destinationFile = stdout
     
     if let errorThresholdLevel = self.errorThresholdLevel {
       if(level.rawValue >= errorThresholdLevel.rawValue) {
-        destinationFile  = stderr;
+        destinationFile  = stderr
       }
     }
     
-    let finalLogString = self.colorizeLog(log, level: level) + "\n";
-    fputs(finalLogString, destinationFile);
+    let finalLogString = self.colorizeLog(log, level: level) + "\n"
+    fputs(finalLogString, destinationFile)
   }
   
 }
@@ -160,159 +160,159 @@ extension StdOutAppender {
     
     init?(_ name: String) {
       switch(name.lowercaseString) {
-      case "black" : self = .Black;
-      case "darkgrey" : self = .DarkGrey;
-      case "grey" : self = .Grey;
-      case "lightgrey" : self = .LightGrey;
-      case "white" : self = .White;
-      case "lightred" : self = .LightRed;
-      case "red" : self = .Red;
-      case "darkred" : self = .DarkRed;
-      case "lightgreen" : self = .LightGreen;
-      case "green" : self = .Green;
-      case "darkgreen" : self = .DarkGreen;
-      case "lightblue" : self = .LightBlue;
-      case "blue" : self = .Blue;
-      case "darkblue" : self = .DarkBlue;
-      case "lightyellow" : self = .LightYellow;
-      case "yellow" : self = .Yellow;
-      case "darkyellow" : self = .DarkYellow;
-      case "lightpurple" : self = .LightPurple;
-      case "purple" : self = .Purple;
-      case "darkpurple" : self = .DarkPurple;
-      case "lightorange" : self = .LightOrange;
-      case "orange" : self = .Orange;
-      case "darkorange" : self = .DarkOrange;
-      default: return nil;
+      case "black" : self = .Black
+      case "darkgrey" : self = .DarkGrey
+      case "grey" : self = .Grey
+      case "lightgrey" : self = .LightGrey
+      case "white" : self = .White
+      case "lightred" : self = .LightRed
+      case "red" : self = .Red
+      case "darkred" : self = .DarkRed
+      case "lightgreen" : self = .LightGreen
+      case "green" : self = .Green
+      case "darkgreen" : self = .DarkGreen
+      case "lightblue" : self = .LightBlue
+      case "blue" : self = .Blue
+      case "darkblue" : self = .DarkBlue
+      case "lightyellow" : self = .LightYellow
+      case "yellow" : self = .Yellow
+      case "darkyellow" : self = .DarkYellow
+      case "lightpurple" : self = .LightPurple
+      case "purple" : self = .Purple
+      case "darkpurple" : self = .DarkPurple
+      case "lightorange" : self = .LightOrange
+      case "orange" : self = .Orange
+      case "darkorange" : self = .DarkOrange
+      default: return nil
       }
     }
     
     private func xtermCode() -> Int {
       switch(self) {
-      case Black : return 0;
-      case DarkGrey : return 238;
-      case Grey : return 241;
-      case LightGrey : return 251;
-      case White : return 15;
-      case LightRed : return 199;
-      case Red : return 9;
-      case DarkRed : return 1;
-      case LightGreen : return 46;
-      case Green : return 2;
-      case DarkGreen : return 22;
-      case LightBlue : return 45;
-      case Blue : return 21;
-      case DarkBlue : return 18;
-      case LightYellow : return 228;
-      case Yellow : return 11;
-      case DarkYellow : return 3;
-      case Purple : return 93;
-      case LightPurple : return 135;
-      case DarkPurple : return 55;
-      case LightOrange: return 215;
-      case Orange: return 208;
-      case DarkOrange: return 166;
+      case Black : return 0
+      case DarkGrey : return 238
+      case Grey : return 241
+      case LightGrey : return 251
+      case White : return 15
+      case LightRed : return 199
+      case Red : return 9
+      case DarkRed : return 1
+      case LightGreen : return 46
+      case Green : return 2
+      case DarkGreen : return 22
+      case LightBlue : return 45
+      case Blue : return 21
+      case DarkBlue : return 18
+      case LightYellow : return 228
+      case Yellow : return 11
+      case DarkYellow : return 3
+      case Purple : return 93
+      case LightPurple : return 135
+      case DarkPurple : return 55
+      case LightOrange: return 215
+      case Orange: return 208
+      case DarkOrange: return 166
       }
     }
     
     private func xcodeCode() -> String {
       switch(self) {
-      case Black : return "0,0,0";
-      case DarkGrey : return "68,68,68";
-      case Grey : return "98,98,98";
-      case LightGrey : return "200,200,200";
-      case White : return "255,255,255";
-      case LightRed : return "255,37,174";
-      case Red : return "255,0,0";
-      case DarkRed : return "201,14,19";
-      case LightGreen : return "57,255,42";
-      case Green : return "0,255,0";
-      case DarkGreen : return "18,94,11";
-      case LightBlue : return "47,216,255";
-      case Blue : return "0,0,255";
-      case DarkBlue : return "0,18,133";
-      case LightYellow : return "255,255,143";
-      case Yellow : return "255,255,56";
-      case DarkYellow : return "206,203,43";
-      case Purple : return "131,46,252";
-      case LightPurple : return "172,105,252";
-      case DarkPurple : return "92,28,173";
-      case LightOrange: return "255,176,95";
-      case Orange: return "255,135,0";
-      case DarkOrange: return "216,96,0";
+      case Black : return "0,0,0"
+      case DarkGrey : return "68,68,68"
+      case Grey : return "98,98,98"
+      case LightGrey : return "200,200,200"
+      case White : return "255,255,255"
+      case LightRed : return "255,37,174"
+      case Red : return "255,0,0"
+      case DarkRed : return "201,14,19"
+      case LightGreen : return "57,255,42"
+      case Green : return "0,255,0"
+      case DarkGreen : return "18,94,11"
+      case LightBlue : return "47,216,255"
+      case Blue : return "0,0,255"
+      case DarkBlue : return "0,18,133"
+      case LightYellow : return "255,255,143"
+      case Yellow : return "255,255,56"
+      case DarkYellow : return "206,203,43"
+      case Purple : return "131,46,252"
+      case LightPurple : return "172,105,252"
+      case DarkPurple : return "92,28,173"
+      case LightOrange: return "255,176,95"
+      case Orange: return "255,135,0"
+      case DarkOrange: return "216,96,0"
       }
     }
     
     private func codeForTTYType(type: TTYType) -> String {
       switch(type) {
-      case .XtermColor: return String(self.xtermCode());
-      case .XcodeColors: return self.xcodeCode();
-      case .Other: return "";
+      case .XtermColor: return String(self.xtermCode())
+      case .XcodeColors: return self.xcodeCode()
+      case .Other: return ""
       }
     }
-  };
+  }
   
   private var textColorPrefix: String {
     switch(self.ttyType) {
-    case .XcodeColors: return "\u{1B}[fg";
-    case .XtermColor: return "\u{1B}[38;5;";
-    case .Other: return "";
+    case .XcodeColors: return "\u{1B}[fg"
+    case .XtermColor: return "\u{1B}[38;5;"
+    case .Other: return ""
     }
   }
   
   private var backgroundColorPrefix: String {
     switch(self.ttyType) {
-    case .XcodeColors: return "\u{1B}[bg";
-    case .XtermColor: return "\u{1B}[48;5;";
-    case .Other: return "";
+    case .XcodeColors: return "\u{1B}[bg"
+    case .XtermColor: return "\u{1B}[48;5;"
+    case .Other: return ""
     }
   }
   
   private var colorSuffix: String {
     switch(self.ttyType) {
-    case .XcodeColors: return ";";
-    case .XtermColor: return "m";
-    case .Other: return "";
+    case .XcodeColors: return ";"
+    case .XtermColor: return "m"
+    case .Other: return ""
     }
   }
   
   private var resetColorSequence: String {
     switch(self.ttyType) {
-    case .XcodeColors: return "\u{1B}[;";
-    case .XtermColor: return "\u{1B}[0m";
-    case .Other: return "";
+    case .XcodeColors: return "\u{1B}[;"
+    case .XtermColor: return "\u{1B}[0m"
+    case .Other: return ""
     }
   }
   
   private func colorizeLog(log: String, level: LogLevel) ->  String {
-    var shouldResetColors = false;
-    var colorizedLog = "";
+    var shouldResetColors = false
+    var colorizedLog = ""
     
     if let textColor = self.textColors[level] {
-      shouldResetColors = true;
-      colorizedLog += self.textColorPrefix + textColor.codeForTTYType(self.ttyType) + self.colorSuffix;
+      shouldResetColors = true
+      colorizedLog += self.textColorPrefix + textColor.codeForTTYType(self.ttyType) + self.colorSuffix
     }
     if let backgroundColor = self.backgroundColors[level] {
-      shouldResetColors = true;
-      colorizedLog += self.backgroundColorPrefix + backgroundColor.codeForTTYType(self.ttyType) + self.colorSuffix;
+      shouldResetColors = true
+      colorizedLog += self.backgroundColorPrefix + backgroundColor.codeForTTYType(self.ttyType) + self.colorSuffix
     }
 
-    colorizedLog += log;
+    colorizedLog += log
     
     if(shouldResetColors) {
-      colorizedLog += self.resetColorSequence;
+      colorizedLog += self.resetColorSequence
     }
     
-    return colorizedLog;
+    return colorizedLog
   }
   
   /// :param: color The color to set, or nil to set no color
   /// :param: level The log level to which the provided color applies
   public func setTextColor(color: TTYColor?, level: LogLevel) {
     if let color = color {
-      self.textColors[level] = color;
+      self.textColors[level] = color
     } else {
-      self.textColors.removeValueForKey(level);
+      self.textColors.removeValueForKey(level)
     }
   }
 
@@ -320,9 +320,9 @@ extension StdOutAppender {
   /// :param: level The log level to which the provided color applies
   public func setBackgroundColor(color: TTYColor?, level: LogLevel) {
     if let color = color {
-      self.backgroundColors[level] = color;
+      self.backgroundColors[level] = color
     } else {
-      self.backgroundColors.removeValueForKey(level);
+      self.backgroundColors.removeValueForKey(level)
     }
   }
 

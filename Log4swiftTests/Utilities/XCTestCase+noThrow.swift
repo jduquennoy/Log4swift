@@ -22,22 +22,22 @@ import XCTest
 
 extension XCTestCase {
 
-  func XCTAssertThrows(file: String = __FILE__, line: UInt = __LINE__, _ closure:() throws -> Void) {
+  func XCTAssertThrows(file: StaticString = #file, line: UInt = #line, _ closure:() throws -> Void) {
     do {
-      try closure();
-      XCTFail("Closure did not throw an error", file: file, line: line);
+      try closure()
+      XCTFail("Closure did not throw an error", file: file, line: line)
     } catch {
       // expected, nothing to do
     }
   }
   
-  func XCTAssertNoThrow<T>(file: String = __FILE__, line: UInt = __LINE__, _ closure:() throws -> T) -> T? {
+  func XCTAssertNoThrow<T>(file: StaticString = #file, line: UInt = #line, _ closure:() throws -> T) -> T? {
     do {
-      return try closure();
+      return try closure()
     } catch let error {
-      XCTFail("Closure throw unexpected error \(error)", file: file, line: line);
+      XCTFail("Closure throw unexpected error \(error)", file: file, line: line)
     }
-    return nil;
+    return nil
   }
   
 }

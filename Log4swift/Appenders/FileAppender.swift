@@ -27,72 +27,73 @@ If file does not exist, it will be created on the first log, or re-created if de
 public class FileAppender : Appender {
   public enum DictionaryKey: String {
     case FilePath = "FilePath"
-  };
+  }
   
   internal var filePath : String {
     didSet {
       if let safeHandler = self.fileHandler {
-        safeHandler.closeFile();
-        self.fileHandler = nil;
+        safeHandler.closeFile()
+        self.fileHandler = nil
       }
-      self.filePath = (self.filePath as NSString).stringByExpandingTildeInPath;
-      didLogFailure = false;
+      self.filePath = (self.filePath as NSString).stringByExpandingTildeInPath
+      didLogFailure = false
     }
-  };
-  private var fileHandler: NSFileHandle?;
-  private var didLogFailure = false;
+  }
+  private var fileHandler: NSFileHandle?
+  private var didLogFailure = false
 
   public init(identifier: String, filePath: String) {
-    self.fileHandler = nil;
-    self.filePath = (filePath as NSString).stringByExpandingTildeInPath;
+    self.fileHandler = nil
+    self.filePath = (filePath as NSString).stringByExpandingTildeInPath
 
-    super.init(identifier);
+    super.init(identifier)
   }
 
   public required convenience init(_ identifier: String) {
-    self.init(identifier: identifier, filePath: "/dev/null");
+    self.init(identifier: identifier, filePath: "/dev/null")
   }
   
   public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters);
+    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
     
     if let safeFilePath = (dictionary[DictionaryKey.FilePath.rawValue] as? String) {
-      self.filePath = safeFilePath;
+      self.filePath = safeFilePath
     } else {
-      self.filePath = "placeholder";
-      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'");
+      self.filePath = "placeholder"
+      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'")
     }
   }
   
-  override func performLog(var log: String, level: LogLevel, info: LogInfoDictionary) {
+  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
     if(self.fileHandler == nil || !NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
       do {
-        try self.openFileHandleForPath(self.filePath);
-        didLogFailure = false;
+        try self.openFileHandleForPath(self.filePath)
+        didLogFailure = false
       } catch (let error) {
         if(!didLogFailure) {
           NSLog("Appender \(self.identifier) failed to open log file \(self.filePath) : \(error)")
-          didLogFailure = true;
+          didLogFailure = true
         }
       }
     }
     
-    if(!log.hasSuffix("\n")) {
-      log = "\(log)\n";
+    var normalizedLog = log
+    if(!normalizedLog.hasSuffix("\n")) {
+      normalizedLog = normalizedLog + "\n"
     }
-    if let dataToLog = log.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
-      fileHandler?.writeData(dataToLog);
+    if let dataToLog = normalizedLog.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
+      fileHandler?.writeData(dataToLog)
     }
   }
   
   private func openFileHandleForPath(filePath: String) throws {
-    let fileManager = NSFileManager.defaultManager();
-    let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent;
-    try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil);
+    let fileManager = NSFileManager.defaultManager()
+    let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent
+    try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
     
-    fileManager.createFileAtPath(filePath, contents: nil, attributes: nil);
-    fileHandler = NSFileHandle(forWritingAtPath: filePath);
-    fileHandler?.seekToEndOfFile();
+    fileManager.createFileAtPath(filePath, contents: nil, attributes: nil)
+    fileHandler = NSFileHandle(forWritingAtPath: filePath)
+    fileHandler?.seekToEndOfFile()
   }
 }
 

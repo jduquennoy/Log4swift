@@ -33,4 +33,4 @@ public enum LogInfoKeys {
 /**
 The definition of the type used to attach meta informations to log messages
 */
-public typealias LogInfoDictionary = Dictionary<LogInfoKeys, CustomStringConvertible>;
+public typealias LogInfoDictionary = Dictionary<LogInfoKeys, CustomStringConvertible>
