@@ -30,10 +30,12 @@ Available markers are :
 * l{'padding': 'padding value'} : The name of the log level.
 * n{'padding': 'padding value'} : The name of the logger.
 * d{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of the strftime function.
+* D{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of NSDateFormatter.dateFormat (see also http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
 * L{'padding': 'padding value'} : the number of the line where the log was issued
 * F{'padding': 'padding value'} : the name of the file where the log was issued
 * f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
 * M{'padding': 'padding value'} : the name of the function in which the log was issued
+* t{'padding': 'padding value'} : the id of the current thread as hexadecimal
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
@@ -104,6 +106,17 @@ Available markers are :
 
         return processCommonParameters(result, parameters: parameters)
       },
+      "D": {(parameters, message, info) in
+        let result: String
+        let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
+        let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+        let date = NSDate(timeIntervalSince1970: timestamp)
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = format
+        result = dateFormatter.stringFromDate(date)
+        
+        return processCommonParameters(result, parameters: parameters)
+      },
       "l": {(parameters, message, info) in
         let logLevel = info[.LogLevel] ?? "-"
         return processCommonParameters(logLevel, parameters: parameters)
@@ -130,6 +143,10 @@ Available markers are :
       },
       "m": {(parameters, message, info) in
         processCommonParameters(message as String, parameters: parameters)
+      },
+      "t": {(parameters, message, info) in
+        let tid = String(GetThreadID(pthread_self()), radix: 16, uppercase: false)
+        return processCommonParameters("\(tid)", parameters: parameters)
       },
       "%": {(parameters, message, info) in "%" }
     ]

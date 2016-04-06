@@ -40,6 +40,8 @@
 		02F4E8701B3A0454004AB9EA /* LoggerCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8711B3A0454004AB9EA /* NSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86D1B3A0454004AB9EA /* NSLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
+		2828FA621CB40AD2001CDCCF /* CHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 2828FA601CB40AD2001CDCCF /* CHelper.c */; };
+		2828FA631CB40AD2001CDCCF /* CHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 2828FA601CB40AD2001CDCCF /* CHelper.c */; };
 		5E06D56C1B987F5700273AC7 /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 02664C0D1B2CE96500B695DE /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
@@ -142,6 +144,7 @@
 		02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerCommon.h; sourceTree = "<group>"; };
 		02F4E86D1B3A0454004AB9EA /* NSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogger.h; sourceTree = "<group>"; };
 		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
+		2828FA601CB40AD2001CDCCF /* CHelper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CHelper.c; path = "Log4swift/Objective-c wrappers/CHelper.c"; sourceTree = "<group>"; };
 		5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterPerformanceTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
@@ -405,6 +408,7 @@
 			children = (
 				5EFEFA951B69388800A28A53 /* ASLWrapper.h */,
 				5EFEFA961B69388800A28A53 /* ASLWrapper.m */,
+				2828FA601CB40AD2001CDCCF /* CHelper.c */,
 			);
 			name = "Objective-c wrappers";
 			path = ..;
@@ -613,6 +617,7 @@
 				5EFEFA981B69388800A28A53 /* ASLWrapper.m in Sources */,
 				5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */,
 				026A43811B4DCF2700997862 /* LogInformation.swift in Sources */,
+				2828FA621CB40AD2001CDCCF /* CHelper.c in Sources */,
 				0241A2D81C32ACD400A624CF /* FileObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -677,6 +682,7 @@
 				5E3E720D1B7A186700EEE46B /* Bool+utilities.swift in Sources */,
 				5E3E720E1B7A186700EEE46B /* Array+utilities.swift in Sources */,
 				5E3E720F1B7A186700EEE46B /* ASLWrapper.m in Sources */,
+				2828FA631CB40AD2001CDCCF /* CHelper.c in Sources */,
 				0241A2D91C32ACD400A624CF /* FileObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
