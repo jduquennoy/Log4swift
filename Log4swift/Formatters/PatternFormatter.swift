@@ -36,6 +36,7 @@ Available markers are :
 * f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
 * M{'padding': 'padding value'} : the name of the function in which the log was issued
 * t{'padding': 'padding value'} : the id of the current thread as hexadecimal
+* T{'padding': 'padding value'} : the name of the current thread or GCD queue
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
@@ -146,7 +147,11 @@ Available markers are :
       },
       "t": {(parameters, message, info) in
         let tid = String(GetThreadID(pthread_self()), radix: 16, uppercase: false)
-        return processCommonParameters("\(tid)", parameters: parameters)
+        return processCommonParameters(tid, parameters: parameters)
+      },
+      "T": {(parameters, message, info) in
+        let tname = threadName()
+        return processCommonParameters(tname, parameters: parameters)
       },
       "%": {(parameters, message, info) in "%" }
     ]
@@ -276,4 +281,20 @@ func processCommonParameters(value: CustomStringConvertible, parameters: [String
   }
 
   return value.description.padToWidth(width)
+}
+
+
+/// returns the current thread name
+private func threadName() -> String {
+  if NSThread.isMainThread() {
+    return "main"
+  } else {
+    if let threadName = NSThread.currentThread().name where !threadName.isEmpty {
+      return threadName
+    } else if let queueName = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)) where !queueName.isEmpty {
+      return queueName
+    } else {
+      return String(format: "%p", NSThread.currentThread())
+    }
+  }
 }
