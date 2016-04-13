@@ -181,64 +181,32 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.log(formattedMessage, level: LogLevel.Fatal, file: file, line: line, function: function)
   }
   /// Logs the entering of a function and its parameters with a trace level
-  @nonobjc public func entering(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: [Any?]) {
+  @nonobjc public func entering(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String = #file, line: Int = #line, function: String = #function, _ args: Any...) {
     if (!self.willIssueLogForLevel(.Trace)) {
-      return;
+      return
     }
-
-    var message = "ENTERING - ";
-
-    let numArgs = args.count;
-
-    if (numArgs == 0) {
-      message += "without parameters";
-    } else if (numArgs == 1) {
-      message += "with 1 parameter";
-    } else {
-      message += "with \(numArgs) parameters";
-    }
-
-    if dumpParameters && numArgs > 0 {
-      message += "\n";
-      debugPrint(args, separator: "\n", terminator: "\n", toStream: &message);
-    }
-
-    self.log(message, level: .Trace, file: file, line: line, function: function);
-  }
-  /// Logs the entering of a function and its parameters with a trace level
-  @nonobjc public func entering(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: Any?...) {
-    entering(dumpParameters, file: file, line: line, function: function, args);
+    
+    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
   }
   /// Logs the exiting of a function and its return values with a trace level
-  @nonobjc public func exiting(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: [Any?]) {
+  @nonobjc public func exiting(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String = #file, line: Int = #line, function: String = #function, _ args: Any...) {
     if (!self.willIssueLogForLevel(.Trace)) {
-      return;
+      return
     }
-
-    var message = "EXITING - ";
-
-    let numArgs = args.count;
-
-    if (numArgs == 0) {
-      message += "without return value";
-    } else if (numArgs == 1) {
-      message += "with 1 return value";
-    } else {
-      message += "with \(numArgs) return values";
-    }
-
-    if dumpParameters && numArgs > 0 {
-      message += "\n";
-      debugPrint(args, separator: "\n", terminator: "\n", toStream: &message);
-    }
-
-    self.log(message, level: LogLevel.Trace, file: file, line: line, function: function);
+    
+    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
   }
-  /// Logs the exiting of a function and its return values with a trace level
-  @nonobjc public func exiting(dumpParameters: Bool, file: String = __FILE__, line: Int = __LINE__, function: String = __FUNCTION__, _ args: Any?...) {
-    exiting(dumpParameters, file: file, line: line, function: function, args);
+  
+  /// Logs the entering of a function and its parameters returned by the closure with a trace level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public func entering(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String = #file, line: Int = #line, function: String = #function, closure: () -> [Any]) {
+    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, closure: closure)
   }
-
+  /// Logs the exiting of a function and its return values returned by the closure with a trace level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public func exiting(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String = #file, line: Int = #line, function: String = #function, closure: () -> [Any]) {
+    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, closure: closure)
+  }
   /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func trace(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
@@ -296,7 +264,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
       let logClosure = {
         for currentAppender in self.appenders {
-          currentAppender.log(message, level:level, info: info)
+          currentAppender.log(message, level: level, info: info)
         }
       }
 
@@ -324,11 +292,131 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       let logClosure = {
         let logMessage = closure()
         for currentAppender in self.appenders {
-          currentAppender.log(logMessage, level:level, info: info)
+          currentAppender.log(logMessage, level: level, info: info)
         }
       }
       self.executeLogClosure(logClosure)
     }
+  }
+  
+  @nonobjc internal func logEnteringInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let args = closure()
+    
+    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logEnteringInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, args: [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var objects = [Any]()
+    
+    for o in args {
+      objects.append(o)
+    }
+    
+    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: objects)
+  }
+  
+  @nonobjc internal func logEnteringInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let objects = closure()
+    var args = [Any]()
+    
+    for o in objects {
+      args.append(o)
+    }
+    
+    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logExitingInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let args = closure()
+    
+    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logExitingInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let objects = closure()
+    var args = [Any]()
+    
+    for o in objects {
+      args.append(o)
+    }
+    
+    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logExitingInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, args: [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var objects = [Any]()
+    
+    for o in args {
+      objects.append(o)
+    }
+    
+    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: objects)
+  }
+  
+  @nonobjc internal func logEnteringInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, args: [Any]) {
+    var message = "ENTERING - "
+    
+    let numArgs = args.count
+    
+    if (numArgs == 0) {
+      message += "without parameters"
+    } else if (numArgs == 1) {
+      message += "with 1 parameter"
+    } else {
+      message += "with \(numArgs) parameters"
+    }
+    
+    if dumpArgs && numArgs > 0 {
+      message += ": "
+      message += dumpArguments(args, withTypeInfo: withTypeInfo)
+    }
+    
+    self.log(message, level: .Trace, file: file, line: line, function: function)
+  }
+  
+  @nonobjc internal func logExitingInternal(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String? = nil, line: Int? = nil, function: String? = nil, args: [Any]) {
+    var message = "EXITING - "
+    
+    let numArgs = args.count
+    
+    if (numArgs == 0) {
+      message += "without return value"
+    } else if (numArgs == 1) {
+      message += "with 1 return value"
+    } else {
+      message += "with \(numArgs) return values"
+    }
+    
+    if dumpArgs && numArgs > 0 {
+      message += ": "
+      message += dumpArguments(args, withTypeInfo: withTypeInfo)
+    }
+    
+    self.log(message, level: .Trace, file: file, line: line, function: function)
   }
   
   // MARK: Private methods
@@ -348,7 +436,50 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.appendersStorage = parent.appenders
     self.parent = nil
   }
-
+  
+  
+  private func dumpArguments(args: [Any], withTypeInfo: Bool) -> String {
+    if (args.isEmpty) {
+      return ""
+    }
+    
+    //let arguments = RemoveStackedArrays(args)
+    
+    var result = ""
+    var isFirst = true
+    
+    for arg in args {
+      if (!isFirst) {
+        result += ", "
+      }
+      else {
+        isFirst = false
+      }
+      
+      if (withTypeInfo) {
+        let argMirror = Mirror(reflecting: arg)
+        
+        print(argMirror.subjectType, separator: "", terminator: "", toStream: &result)
+        
+        result += ": "
+      }
+      
+      debugPrint(arg, separator: "", terminator: "", toStream: &result)
+    }
+    
+    return result
+  }
+  
+  private func RemoveStackedArrays(array: [Any]) -> [Any] {
+    if array.count == 1 {
+      if let stackedArray = array[0] as? [Any] {
+        return RemoveStackedArrays(stackedArray)
+      }
+    }
+    
+    return array
+  }
+  
   private final class func createDefaultAppenders() -> [Appender] {
     return [StdOutAppender("defaultAppender")]
   }
