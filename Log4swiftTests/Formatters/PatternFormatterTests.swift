@@ -231,7 +231,72 @@ class PatternFormatterTests: XCTestCase {
       XCTAssertTrue(false, "Could not read logged time")
     }
   }
-
+  
+  func testFormatterAppliesHighResDateMarkerWithDefaultFormatIfNoneIsSpecified() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.876]
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesHighResDateMarkerWithFormat() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{\"format\":\"dd.MM.yy HH:mm:ss.SSS\"}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.876]
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesHighResDateMarkerWithFormatAndCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'padding':'23', 'format':'dd.MM.yy HH:mm:ss.SSS'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.876]
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876  $", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesHighResDateMarkerWithFormatAndCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'padding':'-23', 'format':'dd.MM.yy HH:mm:ss.SSS'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.876]
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^  29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesHighResDateMarkerWithFormatAndCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'padding':'0', 'format':'dd.MM.yy HH:mm:ss.SSS'}")
+    let info: LogInfoDictionary = [.Timestamp: 123456789.876]
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with time shift)
+    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
+  }
+  
   func testMarkerParametersAreInterpreted() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %l{'padding':'0'}")
     let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug]
@@ -418,7 +483,103 @@ class PatternFormatterTests: XCTestCase {
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345")
   }
-
+  
+  func testFormatterAppliesThreadIdMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %t")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with unknown thread id)
+    let validationRegexp = try! NSRegularExpression(pattern: "^test [0-9a-f]+$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Message '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesThreadIdMarkerWithCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %t{'padding':'30'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with unknown thread id)
+    let validationRegexp = try! NSRegularExpression(pattern: "^test [0-9a-f]+[ ]+$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Message '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesThreadIdMarkerWithCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %t{'padding':'-30'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with unknown thread id)
+    let validationRegexp = try! NSRegularExpression(pattern: "^test [ ]+[0-9a-f]+$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Message '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesThreadIdMarkerWithCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %t{'padding':'0'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate (regex used to avoid problems with unknown thread id)
+    let validationRegexp = try! NSRegularExpression(pattern: "^test [0-9a-f]+$", options: NSRegularExpressionOptions())
+    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    XCTAssert(matches.count > 0, "Message '\(formattedMessage)' is not valid")
+  }
+  
+  func testFormatterAppliesThreadNameMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %T")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test main")
+  }
+  
+  func testFormatterAppliesThreadNameMarkerWithCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %T{'padding':'8'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test main    ")
+  }
+  
+  func testFormatterAppliesThreadNameMarkerWithCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %T{'padding':'-8'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test     main")
+  }
+  
+  func testFormatterAppliesThreadNameMarkerWithCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %T{'padding':'0'}")
+    let info = LogInfoDictionary()
+    
+    // Execute
+    let formattedMessage = formatter.format("", info: info)
+    
+    // Validate
+    XCTAssertEqual(formattedMessage, "test main")
+  }
+  
   func testFormatterAppliesPercentageMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %%")
     let info = LogInfoDictionary()

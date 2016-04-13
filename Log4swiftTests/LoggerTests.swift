@@ -611,4 +611,175 @@ class LoggerTests: XCTestCase {
     // Validate
     // nothing to test, it should just not crash
   }
+  
+  internal class TestClass: CustomStringConvertible {
+    var name: String = ""
+    var age: Int = 0
+    
+    init(withName name: String, andAge: Int)
+    {
+      self.name = name
+      self.age = andAge
+    }
+    
+    var description: String {
+      return "{ name: \"\(name)\", age: \(age) }"
+    }
+  }
+  
+  func testLoggerLogEnteringVariants() {
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Trace
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%m")
+    appender.formatter = formatter
+    let logger = Logger(identifier: "test.logger", level: .Trace, appenders: [appender])
+    
+    let testString: String = "Somestring"
+    let testInt: Int = 54
+    let testClass = TestClass(withName: "Somename", andAge: 62)
+    let testTuple = (3, "1", 4.0)
+    
+    // Execute
+    logger.entering(dumpArgs: false, withTypeInfo: false)
+    logger.entering(dumpArgs: false, withTypeInfo: false, testString)
+    logger.entering(dumpArgs: false, withTypeInfo: false, testString, testInt, testClass, testTuple)
+    logger.entering(dumpArgs: true, withTypeInfo: false, testString, testInt, testClass, testTuple)
+    logger.entering(dumpArgs: true, withTypeInfo: true, testString, testInt, testClass, testTuple)
+    
+    logger.entering(dumpArgs: false, withTypeInfo: false) { [] }
+    logger.entering(dumpArgs: false, withTypeInfo: false) { [testString] }
+    logger.entering(dumpArgs: false, withTypeInfo: false) { [testString, testInt, testClass, testTuple] }
+    logger.entering(dumpArgs: true, withTypeInfo: false) { [testString, testInt, testClass, testTuple] }
+    logger.entering(dumpArgs: true, withTypeInfo: true, closure: { [testString, testInt, testClass, testTuple] })
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "ENTERING - without parameters")
+    XCTAssertEqual(appender.logMessages[1].message, "ENTERING - with 1 parameter")
+    XCTAssertEqual(appender.logMessages[2].message, "ENTERING - with 4 parameters")
+    XCTAssertEqual(appender.logMessages[3].message, "ENTERING - with 4 parameters: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[4].message, "ENTERING - with 4 parameters: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+    
+    XCTAssertEqual(appender.logMessages[5].message, "ENTERING - without parameters")
+    XCTAssertEqual(appender.logMessages[6].message, "ENTERING - with 1 parameter")
+    XCTAssertEqual(appender.logMessages[7].message, "ENTERING - with 4 parameters")
+    XCTAssertEqual(appender.logMessages[8].message, "ENTERING - with 4 parameters: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[9].message, "ENTERING - with 4 parameters: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+  }
+  
+  func testLogEnteringVariantsWithFileLineAndFunction() {
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Trace
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m")
+    appender.formatter = formatter
+    let logger = Logger(identifier: "test.logger", level: .Trace, appenders: [appender])
+    
+    let testString: String = "Somestring"
+    let testInt: Int = 54
+    let testClass = TestClass(withName: "Somename", andAge: 62)
+    let testTuple = (3, "1", 4.0)
+    
+    // Execute
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function")
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function", testString)
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    logger.entering(dumpArgs: true, withTypeInfo: false, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    logger.entering(dumpArgs: true, withTypeInfo: true, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [] }
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString] }
+    logger.entering(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString, testInt, testClass, testTuple] }
+    logger.entering(dumpArgs: true, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString, testInt, testClass, testTuple] }
+    logger.entering(dumpArgs: true, withTypeInfo: true, file: "filename", line: 42, function: "function", closure: { [testString, testInt, testClass, testTuple] })
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42]:[function] ENTERING - without parameters")
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42]:[function] ENTERING - with 1 parameter")
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42]:[function] ENTERING - with 4 parameters")
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42]:[function] ENTERING - with 4 parameters: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42]:[function] ENTERING - with 4 parameters: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+    
+    XCTAssertEqual(appender.logMessages[5].message, "[filename]:[42]:[function] ENTERING - without parameters")
+    XCTAssertEqual(appender.logMessages[6].message, "[filename]:[42]:[function] ENTERING - with 1 parameter")
+    XCTAssertEqual(appender.logMessages[7].message, "[filename]:[42]:[function] ENTERING - with 4 parameters")
+    XCTAssertEqual(appender.logMessages[8].message, "[filename]:[42]:[function] ENTERING - with 4 parameters: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[9].message, "[filename]:[42]:[function] ENTERING - with 4 parameters: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+  }
+  
+  func testLogExitingVariants() {
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Trace
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%m")
+    appender.formatter = formatter
+    let logger = Logger(identifier: "test.logger", level: .Trace, appenders: [appender])
+    
+    let testString: String = "Somestring"
+    let testInt: Int = 54
+    let testClass = TestClass(withName: "Somename", andAge: 62)
+    let testTuple = (3, "1", 4.0)
+    
+    // Execute
+    logger.exiting(dumpArgs: false, withTypeInfo: false)
+    logger.exiting(dumpArgs: false, withTypeInfo: false, testString)
+    logger.exiting(dumpArgs: false, withTypeInfo: false, testString, testInt, testClass, testTuple)
+    logger.exiting(dumpArgs: true, withTypeInfo: false, testString, testInt, testClass, testTuple)
+    logger.exiting(dumpArgs: true, withTypeInfo: true, testString, testInt, testClass, testTuple)
+    
+    logger.exiting(dumpArgs: false, withTypeInfo: false) { [] }
+    logger.exiting(dumpArgs: false, withTypeInfo: false) { [testString] }
+    logger.exiting(dumpArgs: false, withTypeInfo: false) { [testString, testInt, testClass, testTuple] }
+    logger.exiting(dumpArgs: true, withTypeInfo: false) { [testString, testInt, testClass, testTuple] }
+    logger.exiting(dumpArgs: true, withTypeInfo: true, closure: { [testString, testInt, testClass, testTuple] })
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "EXITING - without return value")
+    XCTAssertEqual(appender.logMessages[1].message, "EXITING - with 1 return value")
+    XCTAssertEqual(appender.logMessages[2].message, "EXITING - with 4 return values")
+    XCTAssertEqual(appender.logMessages[3].message, "EXITING - with 4 return values: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[4].message, "EXITING - with 4 return values: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+    
+    XCTAssertEqual(appender.logMessages[5].message, "EXITING - without return value")
+    XCTAssertEqual(appender.logMessages[6].message, "EXITING - with 1 return value")
+    XCTAssertEqual(appender.logMessages[7].message, "EXITING - with 4 return values")
+    XCTAssertEqual(appender.logMessages[8].message, "EXITING - with 4 return values: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[9].message, "EXITING - with 4 return values: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+  }
+  
+  func testLogExitingVariantsWithFileLineAndFunction() {
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Trace
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%F]:[%L]:[%M] %m")
+    appender.formatter = formatter
+    let logger = Logger(identifier: "test.logger", level: .Trace, appenders: [appender])
+    
+    let testString: String = "Somestring"
+    let testInt: Int = 54
+    let testClass = TestClass(withName: "Somename", andAge: 62)
+    let testTuple = (3, "1", 4.0)
+    
+    // Execute
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function")
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function", testString)
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    logger.exiting(dumpArgs: true, withTypeInfo: false, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    logger.exiting(dumpArgs: true, withTypeInfo: true, file: "filename", line: 42, function: "function", testString, testInt, testClass, testTuple)
+    
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [] }
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString] }
+    logger.exiting(dumpArgs: false, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString, testInt, testClass, testTuple] }
+    logger.exiting(dumpArgs: true, withTypeInfo: false, file: "filename", line: 42, function: "function") { [testString, testInt, testClass, testTuple] }
+    logger.exiting(dumpArgs: true, withTypeInfo: true, file: "filename", line: 42, function: "function", closure: { [testString, testInt, testClass, testTuple] })
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "[filename]:[42]:[function] EXITING - without return value")
+    XCTAssertEqual(appender.logMessages[1].message, "[filename]:[42]:[function] EXITING - with 1 return value")
+    XCTAssertEqual(appender.logMessages[2].message, "[filename]:[42]:[function] EXITING - with 4 return values")
+    XCTAssertEqual(appender.logMessages[3].message, "[filename]:[42]:[function] EXITING - with 4 return values: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[4].message, "[filename]:[42]:[function] EXITING - with 4 return values: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+    
+    XCTAssertEqual(appender.logMessages[5].message, "[filename]:[42]:[function] EXITING - without return value")
+    XCTAssertEqual(appender.logMessages[6].message, "[filename]:[42]:[function] EXITING - with 1 return value")
+    XCTAssertEqual(appender.logMessages[7].message, "[filename]:[42]:[function] EXITING - with 4 return values")
+    XCTAssertEqual(appender.logMessages[8].message, "[filename]:[42]:[function] EXITING - with 4 return values: \"Somestring\", 54, { name: \"Somename\", age: 62 }, (3, \"1\", 4.0)")
+    XCTAssertEqual(appender.logMessages[9].message, "[filename]:[42]:[function] EXITING - with 4 return values: String: \"Somestring\", Int: 54, TestClass: { name: \"Somename\", age: 62 }, (Int, String, Double): (3, \"1\", 4.0)")
+  }
 }
