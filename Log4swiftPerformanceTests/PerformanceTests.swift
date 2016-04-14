@@ -99,25 +99,27 @@ class PerformanceTests: XCTestCase {
   // MARK: LoggerFactory performances
   
   func testGetLoggerForSamedIdentifierPerformance() {
+		let factory = LoggerFactory()
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]))
+      try! factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
     self.measureBlock() {
       for _ in 1...10000 {
-        self.factory.getLogger("test.identifier")
+        factory.getLogger("test.identifier")
       }
     }
   }
   
   func testGetLoggerForDifferentIdentifierPerformance() {
+		let factory = LoggerFactory()
     for index in 1...10 {
-      try! self.factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]))
+      try! factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
     self.measureBlock() {
       for index in 1...10000 {
-        self.factory.getLogger("test.identifier.\(index)")
+        factory.getLogger("test.identifier.\(index)")
       }
     }
   }
