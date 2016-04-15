@@ -26,6 +26,7 @@
 		02664C371B2DBC5C00B695DE /* Logger+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C361B2DBC5C00B695DE /* Logger+convenience.swift */; };
 		02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */; };
 		026A43811B4DCF2700997862 /* LogInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026A43801B4DCF2700997862 /* LogInformation.swift */; };
+		0285F3BA1CC01FE200CA850D /* XCTestCase+fileAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE4EE31C370A4600030042 /* XCTestCase+fileAdditions.swift */; };
 		0291DB741BC443D2000B90FD /* String+utilitiesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0291DB731BC443D2000B90FD /* String+utilitiesTest.swift */; };
 		02B61A5D1B56D1F100C683D8 /* Log4swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02664C0A1B2CE96500B695DE /* Log4swift.framework */; };
 		02B61A5F1B56D1F100C683D8 /* ValidCompleteConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */; };
@@ -652,6 +653,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0285F3BA1CC01FE200CA850D /* XCTestCase+fileAdditions.swift in Sources */,
 				5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */,
 				02C9E1581B56D40F0038AB0E /* PerformanceTests.swift in Sources */,
 			);
