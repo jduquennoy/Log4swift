@@ -250,7 +250,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: getSecondsSince1970()
       ]
       if let file = file {
         info[.FileName] = file
@@ -277,7 +277,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: getSecondsSince1970()
       ]
       if let file = file {
         info[.FileName] = file

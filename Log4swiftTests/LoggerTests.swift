@@ -588,7 +588,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender])
     
     // Execute
-    let timestampBefore = NSDate().timeIntervalSince1970
+    let timestampBefore = getSecondsSince1970()
     logger.debug {NSThread.sleepForTimeInterval(2); return "This is a debug message";}
     
     // Validate

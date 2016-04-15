@@ -224,7 +224,7 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format("", info: info)
     
     // Validate
-    let expectedTimestamp = NSDate().timeIntervalSince1970
+    let expectedTimestamp = getSecondsSince1970()
     if let loggedMessageTime = NSTimeInterval(formattedMessage) {
       XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
     } else {
