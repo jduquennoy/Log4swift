@@ -58,13 +58,18 @@ extension Logger {
   }
   /// Logs the entering of a function and its parameters with a trace level. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "entering" method.
-  @objc public func logEntering(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, args: [AnyObject]) {
-    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, args: args)
+  @objc public func logEntering(args: [AnyObject]) {
+    self.logEnteringInternal(objArgs: args)
   }
   /// Logs the exiting of a function and its return values with a trace level. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "exiting" method.
-  @objc public func logExiting(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, args: [AnyObject]) {
-    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, args: args)
+  @objc public func logExiting(args: [AnyObject]) {
+    self.logExitingInternal(objArgs: args)
+  }
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level. This method is meant to be used from Objective-C.
+  /// When in swift, prefer the "values" method.
+  @objc public func logValues(message: String, args: [AnyObject]) {
+    self.logValuesInternal(message: message, objArgs: args)
   }
 
   /// Logs a trace message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
@@ -99,13 +104,18 @@ extension Logger {
   }
   /// Logs the entering of a function and its parameters with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "entering" method.
-  @objc public func logEntering(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, args: [AnyObject], file: String, line: Int, function: String) {
-    logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  @objc public func logEntering(args: [AnyObject], file: String, line: Int, function: String) {
+    logEnteringInternal(file: file, line: line, function: function, objArgs: args)
   }
   /// Logs the exiting of a function and its return values with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "exiting" method.
-  @objc public func logExiting(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, args: [AnyObject], file: String, line: Int, function: String) {
-    logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, args: args)
+  @objc public func logExiting(args: [AnyObject], file: String, line: Int, function: String) {
+    logExitingInternal(file: file, line: line, function: function, objArgs: args)
+  }
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
+  /// When in swift, prefer the "values" method.
+  @objc public func logValues(message: String, args: [AnyObject], file: String, line: Int, function: String) {
+    self.logValuesInternal(message: message, file: file, line: line, function: function, objArgs: args)
   }
 
   /// Logs a trace message. This method is meant to be used from Objective-C.
@@ -140,13 +150,18 @@ extension Logger {
   }
   /// Logs the entering of a function and its parameters with a trace level. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "entering" method.
-  @objc public func logEnteringBloc(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, _ closure: () -> [AnyObject]) {
-    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, closure: closure)
+  @objc public func logEnteringBloc(closure: () -> [AnyObject]) {
+    self.logEnteringInternal(closure: closure)
   }
   /// Logs the exiting of a function and its return values with a trace level. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "exiting" method.
-  @objc public func logExitingBloc(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, _ closure: () -> [AnyObject]) {
-    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, closure: closure)
+  @objc public func logExitingBloc(closure: () -> [AnyObject]) {
+    self.logExitingInternal(closure: closure)
+  }
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level. This method is meant to be used from Objective-C.
+  /// When in swift, prefer the "exiting" method.
+  @objc public func logValuesBloc(message: String, closure: () -> [AnyObject]) {
+    self.logValuesInternal(message: message, closure: closure)
   }
 
   /// Logs a trace message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
@@ -181,13 +196,17 @@ extension Logger {
   }
   /// Logs the entering of a function and its parameters with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "entering" method.
-  @objc public func logEnteringBloc(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String, line: Int, function: String, _ closure: () -> [AnyObject]) {
-    self.logEnteringInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, closure: closure)
+  @objc public func logEnteringBloc(closure: () -> [AnyObject], file: String, line: Int, function: String) {
+    self.logEnteringInternal(file: file, line: line, function: function, closure: closure)
   }
   /// Logs the exiting of a function and its return values with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "exiting" method.
-  @objc public func logExitingBloc(dumpArgs dumpArgs: Bool = true, withTypeInfo: Bool = false, file: String, line: Int, function: String, _ closure: () -> [AnyObject]) {
-    self.logExitingInternal(dumpArgs: dumpArgs, withTypeInfo: withTypeInfo, file: file, line: line, function: function, closure: closure)
+  @objc public func logExitingBloc(closure: () -> [AnyObject], file: String, line: Int, function: String) {
+    self.logExitingInternal(file: file, line: line, function: function, closure: closure)
   }
-  
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
+  /// When in swift, prefer the "exiting" method.
+  @objc public func logValuesBloc(message: String, closure: () -> [AnyObject], file: String, line: Int, function: String) {
+    self.logValuesInternal(message: message, file: file, line: line, function: function, closure: closure)
+  }
 }

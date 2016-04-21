@@ -436,6 +436,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     
     // Validate loggers
     XCTAssertEqual(self.factory.rootLogger.thresholdLevel, LogLevel.Info)
+    XCTAssertEqual(self.factory.rootLogger.argOutputLevel, ArgOutputLevel.Off)
     XCTAssertEqual(self.factory.loggers.count, 2)
     let logger1 = self.factory.getLogger("project.feature.logger1")
     let logger2 = self.factory.getLogger("project.feature.logger2")
@@ -443,6 +444,8 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     XCTAssertNil(logger2.parent)
     XCTAssertEqual(logger1.thresholdLevel, LogLevel.Error)
     XCTAssertEqual(logger2.thresholdLevel, LogLevel.Fatal)
+    XCTAssertEqual(logger1.argOutputLevel, ArgOutputLevel.ValueOnly)
+    XCTAssertEqual(logger2.argOutputLevel, ArgOutputLevel.ValueWithType)
     
     // Validate appenders
     let logger1Appender1 = logger1.appenders[0]

@@ -30,6 +30,8 @@
 	<dict>
 		<key>ThresholdLevel</key>
 		<string>Info</string>
+		<key>ArgOutputLevel</key>
+		<string>Off</string>
 	</dict>
 	<key>Loggers</key>
 	<array>
@@ -38,6 +40,8 @@
 			<string>project.feature.logger1</string>
 			<key>ThresholdLevel</key>
 			<string>Error</string>
+			<key>ArgOutputLevel</key>
+			<string>ValueOnly</string>
 			<key>AppenderIds</key>
 			<array>
 				<string>stdOutAppender1</string>
@@ -48,6 +52,8 @@
 			<string>project.feature.logger2</string>
 			<key>ThresholdLevel</key>
 			<string>Fatal</string>
+			<key>ArgOutputLevel</key>
+			<string>ValueWithType</string>
 			<key>AppenderIds</key>
 			<array>
 				<string>stdOutAppender1</string>
