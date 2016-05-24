@@ -101,6 +101,32 @@ class FileAppenderTests: XCTestCase {
     }
   }
   
+  func testFileAppenderDoesNotOverwriteTheFileIfAlreadyExisted() {
+    do {
+      let tempFilePath = try self.createTemporaryFilePath("log")
+      var fileAppender :FileAppender?
+      fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath)
+      let logContent = "ping"
+      defer {
+        unlink((tempFilePath as NSString).fileSystemRepresentation)
+      }
+      
+      fileAppender!.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
+      
+      fileAppender = nil
+      fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath)
+      
+      // Execute
+      fileAppender!.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
+      
+      // Validate
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      XCTAssert(fileContent.length >= logContent.characters.count * 2, "Content of log file should not be just the first ping")
+    } catch let error {
+      XCTAssert(false, "Error in test : \(error)")
+    }
+  }
+  
   func testFileAppenderAddsEndOfLineToLogsIfNotPresentAtEndOfMessage()  {
     do {
       let tempFilePath = try self.createTemporaryFilePath("log")
