@@ -1,5 +1,10 @@
 # Log4swift versions changelog
 
+## 1.0 (-)
+
+### Bug fixes
+- Fixed a problem causing the FileAppender to erase log file on all new sessions (Thanks to josealobato for this fix)
+
 ## 1.0b5 (2016-03-22)
 
 ### General changes
@@ -10,7 +15,7 @@
 
 ### Pattern formatter enhancements (thanks to Darkdah for those improvements)
 
-- Added two marker to the pattern formatter :
+- Added two markers to the pattern formatter :
   - %f : displays the name of the file where the log was issued (%F displays the full path)
   - %M : the name of the method in which the log message was sent
 
