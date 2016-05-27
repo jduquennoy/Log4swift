@@ -215,17 +215,17 @@ class FileAppenderTests: XCTestCase {
     XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
   }
   
-  func testUpdatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
-    let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"]
-    let appender = FileAppender("testAppender")
-    
-    // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
-    
-    // Analyze
-    XCTAssertEqual(appender.filePath,  "/log/file/path.log")
-  }
-  
+	func testUpdatingAppenderFromDictionaryWithFilePathUsesProvidedValue() {
+		let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log"]
+		let appender = FileAppender("testAppender")
+		
+		// Execute
+		try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+		
+		// Analyze
+		XCTAssertEqual(appender.filePath,  "/log/file/path.log")
+	}
+	
   func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
     let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"]
@@ -264,4 +264,16 @@ class FileAppenderTests: XCTestCase {
       XCTAssert(false, "Error in test : \(error)")
     }
   }
+
+	func testLoggingToImpossiblePathDoesNotCreateTheFileAndDoesNotRaiseError() {
+		let filePath = "/proc/impossibleLogFile.log"
+		let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath)
+		
+		// Execute
+		fileAppender.performLog("log", level: .Error, info: [:])
+		
+		// Analyze
+		XCTAssertFalse(NSFileManager.defaultManager().fileExistsAtPath(filePath))
+	}
+	
 }
