@@ -30,10 +30,13 @@ Available markers are :
 * l{'padding': 'padding value'} : The name of the log level.
 * n{'padding': 'padding value'} : The name of the logger.
 * d{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of the strftime function.
+* D{'padding': 'padding value', 'format': 'format specifier'} : The date of the log. The format specifier is the one of NSDateFormatter.dateFormat (see also http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
 * L{'padding': 'padding value'} : the number of the line where the log was issued
 * F{'padding': 'padding value'} : the name of the file where the log was issued
 * f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
 * M{'padding': 'padding value'} : the name of the function in which the log was issued
+* t{'padding': 'padding value'} : the id of the current thread as hexadecimal
+* T{'padding': 'padding value'} : the name of the current thread or GCD queue
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
@@ -54,12 +57,15 @@ Available markers are :
   
   public let identifier: String
   
-  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String
+  typealias FormattingClosure = (message: String, infos: LogInfoDictionary, dateFormatter: NSDateFormatter) -> String
   private var formattingClosuresSequence = [FormattingClosure]()
+  
+  private let dateFormatter: NSDateFormatter
   
   /// This initialiser will throw an error if the pattern is not valid.
   public init(identifier: String, pattern: String) throws {
     self.identifier = identifier
+    self.dateFormatter = NSDateFormatter()
     let parser = PatternParser()
     super.init()
     self.formattingClosuresSequence = try parser.parsePattern(pattern)
@@ -81,18 +87,18 @@ Available markers are :
   }
   
   public func format(message: String, info: LogInfoDictionary) -> String {
-    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) }
+    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info, dateFormatter: dateFormatter) }
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String
+    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary, dateFormatter: NSDateFormatter) -> String
     // This dictionary matches a markers (one letter) with its logic (the closure that will return the value of the marker.  
     // Add an entry to this array to declare a new marker.
     private let markerClosures: Dictionary<String, MarkerClosure> = [
-      "d": {(parameters, message, info) in
+      "d": {(parameters, message, info, dateFormatter) in
         let result: String
         let format = parameters["format"] as? String ?? "%F %T"
-        let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+        let timestamp = info[.Timestamp] as? Double ?? getSecondsSince1970(withoutMacroSeconds: true)
         var secondsSinceEpoch = Int(timestamp)
         let date = withUnsafePointer(&secondsSinceEpoch) {
           localtime($0)
@@ -104,34 +110,52 @@ Available markers are :
 
         return processCommonParameters(result, parameters: parameters)
       },
-      "l": {(parameters, message, info) in
+      "D": {(parameters, message, info, dateFormatter) in
+        let result: String
+        let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
+        let timestamp = info[.Timestamp] as? Double ?? getSecondsSince1970()
+        let date = NSDate(timeIntervalSince1970: timestamp)
+        dateFormatter.dateFormat = format
+        result = dateFormatter.stringFromDate(date)
+        
+        return processCommonParameters(result, parameters: parameters)
+      },
+      "l": {(parameters, message, info, dateFormatter) in
         let logLevel = info[.LogLevel] ?? "-"
         return processCommonParameters(logLevel, parameters: parameters)
       },
-      "n": {(parameters, message, info) in
+      "n": {(parameters, message, info, dateFormatter) in
         let loggerName = info[.LoggerName] ?? "-"
         return processCommonParameters(loggerName, parameters: parameters)
       },
-      "L": {(parameters, message, info) in 
+      "L": {(parameters, message, info, dateFormatter) in
         let line = info[.FileLine] ?? "-"
         return processCommonParameters(line, parameters: parameters)
       },
-      "F": {(parameters, message, info) in 
+      "F": {(parameters, message, info, dateFormatter) in
         let filename = info[.FileName] ?? "-"
         return processCommonParameters(filename, parameters: parameters)
       },
-      "f": {(parameters, message, info) in
+      "f": {(parameters, message, info, dateFormatter) in
         let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent
         return processCommonParameters(filename, parameters: parameters)
       },
-      "M": {(parameters, message, info) in
+      "M": {(parameters, message, info, dateFormatter) in
         let function = info[.Function] ?? "-"
         return processCommonParameters(function, parameters: parameters)
       },
-      "m": {(parameters, message, info) in
+      "m": {(parameters, message, info, dateFormatter) in
         processCommonParameters(message as String, parameters: parameters)
       },
-      "%": {(parameters, message, info) in "%" }
+      "t": {(parameters, message, info, dateFormatter) in
+        let tid = String(GetThreadID(pthread_self()), radix: 16, uppercase: false)
+        return processCommonParameters(tid, parameters: parameters)
+      },
+      "T": {(parameters, message, info, dateFormatter) in
+        let tname = threadName()
+        return processCommonParameters(tname, parameters: parameters)
+      },
+      "%": {(parameters, message, info, dateFormatter) in "%" }
     ]
     
     
@@ -200,7 +224,7 @@ Available markers are :
       case .Text where parserStatus.charactersAccumulator.count > 0:
         let parsedString = String(parserStatus.charactersAccumulator)
         if(!parsedString.isEmpty) {
-          parsedClosuresSequence.append({(_, _ ) in return parsedString})
+          parsedClosuresSequence.append({(_, _, _ ) in return parsedString})
           parserStatus.charactersAccumulator.removeAll()
         }
       case .PostMarker(let markerName):
@@ -236,7 +260,7 @@ Available markers are :
     
     private func processMarker(markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = markerClosures[markerName] {
-        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) })
+        parsedClosuresSequence.append({(message, info, dateFormatter) in closureForMarker(parameters: parameters, message: message, info: info, dateFormatter: dateFormatter) })
       } else {
         parserStatus.charactersAccumulator += "%\(markerName)".characters
       }
@@ -259,4 +283,33 @@ func processCommonParameters(value: CustomStringConvertible, parameters: [String
   }
 
   return value.description.padToWidth(width)
+}
+
+/// Returns the number of seconds between 1970-01-01 00:00:00 UTC and the current date and time in the integral part of the double.
+/// The fractional part of the double contains the current macroseconds unless withoutMacroSeconds is true, in which case the fractional part is 0
+func getSecondsSince1970(withoutMacroSeconds withoutMacroSeconds: Bool = false) -> Double {
+  var time: timeval = timeval(tv_sec: 0, tv_usec: 0)
+  gettimeofday(&time, nil)
+  
+  if (withoutMacroSeconds) {
+    return Double(time.tv_sec)
+  }
+  
+  return Double(time.tv_sec) + (Double(time.tv_usec) / 1000000.0)
+}
+
+
+/// returns the current thread name
+private func threadName() -> String {
+  if NSThread.isMainThread() {
+    return "main"
+  } else {
+    if let threadName = NSThread.currentThread().name where !threadName.isEmpty {
+      return threadName
+    } else if let queueName = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)) where !queueName.isEmpty {
+      return queueName
+    } else {
+      return String(format: "%p", NSThread.currentThread())
+    }
+  }
 }

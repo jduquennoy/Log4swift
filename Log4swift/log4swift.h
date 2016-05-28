@@ -32,3 +32,5 @@ FOUNDATION_EXPORT const unsigned char log4swiftVersionString[];
 #import "LoggerCommon.h"
 
 #import "ASLWrapper.h"
+
+uint64_t GetThreadID(pthread_t thread);

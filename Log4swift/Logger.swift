@@ -28,6 +28,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case ThresholdLevel = "ThresholdLevel"
     case AppenderIds = "AppenderIds"
     case Asynchronous = "Asynchronous"
+    case ArgOutputLevel = "ArgOutputLevel"
   }
   
   private static let loggingQueue: dispatch_queue_t = {
@@ -44,6 +45,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   private var thresholdLevelStorage: LogLevel
   private var appendersStorage: [Appender]
   private var asynchronousStorage = false
+  private var argOutputLevelStorage: ArgOutputLevel
 
   /// If asynchronous is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
   /// The order of the messages will be preserved in async mode.
@@ -93,14 +95,30 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       self.appendersStorage = newValue
     }
   }
+  
+  /// The argument output level defining how arguments are logged.
+  public var argOutputLevel: ArgOutputLevel {
+    get {
+      if let parent = self.parent {
+        return parent.argOutputLevel
+      } else {
+        return self.argOutputLevelStorage
+      }
+    }
+    set {
+      self.breakDependencyWithParent()
+      self.argOutputLevelStorage = newValue
+    }
+  }
 
   
   /// Creates a new logger with the given identifier, log level and appenders.
   /// The identifier will not be modifiable, and should not be an empty string.
-  public init(identifier: String, level: LogLevel = LogLevel.Debug, appenders: [Appender] = []) {
+  public init(identifier: String, level: LogLevel = LogLevel.Debug, argOutputLevel: ArgOutputLevel = ArgOutputLevel.Off, appenders: [Appender] = []) {
     self.identifier = identifier
     self.thresholdLevelStorage = level
     self.appendersStorage = appenders
+    self.argOutputLevelStorage = argOutputLevel
   }
 
   convenience override init() {
@@ -110,7 +128,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   /// Create a logger that is a child of the given logger.
   /// The created logger will follow the parent logger's configuration until it is manually modified.
   convenience init(parentLogger: Logger, identifier: String) {
-    self.init(identifier: identifier, level: parentLogger.thresholdLevel, appenders: [Appender]() + parentLogger.appenders)
+    self.init(identifier: identifier, level: parentLogger.thresholdLevel, argOutputLevel: parentLogger.argOutputLevel, appenders: [Appender]() + parentLogger.appenders)
     self.parent = parentLogger
   }
   
@@ -140,16 +158,49 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     if let asynchronous = dictionary[DictionaryKey.Asynchronous.rawValue] as? Bool {
       self.asynchronous = asynchronous
     }
+    
+    if let safeArgOutputString = dictionary[DictionaryKey.ArgOutputLevel.rawValue] as? String {
+      if let safeArgOutputLevel = ArgOutputLevel(safeArgOutputString) {
+        self.argOutputLevel = safeArgOutputLevel
+      } else {
+        throw NSError.Log4swiftErrorWithDescription("Invalid '\(DictionaryKey.ArgOutputLevel.rawValue)' value for logger '\(self.identifier)'")
+      }
+    }
   }
   
   func resetConfiguration() {
     self.thresholdLevel = .Debug
+    self.argOutputLevel = .Off
     self.appenders = Logger.createDefaultAppenders()
     self.asynchronousStorage = false
   }
   
   // MARK: Logging methods
 
+  /// Logs the entering of a function and its parameters with a trace level
+  @nonobjc public func entering(args: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    self.logEnteringInternal(file: file, line: line, function: function, args: args)
+  }
+  /// Logs the exiting of a function and its return values with a trace level
+  @nonobjc public func exiting(args: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    self.logExitingInternal(file: file, line: line, function: function, args: args)
+  }
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level
+  @nonobjc public func values(message message:String = "", _ args: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    self.logValuesInternal(message: message, file: file, line: line, function: function, args: args)
+  }
   /// Logs the provided message with a trace level.
   @nonobjc public func trace(format: String, file: String = #file, line: Int = #line, function: String = #function, _ args: CVarArgType...) {
     let formattedMessage = format.format(args)
@@ -180,7 +231,22 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     let formattedMessage = format.format(args)
     self.log(formattedMessage, level: LogLevel.Fatal, file: file, line: line, function: function)
   }
-
+  
+  /// Logs the entering of a function and its parameters returned by the closure with a trace level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public func entering(file file: String = #file, line: Int = #line, function: String = #function, closure: () -> [Any]) {
+    self.logEnteringInternal(file: file, line: line, function: function, closure: closure)
+  }
+  /// Logs the exiting of a function and its return values returned by the closure with a trace level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public func exiting(file file: String = #file, line: Int = #line, function: String = #function, closure: () -> [Any]) {
+    self.logExitingInternal(file: file, line: line, function: function, closure: closure)
+  }
+  /// Logs the message and the given values according to the argOutputLevel of the logger with a trace level
+  /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
+  @nonobjc public func values(message message: String = "", file: String = #file, line: Int = #line, function: String = #function, closure: () -> [Any]) {
+    self.logValuesInternal(message: message, file: file, line: line, function: function, closure: closure)
+  }
   /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
   @nonobjc public func trace(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
@@ -224,7 +290,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: getSecondsSince1970()
       ]
       if let file = file {
         info[.FileName] = file
@@ -238,7 +304,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
       let logClosure = {
         for currentAppender in self.appenders {
-          currentAppender.log(message, level:level, info: info)
+          currentAppender.log(message, level: level, info: info)
         }
       }
 
@@ -251,7 +317,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: getSecondsSince1970()
       ]
       if let file = file {
         info[.FileName] = file
@@ -266,11 +332,200 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       let logClosure = {
         let logMessage = closure()
         for currentAppender in self.appenders {
-          currentAppender.log(logMessage, level:level, info: info)
+          currentAppender.log(logMessage, level: level, info: info)
         }
       }
       self.executeLogClosure(logClosure)
     }
+  }
+  
+  @nonobjc internal func logEnteringInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let args = closure()
+    
+    self.logEnteringInternal(file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logEnteringInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let objects = closure()
+    var args = [Any]()
+    
+    for o in objects {
+      args.append(o)
+    }
+    
+    self.logEnteringInternal(file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logEnteringInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, objArgs: [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var objects = [Any]()
+    
+    for o in objArgs {
+      objects.append(o)
+    }
+    
+    self.logEnteringInternal(file: file, line: line, function: function, args: objects)
+  }
+  
+  @nonobjc internal func logEnteringInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, args: [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var message = "ENTERING - "
+    
+    let numArgs = args.count
+    
+    if (numArgs == 0) {
+      message += "without parameters"
+    } else if (numArgs == 1) {
+      message += "with 1 parameter"
+    } else {
+      message += "with \(numArgs) parameters"
+    }
+    
+    if self.argOutputLevel.rawValue >= ArgOutputLevel.ValueOnly.rawValue && numArgs > 0 {
+      message += ": "
+      message += dumpArguments(args)
+    }
+    
+    self.log(message, level: .Trace, file: file, line: line, function: function)
+  }
+  
+  @nonobjc internal func logExitingInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let args = closure()
+    
+    self.logExitingInternal(file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logExitingInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let objects = closure()
+    var args = [Any]()
+    
+    for o in objects {
+      args.append(o)
+    }
+    
+    self.logExitingInternal(file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logExitingInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, objArgs: [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var objects = [Any]()
+    
+    for o in objArgs {
+      objects.append(o)
+    }
+    
+    self.logExitingInternal(file: file, line: line, function: function, args: objects)
+  }
+  
+  @nonobjc internal func logExitingInternal(file file: String? = nil, line: Int? = nil, function: String? = nil, args: [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var message = "EXITING - "
+    
+    let numArgs = args.count
+    
+    if (numArgs == 0) {
+      message += "without return value"
+    } else if (numArgs == 1) {
+      message += "with 1 return value"
+    } else {
+      message += "with \(numArgs) return values"
+    }
+    
+    if self.argOutputLevel.rawValue >= ArgOutputLevel.ValueOnly.rawValue && numArgs > 0 {
+      message += ": "
+      message += dumpArguments(args)
+    }
+    
+    self.log(message, level: .Trace, file: file, line: line, function: function)
+  }
+  
+  @nonobjc internal func logValuesInternal(message message: String?, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let args = closure()
+    
+    self.logValuesInternal(message: message, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logValuesInternal(message message: String?, file: String? = nil, line: Int? = nil, function: String? = nil, closure: () -> [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    let objects = closure()
+    var args = [Any]()
+    
+    for o in objects {
+      args.append(o)
+    }
+    
+    self.logValuesInternal(message: message, file: file, line: line, function: function, args: args)
+  }
+  
+  @nonobjc internal func logValuesInternal(message message: String?, file: String? = nil, line: Int? = nil, function: String? = nil, objArgs: [AnyObject]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var objects = [Any]()
+    
+    for o in objArgs {
+      objects.append(o)
+    }
+    
+    self.logValuesInternal(message: message, file: file, line: line, function: function, args: objects)
+  }
+  
+  @nonobjc internal func logValuesInternal(message message: String?, file: String? = nil, line: Int? = nil, function: String? = nil, args: [Any]) {
+    if (!self.willIssueLogForLevel(.Trace)) {
+      return
+    }
+    
+    var theMessage = message ?? ""
+    
+    if self.argOutputLevel.rawValue >= ArgOutputLevel.ValueOnly.rawValue && args.count > 0 {
+      if !theMessage.isEmpty {
+        theMessage += ": "
+      }
+      
+      theMessage += dumpArguments(args)
+    }
+    
+    if theMessage.isEmpty {
+      return
+    }
+    
+    self.log(theMessage, level: .Trace, file: file, line: line, function: function)
   }
   
   // MARK: Private methods
@@ -290,7 +545,50 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     self.appendersStorage = parent.appenders
     self.parent = nil
   }
-
+  
+  
+  private func dumpArguments(args: [Any]) -> String {
+    if (self.argOutputLevel.rawValue < ArgOutputLevel.ValueOnly.rawValue || args.isEmpty) {
+      return ""
+    }
+    
+    //let arguments = RemoveStackedArrays(args)
+    
+    var result = ""
+    var isFirst = true
+    
+    for arg in args {
+      if (!isFirst) {
+        result += ", "
+      }
+      else {
+        isFirst = false
+      }
+      
+      if (self.argOutputLevel.rawValue >= ArgOutputLevel.ValueWithType.rawValue) {
+        let argMirror = Mirror(reflecting: arg)
+        
+        print(argMirror.subjectType, separator: "", terminator: "", toStream: &result)
+        
+        result += ": "
+      }
+      
+      debugPrint(arg, separator: "", terminator: "", toStream: &result)
+    }
+    
+    return result
+  }
+  
+  private func RemoveStackedArrays(array: [Any]) -> [Any] {
+    if array.count == 1 {
+      if let stackedArray = array[0] as? [Any] {
+        return RemoveStackedArrays(stackedArray)
+      }
+    }
+    
+    return array
+  }
+  
   private final class func createDefaultAppenders() -> [Appender] {
     return [StdOutAppender("defaultAppender")]
   }
