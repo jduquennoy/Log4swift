@@ -65,35 +65,47 @@ public class FileAppender : Appender {
   }
   
   override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
-    if(self.fileHandler == nil || !NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
-      do {
-        try self.openFileHandleForPath(self.filePath)
-        didLogFailure = false
-      } catch (let error) {
-        if(!didLogFailure) {
-          NSLog("Appender \(self.identifier) failed to open log file \(self.filePath) : \(error)")
-          didLogFailure = true
-        }
-      }
-    }
+		guard createFileHandlerIfNeeded() else {
+			return
+		}
     
     var normalizedLog = log
     if(!normalizedLog.hasSuffix("\n")) {
       normalizedLog = normalizedLog + "\n"
     }
     if let dataToLog = normalizedLog.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
-      fileHandler?.writeData(dataToLog)
+      self.fileHandler?.writeData(dataToLog)
     }
   }
-  
-  private func openFileHandleForPath(filePath: String) throws {
+	
+	/// - returns: true if the file handler can be used, false if not.
+  private func createFileHandlerIfNeeded() -> Bool {
     let fileManager = NSFileManager.defaultManager()
-    let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent
-    try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
     
-    fileManager.createFileAtPath(filePath, contents: nil, attributes: nil)
-    fileHandler = NSFileHandle(forWritingAtPath: filePath)
-    fileHandler?.seekToEndOfFile()
+    do {
+      if !fileManager.fileExistsAtPath(self.filePath) {
+				self.fileHandler = nil
+				
+        let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent
+        try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
+        
+        fileManager.createFileAtPath(filePath, contents: nil, attributes: nil)
+      }
+      if fileHandler == nil {
+        self.fileHandler = NSFileHandle(forWritingAtPath: self.filePath)
+        self.fileHandler?.seekToEndOfFile()
+      }
+      didLogFailure = false
+      
+    } catch (let error) {
+      if(!didLogFailure) {
+        NSLog("Appender \(self.identifier) failed to open log file \(self.filePath) : \(error)")
+        didLogFailure = true
+				self.fileHandler = nil
+      }
+    }
+		return self.fileHandler != nil
   }
+  
 }
 
