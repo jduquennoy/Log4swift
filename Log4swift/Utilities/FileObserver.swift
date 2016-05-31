@@ -48,7 +48,7 @@ public class FileObserver {
   func poolForChange() {
     let modificationDate = self.getFileModificationDate()
     if modificationDate > self.lastModificationTime {
-      delegate?.fileChanged(self.filePath)
+			delegate?.fileChanged(atPath: self.filePath)
       self.lastModificationTime = modificationDate
     }
     self.scheduleNextPooling()

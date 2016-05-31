@@ -26,56 +26,56 @@ class NSLoggerAppenderTests: XCTestCase {
   func testSettingUpAHostLoggerWithSSLEnabledEnablesSSLOption() {
     let appender = NSLoggerAppender(identifier: "test", remoteHost: "test", remotePort: 12345, useLocalCache: false, useSSL: true)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
     XCTAssertTrue(sslEnabled, "logger should have the SSL option enabled.")
   }
   
   func testSettingUpAHostLoggerWithSSLDisabledDisablesSSLOption() {
     let appender = NSLoggerAppender(identifier: "test", remoteHost: "test", remotePort: 12345, useLocalCache: false, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
     XCTAssertFalse(sslEnabled, "logger should have the SSL option disabled.")
   }
   
   func testSettingUpAHostLoggerWithLocalCacheDisabledDisablesLocalCacheOption() {
     let appender = NSLoggerAppender(identifier: "test", remoteHost: "test", remotePort: 12345, useLocalCache: false, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
     XCTAssertFalse(sslEnabled, "logger should have the local cache option disabled.")
   }
   
   func testSettingUpAHostLoggerWithLocalCacheEnabledEnablesLocalCacheOption() {
     let appender = NSLoggerAppender(identifier: "test", remoteHost: "test", remotePort: 12345, useLocalCache: true, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
     XCTAssertTrue(sslEnabled, "logger should have the local cache option enabled.")
   }
   
   func testSettingUpABonjourLoggerWithSSLEnabledEnablesSSLOption() {
     let appender = NSLoggerAppender(identifier: "test", bonjourServiceName: "test", useLocalCache: false, useSSL: true)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
     XCTAssertTrue(sslEnabled, "logger should have the SSL option enabled.")
   }
   
   func testSettingUpABonjourLoggerWithSSLDisabledDisablesSSLOption() {
     let appender = NSLoggerAppender(identifier: "test", bonjourServiceName: "test", useLocalCache: false, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_UseSSL)) != UInt32(0)
     XCTAssertFalse(sslEnabled, "logger should have the SSL option disabled.")
   }
   
   func testSettingUpABonjourLoggerWithLocalCacheDisabledDisablesLocalCacheOption() {
     let appender = NSLoggerAppender(identifier: "test", bonjourServiceName: "test", useLocalCache: false, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
     XCTAssertFalse(sslEnabled, "logger should have the local cache option disabled.")
   }
   
   func testSettingUpABonjourLoggerWithLocalCacheEnabledEnablesLocalCacheOption() {
     let appender = NSLoggerAppender(identifier: "test", bonjourServiceName: "test", useLocalCache: true, useSSL: false)
     
-    let sslEnabled: Bool = (appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
+    let sslEnabled: Bool = (appender.logger.pointee.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) != UInt32(0)
     XCTAssertTrue(sslEnabled, "logger should have the local cache option enabled.")
   }
 
@@ -84,7 +84,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
   func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError () {
@@ -93,7 +93,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesIt () {
@@ -102,7 +102,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Warning)
@@ -113,10 +113,10 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssertEqual(appender.logger.memory.port, 50000)
+    XCTAssertEqual(appender.logger.pointee.port, 50000)
   }
 
   func testUpdatingAppenderFromDictionaryWithAnInvalidRemotePortThrowsError () {
@@ -125,7 +125,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
   func testUpdatingAppenderFromDictionaryWithRemotePortLowerThan1024ThrowsError () {
@@ -134,7 +134,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
   func testUpdatingAppenderFromDictionaryWithRemotePortLowerThan65535ThrowsError () {
@@ -143,7 +143,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
 
   func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortAsStringUsesProvidedValue () {
@@ -152,11 +152,11 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssertEqual(appender.logger.memory.port, 1234)
-    XCTAssertEqual(appender.logger.memory.host.takeUnretainedValue() as String, "remoteHost")
+    XCTAssertEqual(appender.logger.pointee.port, 1234)
+    XCTAssertEqual(appender.logger.pointee.host.takeUnretainedValue() as String, "remoteHost")
   }
   
   func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortAsIntUsesProvidedValue () {
@@ -165,11 +165,11 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssertEqual(appender.logger.memory.port, 1235)
-    XCTAssertEqual(appender.logger.memory.host.takeUnretainedValue() as String, "remoteHost")
+    XCTAssertEqual(appender.logger.pointee.port, 1235)
+    XCTAssertEqual(appender.logger.pointee.host.takeUnretainedValue() as String, "remoteHost")
   }
   
   func testUpdatingAppenderFromDictionaryWithSslDisabledUsesProvidedValue () {
@@ -179,10 +179,10 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssert((appender.logger.memory.options & UInt32(kLoggerOption_UseSSL)) == 0)
+    XCTAssert((appender.logger.pointee.options & UInt32(kLoggerOption_UseSSL)) == 0)
   }
   
   func testUpdatingAppenderFromDictionaryWithLocalCacheDisabledUsesProvidedValue () {
@@ -192,10 +192,10 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssert((appender.logger.memory.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) == 0)
+    XCTAssert((appender.logger.pointee.options & UInt32(kLoggerOption_BufferLogsUntilConnection)) == 0)
   }
   
   func testUpdatingAppenderFromDictionaryWithoutThresholdUsesDebugAsDefaultValue () {
@@ -203,7 +203,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Debug)
@@ -214,10 +214,10 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
-    XCTAssertEqual(appender.logger.memory.bonjourServiceName.takeUnretainedValue() as String, "bonjourService")
+    XCTAssertEqual(appender.logger.pointee.bonjourServiceName.takeUnretainedValue() as String, "bonjourService")
   }
 
   func testUpdatingAppenderFromDictionaryWithBonjourServiceNameThatIsNotAStringThrowsError() {
@@ -225,14 +225,14 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters:[]) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
 
   func testUpdatingAppenderFomDictionaryWithNonExistingFormatterIdThrowsError() {
     let dictionary = [Appender.DictionaryKey.FormatterId.rawValue: "not existing id"]
     let appender = NSLoggerAppender("testAppender")
     
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
@@ -242,7 +242,7 @@ class NSLoggerAppenderTests: XCTestCase {
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters: [formatter])
+    try! appender.update(withDictionary: dictionary, availableFormatters: [formatter])
     
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier)

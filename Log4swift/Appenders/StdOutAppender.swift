@@ -40,7 +40,7 @@ public class StdOutAppender: Appender {
     case Other
 
     init(_ name: String) {
-      switch(name.lowercaseString) {
+      switch(name.lowercased()) {
       case "xterm" : self = .XtermColor
       case "xcodecolors" : self = .XcodeColors
       default: self = .Other
@@ -60,9 +60,9 @@ public class StdOutAppender: Appender {
     let xcodeColors = NSProcessInfo().environment["XcodeColors"]
     let terminalType = NSProcessInfo().environment["TERM"]
     switch (xcodeColors, terminalType) {
-    case (.Some("YES"), _):
+    case (.some("YES"), _):
       self.ttyType = .XcodeColors
-    case (_, .Some("xterm-256color")):
+    case (_, .some("xterm-256color")):
       self.ttyType = .XtermColor
     default:
       self.ttyType = .Other
@@ -71,15 +71,15 @@ public class StdOutAppender: Appender {
     super.init(identifier)
   }
   
-  public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public override func update(withDictionary dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
     
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
+		try super.update(withDictionary: dictionary, availableFormatters: availableFormatters)
     
     if let errorThresholdString = (dictionary[DictionaryKey.ErrorThreshold.rawValue] as? String) {
       if let errorThreshold = LogLevel(errorThresholdString) {
         errorThresholdLevel = errorThreshold
       } else {
-        throw NSError.Log4swiftErrorWithDescription("Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'")
+				throw NSError.Log4swiftError(description: "Invalide '\(DictionaryKey.ErrorThreshold.rawValue)' value for Stdout appender '\(self.identifier)'")
       }
     } else {
       errorThresholdLevel = nil
@@ -88,10 +88,10 @@ public class StdOutAppender: Appender {
     if let textColors = (dictionary[DictionaryKey.TextColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in textColors {
         guard let level = LogLevel(levelName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
+          throw NSError.Log4swiftError(description: "Invalide level '\(levelName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         guard let color = TTYColor(colorName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
+          throw NSError.Log4swiftError(description: "Invalide color '\(colorName)' in '\(DictionaryKey.TextColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
 
         self.textColors[level] = color
@@ -101,10 +101,10 @@ public class StdOutAppender: Appender {
     if let backgroundColors = (dictionary[DictionaryKey.BackgroundColors.rawValue] as? Dictionary<String, String>) {
       for (levelName, colorName) in backgroundColors {
         guard let level = LogLevel(levelName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
+          throw NSError.Log4swiftError(description: "Invalide level '\(levelName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         guard let color = TTYColor(colorName) else {
-          throw NSError.Log4swiftErrorWithDescription("Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
+          throw NSError.Log4swiftError(description: "Invalide color '\(colorName)' in '\(DictionaryKey.BackgroundColors.rawValue)' for Stdout appender '\(self.identifier)'")
         }
         
         self.backgroundColors[level] = color
@@ -116,7 +116,7 @@ public class StdOutAppender: Appender {
     }
   }
   
-  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
+  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     var destinationFile = stdout
     
     if let errorThresholdLevel = self.errorThresholdLevel {
@@ -125,7 +125,7 @@ public class StdOutAppender: Appender {
       }
     }
     
-    let finalLogString = self.colorizeLog(log, level: level) + "\n"
+		let finalLogString = self.colorizeLog(log: log, level: level) + "\n"
     fputs(finalLogString, destinationFile)
   }
   
@@ -159,7 +159,7 @@ extension StdOutAppender {
     case DarkOrange
     
     init?(_ name: String) {
-      switch(name.lowercaseString) {
+      switch(name.lowercased()) {
       case "black" : self = .Black
       case "darkgrey" : self = .DarkGrey
       case "grey" : self = .Grey
@@ -243,7 +243,7 @@ extension StdOutAppender {
       }
     }
     
-    private func codeForTTYType(type: TTYType) -> String {
+    private func code(forTTYType type: TTYType) -> String {
       switch(type) {
       case .XtermColor: return String(self.xtermCode())
       case .XcodeColors: return self.xcodeCode()
@@ -290,11 +290,11 @@ extension StdOutAppender {
     
     if let textColor = self.textColors[level] {
       shouldResetColors = true
-      colorizedLog += self.textColorPrefix + textColor.codeForTTYType(self.ttyType) + self.colorSuffix
+			colorizedLog += self.textColorPrefix + textColor.code(forTTYType: self.ttyType) + self.colorSuffix
     }
     if let backgroundColor = self.backgroundColors[level] {
       shouldResetColors = true
-      colorizedLog += self.backgroundColorPrefix + backgroundColor.codeForTTYType(self.ttyType) + self.colorSuffix
+			colorizedLog += self.backgroundColorPrefix + backgroundColor.code(forTTYType: self.ttyType) + self.colorSuffix
     }
 
     colorizedLog += log
@@ -308,21 +308,21 @@ extension StdOutAppender {
   
   /// :param: color The color to set, or nil to set no color
   /// :param: level The log level to which the provided color applies
-  public func setTextColor(color: TTYColor?, level: LogLevel) {
+  public func setTextColor(_ color: TTYColor?, forLevel level: LogLevel) {
     if let color = color {
       self.textColors[level] = color
     } else {
-      self.textColors.removeValueForKey(level)
+			self.textColors.removeValue(forKey: level)
     }
   }
 
   /// :param: color The color to set, or nil to set no color
   /// :param: level The log level to which the provided color applies
-  public func setBackgroundColor(color: TTYColor?, level: LogLevel) {
+  public func setBackgroundColor(_ color: TTYColor?, forLevel level: LogLevel) {
     if let color = color {
       self.backgroundColors[level] = color
     } else {
-      self.backgroundColors.removeValueForKey(level)
+			self.backgroundColors.removeValue(forKey: level)
     }
   }
 

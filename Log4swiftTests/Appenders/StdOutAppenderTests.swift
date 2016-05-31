@@ -103,7 +103,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Info
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters: [])
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Info)
@@ -115,7 +115,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("test appender")
 
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
@@ -125,7 +125,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.thresholdLevel, LogLevel.Info)
@@ -137,7 +137,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.errorThresholdLevel = .Debug
 
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters: [])
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
     
     // Validate
     XCTAssert(appender.errorThresholdLevel == nil)
@@ -149,7 +149,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("test appender")
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithErrorThresholdUsesSpecifiedValue() {
@@ -159,7 +159,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.errorThresholdLevel = .Info
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters: [])
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
     
     // Validate
     XCTAssertEqual(appender.errorThresholdLevel!, LogLevel.Info)
@@ -170,7 +170,7 @@ class StdOutAppenderTests: XCTestCase {
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"]
     let appender = StdOutAppender("test appender")
     
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithExistingFormatterIdUsesIt() {
@@ -180,7 +180,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("test appender")
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters: [formatter])
+    try! appender.update(withDictionary: dictionary, availableFormatters: [formatter])
     
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier)
@@ -195,7 +195,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.textColors, [LogLevel.Error: StdOutAppender.TTYColor.Red, LogLevel.Info: StdOutAppender.TTYColor.Green])
@@ -210,7 +210,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithInvalidLevelInTextColorsThrowsError() {
@@ -222,7 +222,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithBackgroundColorsUsesThem() {
@@ -234,7 +234,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.backgroundColors, [LogLevel.Error: StdOutAppender.TTYColor.Red, LogLevel.Info: StdOutAppender.TTYColor.Green])
@@ -247,7 +247,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.ttyType = .XcodeColors
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.XtermColor)
@@ -260,7 +260,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.ttyType = .XtermColor
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.XcodeColors)
@@ -273,7 +273,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.ttyType = .XtermColor
     
     // Execute
-    try! appender.updateWithDictionary(dictionary, availableFormatters:[])
+    try! appender.update(withDictionary: dictionary, availableFormatters:[])
     
     // Validate
     XCTAssertEqual(appender.ttyType, StdOutAppender.TTYType.Other)
@@ -288,7 +288,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
   func testUpdatingAppenderFromDictionaryWithInvalidLevelInBackgroundColorsThrowsError() {
@@ -300,7 +300,7 @@ class StdOutAppenderTests: XCTestCase {
     appender.thresholdLevel = .Debug
     
     // Execute & validate
-    XCTAssertThrows { try appender.updateWithDictionary(dictionary, availableFormatters: []) }
+    XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
 
   // MARK: - Colors testing
@@ -312,7 +312,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setTextColor(.Red, level: .Error)
+    appender.setTextColor(.Red, forLevel: .Error)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -330,7 +330,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setTextColor(.Red, level: .Error)
+    appender.setTextColor(.Red, forLevel: .Error)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -348,7 +348,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setTextColor(.Red, level: .Error)
+    appender.setTextColor(.Red, forLevel: .Error)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -366,7 +366,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setTextColor(.Red, level: .Info)
+    appender.setTextColor(.Red, forLevel: .Info)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -384,7 +384,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setBackgroundColor(.Blue, level: .Warning)
+    appender.setBackgroundColor(.Blue, forLevel: .Warning)
     
     // Execute
     appender.log("log value", level: .Warning, info: LogInfoDictionary())
@@ -402,7 +402,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setBackgroundColor(.Green, level: .Info)
+    appender.setBackgroundColor(.Green, forLevel: .Info)
     
     // Execute
     appender.log("log value", level: .Info, info: LogInfoDictionary())
@@ -420,7 +420,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setBackgroundColor(.Red, level: .Error)
+    appender.setBackgroundColor(.Red, forLevel: .Error)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -438,7 +438,7 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setBackgroundColor(.Yellow, level: .Warning)
+    appender.setBackgroundColor(.Yellow, forLevel: .Warning)
     
     // Execute
     appender.log("log value", level: .Error, info: LogInfoDictionary())
@@ -456,8 +456,8 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setTextColor(.DarkGrey, level: .Warning)
-    appender.setTextColor(nil, level: .Warning)
+    appender.setTextColor(.DarkGrey, forLevel: .Warning)
+    appender.setTextColor(nil, forLevel: .Warning)
     
     // Execute
     appender.log("log value", level: .Warning, info: LogInfoDictionary())
@@ -475,8 +475,8 @@ class StdOutAppenderTests: XCTestCase {
     let appender = StdOutAppender("appender")
     appender.errorThresholdLevel = .Warning
     
-    appender.setBackgroundColor(.Grey, level: .Warning)
-    appender.setBackgroundColor(nil, level: .Warning)
+    appender.setBackgroundColor(.Grey, forLevel: .Warning)
+    appender.setBackgroundColor(nil, forLevel: .Warning)
     
     // Execute
     appender.log("log value", level: .Warning, info: LogInfoDictionary())
@@ -514,8 +514,8 @@ class StdOutAppenderTests: XCTestCase {
   
   // MARK: - Private methods
 
-  private func getFileHandleContentAsString(fileHandle: NSFileHandle) -> String? {
-    let expectation = expectationWithDescription("filHandle content received")
+  private func getFileHandleContentAsString(_ fileHandle: NSFileHandle) -> String? {
+    let expectation = self.expectation(withDescription: "filHandle content received")
     var expectationIsExpired = false
     var stringContent: String?
     
@@ -527,7 +527,7 @@ class StdOutAppenderTests: XCTestCase {
       }
     }
     
-    waitForExpectationsWithTimeout(1, handler: { error in
+		waitForExpectations(withTimeout: 1, handler: { error in
       expectationIsExpired = true
     })
     return stringContent

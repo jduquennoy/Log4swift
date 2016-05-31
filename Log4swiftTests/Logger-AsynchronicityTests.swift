@@ -140,10 +140,10 @@ class LoggerAsynchronicityTests: XCTestCase {
     logger2.appenders = [slowAppender]
     
     // Execute
-    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "1"; }
-    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "2"; }
-    logger2.info{ NSThread.sleepForTimeInterval(0.2); return "3"; }
-    logger1.info{ NSThread.sleepForTimeInterval(0.1); return "4"; }
+    logger2.info{ NSThread.sleep(forTimeInterval: 0.2); return "1"; }
+    logger1.info{ NSThread.sleep(forTimeInterval: 0.1); return "2"; }
+    logger2.info{ NSThread.sleep(forTimeInterval: 0.2); return "3"; }
+    logger1.info{ NSThread.sleep(forTimeInterval: 0.1); return "4"; }
     
     self.waitUntilTrue{slowAppender.logMessages.count == 4}
     
@@ -167,7 +167,7 @@ class LoggerAsynchronicityTests: XCTestCase {
     let loopDelay = 0.1
     var loopCounter = 0
     while(conditionClosure() == false && timeout > (loopDelay * Double(loopCounter))) {
-      NSThread.sleepForTimeInterval(loopDelay)
+      NSThread.sleep(forTimeInterval: loopDelay)
       loopCounter += 1
     }
   }

@@ -31,13 +31,13 @@ public class ASLAppender : Appender {
     
   }
   
-  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
+  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     let category: String
     if let categoryFromInfo = info[LogInfoKeys.LoggerName] {
       category = categoryFromInfo.description
     } else {
       category = "Undefined"
     }
-    aslClient.logMessage(log, level: Int32(level.rawValue), category: category)
+    self.aslClient.logMessage(log, level: Int32(level.rawValue), category: category)
   }
 }

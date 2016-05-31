@@ -14,7 +14,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "This is a string"
     
     // Execute
-    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(" ")
+    let truncatedString = exempleString.stringByRemovingLastComponent(withDelimiter: " ")
     
     // Validate
     XCTAssertEqual(truncatedString, "This is a")
@@ -24,7 +24,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "This is a string"
     
     // Execute
-    let truncatedString = exempleString.stringByRemovingLastComponentWithDelimiter(",")
+		let truncatedString = exempleString.stringByRemovingLastComponent(withDelimiter: ",")
     
     // Validate
     XCTAssertEqual(truncatedString, "")
@@ -34,7 +34,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(5)
+		let truncatedString = exempleString.pad(toWidth: 5)
     
     // Validate
     XCTAssertEqual(truncatedString, "12345")
@@ -44,7 +44,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(-5)
+		let truncatedString = exempleString.pad(toWidth: -5)
     
     // Validate
     XCTAssertEqual(truncatedString, "67890")
@@ -54,7 +54,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(12)
+		let truncatedString = exempleString.pad(toWidth: 12)
     
     // Validate
     XCTAssertEqual(truncatedString, "1234567890  ")
@@ -64,7 +64,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(-12)
+		let truncatedString = exempleString.pad(toWidth: -12)
     
     // Validate
     XCTAssertEqual(truncatedString, "  1234567890")
@@ -74,7 +74,7 @@ class String_utilitiesTest: XCTestCase {
     let exempleString = "1234567890"
     
     // Execute
-    let truncatedString = exempleString.padToWidth(0)
+		let truncatedString = exempleString.pad(toWidth: 0)
     
     // Validate
     XCTAssertEqual(truncatedString, "1234567890")
@@ -133,7 +133,7 @@ class String_utilitiesTest: XCTestCase {
     }
     
     // Execute
-    logString.format([])
+		_ = logString.format(args: [])
     
     // Validate
     // Nothing to do, it should just not crash

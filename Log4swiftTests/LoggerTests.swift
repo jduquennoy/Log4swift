@@ -309,7 +309,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "testLogger")
     
     // Execute & Validate
-    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: []) }
+    XCTAssertThrows { try logger.update(withDictionary: dictionary, availableAppenders: []) }
   }
   
   func testUpdateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
@@ -319,7 +319,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.thresholdLevel, LogLevel.Info)
@@ -334,7 +334,7 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(MemoryAppender())
 
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.appenders.count, 2)
@@ -350,7 +350,7 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(MemoryAppender())
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.appenders.count, 0)
@@ -364,7 +364,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>()) }
+    XCTAssertThrows { try logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>()) }
   }
   
   func testUpdateLoggerWithAsynchronousKeyAppliesKey() {
@@ -374,7 +374,7 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertTrue(logger.asynchronous)
@@ -391,7 +391,7 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(StdOutAppender("appenderThatShouldBeRemoved"))
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: [appender1, appender2])
+    try! logger.update(withDictionary: dictionary, availableAppenders: [appender1, appender2])
   
     // Validate
     XCTAssertEqual(logger.appenders.count, 2)
@@ -458,12 +458,12 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender])
     
     // Execute
-    logger.trace("ping %@ %02x", "blabla", 12)
+		logger.trace("ping %@ %02x", "blabla", 12)
     logger.debug("ping %@ %02x", "blabla", 12)
     logger.info("ping %@ %02x", "blabla", 12)
     logger.warning("ping %@ %02x", "blabla", 12)
     logger.error("ping %@ %02x", "blabla", 12)
-    logger.fatal("ping %@ %02x", "blabla", 12)
+		logger.fatal("ping %@ %02x", "blabla", 12)
     
     // Validate
     XCTAssertEqual(appender.logMessages[0].message, "ping blabla 0c")
@@ -589,7 +589,7 @@ class LoggerTests: XCTestCase {
     
     // Execute
     let timestampBefore = NSDate().timeIntervalSince1970
-    logger.debug {NSThread.sleepForTimeInterval(2); return "This is a debug message";}
+		logger.debug {NSThread.sleep(forTimeInterval: 2); return "This is a debug message";}
     
     // Validate
     if let loggedMessageTime = NSTimeInterval(appender.logMessages[0].message) {

@@ -42,7 +42,7 @@ Available markers are :
 */
 @objc public final class PatternFormatter: NSObject, Formatter {
   /// Definition of errors the PatternFormatter can throw
-  public enum Error : ErrorType {
+  public enum Error : ErrorProtocol {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
   }
@@ -71,12 +71,12 @@ Available markers are :
   
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-  public func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws {
+	public func update(withDictionary dictionary: Dictionary<String, AnyObject>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
       let parser = PatternParser()
       self.formattingClosuresSequence = try parser.parsePattern(safePattern)
     } else {
-      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'")
+			throw NSError.Log4swiftError(description: "Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'")
     }
   }
   
@@ -97,39 +97,39 @@ Available markers are :
         let date = withUnsafePointer(&secondsSinceEpoch) {
           localtime($0)
         }
-        let buffer = UnsafeMutablePointer<Int8>.alloc(80)
+				let buffer = UnsafeMutablePointer<Int8>(allocatingCapacity: 80)
         strftime(buffer, 80, format , date)
         result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
-        buffer.destroy()
+        buffer.deinitialize()
 
-        return processCommonParameters(result, parameters: parameters)
+        return processCommonParameters(value: result, parameters: parameters)
       },
       "l": {(parameters, message, info) in
         let logLevel = info[.LogLevel] ?? "-"
-        return processCommonParameters(logLevel, parameters: parameters)
+        return processCommonParameters(value: logLevel, parameters: parameters)
       },
       "n": {(parameters, message, info) in
         let loggerName = info[.LoggerName] ?? "-"
-        return processCommonParameters(loggerName, parameters: parameters)
+        return processCommonParameters(value: loggerName, parameters: parameters)
       },
       "L": {(parameters, message, info) in 
         let line = info[.FileLine] ?? "-"
-        return processCommonParameters(line, parameters: parameters)
+        return processCommonParameters(value: line, parameters: parameters)
       },
       "F": {(parameters, message, info) in 
         let filename = info[.FileName] ?? "-"
-        return processCommonParameters(filename, parameters: parameters)
+        return processCommonParameters(value: filename, parameters: parameters)
       },
       "f": {(parameters, message, info) in
         let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent
-        return processCommonParameters(filename, parameters: parameters)
+        return processCommonParameters(value: filename, parameters: parameters)
       },
       "M": {(parameters, message, info) in
         let function = info[.Function] ?? "-"
-        return processCommonParameters(function, parameters: parameters)
+        return processCommonParameters(value: function, parameters: parameters)
       },
       "m": {(parameters, message, info) in
-        processCommonParameters(message as String, parameters: parameters)
+        processCommonParameters(value: message as String, parameters: parameters)
       },
       "%": {(parameters, message, info) in "%" }
     ]
@@ -162,7 +162,7 @@ Available markers are :
     private var parsedClosuresSequence = [FormattingClosure]()
     
     // Converts a textual pattern into a sequence of closure that can be executed to render a messaage.
-    private func parsePattern(pattern: String) throws -> [FormattingClosure] {
+    private func parsePattern(_ pattern: String) throws -> [FormattingClosure] {
       parsedClosuresSequence = [FormattingClosure]()
       
       for currentCharacter in pattern.characters
@@ -195,7 +195,7 @@ Available markers are :
       return parsedClosuresSequence
     }
     
-    private func setParserState(newState: ParserState) throws {
+    private func setParserState(_ newState: ParserState) throws {
       switch(parserStatus.machineState) {
       case .Text where parserStatus.charactersAccumulator.count > 0:
         let parsedString = String(parserStatus.charactersAccumulator)
@@ -234,7 +234,7 @@ Available markers are :
       parserStatus.machineState = newState
     }
     
-    private func processMarker(markerName: String, parameters: [String:AnyObject] = [:]) {
+    private func processMarker(_ markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = markerClosures[markerName] {
         parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) })
       } else {
@@ -258,5 +258,5 @@ func processCommonParameters(value: CustomStringConvertible, parameters: [String
     width = widthString.integerValue
   }
 
-  return value.description.padToWidth(width)
+	return value.description.pad(toWidth: width)
 }

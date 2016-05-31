@@ -26,7 +26,7 @@ extension Bool {
   /// This initializer accepts an optional string, and will return false if the optional is not set.
   public init(_ stringValue: String?) {
     if let stringValue = stringValue {
-      switch(stringValue.lowercaseString) {
+      switch(stringValue.lowercased()) {
       case "true", "yes":
         self = true
       default:

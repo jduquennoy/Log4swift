@@ -21,18 +21,19 @@
 extension String {
   /// Return a new string by removing everything after the last occurence of the provided marker and including the marker.  
   /// If the marker is not found, an empty string is returned.
-  public func stringByRemovingLastComponentWithDelimiter(delimiter: String) -> String {
-    let markerIndex = self.rangeOfString(delimiter, options: NSStringCompareOptions.BackwardsSearch, range: nil)
+  public func stringByRemovingLastComponent(withDelimiter delimiter: String) -> String {
+		let markerIndex = self.range(of: delimiter, options: NSStringCompareOptions.backwardsSearch, range: nil)
+
     let result: String
     if let markerIndex = markerIndex {
-      result = self.substringToIndex(markerIndex.startIndex)
+			result = self.substring(to: markerIndex.lowerBound)
     } else {
       result = ""
     }
     return result
   }
 
-  public func format(args: [CVarArgType]) -> String {
+  public func format(args: [CVarArg]) -> String {
     guard args.count > 0 else {
       return self
     }
@@ -51,31 +52,31 @@ extension String {
   ///                    it will be truncated.
   ///
   /// :returns: The padded string
-  public func padToWidth(width: Int) -> String {
-    var str = self as NSString
-    
+  public func pad(toWidth width: Int) -> String {
+		//    var str = self as NSString
+		var paddedString: String = self
+		
     if width == 0 {
       return self
     }
     
-    if str.length > abs(width) {
+    if self.characters.count > abs(width) {
       if width < 0 {
-        let offset = str.length - abs(width)
-        str = str.substringWithRange(NSRange(location:offset, length:abs(width)))
+				paddedString = self.substring(from: self.index(self.endIndex, offsetBy: width))
       } else {
-        str = str.substringWithRange(NSRange(location:0, length:abs(width)))
+				paddedString = self.substring(to: self.index(self.startIndex, offsetBy: width))
       }
     }
 
-    if str.length < abs(width) {
+    if self.characters.count < abs(width) {
       if width < 0 {
-        str = " ".stringByPaddingToLength(abs(width) - str.length, withString: " ", startingAtIndex: 0) + (str as String)
+				paddedString = " ".padding(toLength: abs(width) - self.characters.count, withPad: " ", startingAt: 0) + self
       } else {
-        str = str.stringByPaddingToLength(width, withString: " ", startingAtIndex: 0)
+        paddedString = self.padding(toLength: width, withPad: " ", startingAt: 0)
       }
     }
     
-    return str as String
+    return paddedString
   }
 
 
@@ -84,11 +85,11 @@ extension String {
   /// Ex: {"name":"value", 'name':'value'}
   public func toDictionary() throws -> [String:AnyObject] {
     var dict: [String:AnyObject] = Dictionary()
-    let s = (self as NSString).stringByReplacingOccurrencesOfString("'", withString: "\"")
+    let s = (self as NSString).replacingOccurrences(of: "'", with: "\"")
 
-    if let data = s.dataUsingEncoding(NSUTF8StringEncoding) {
+		if let data = s.data(using: NSUTF8StringEncoding) {
       do {
-        dict = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! [String:AnyObject]
+				dict = try NSJSONSerialization.jsonObject(with: data, options: NSJSONReadingOptions.allowFragments) as! [String:AnyObject]
       }
     }
 

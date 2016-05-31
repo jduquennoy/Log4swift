@@ -39,9 +39,9 @@ class MemoryAppender: Appender {
     super.init(identifier)
   }
   
-  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
+  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     if let loggingDelay = self.loggingDelay {
-      NSThread.sleepForTimeInterval(loggingDelay)
+      NSThread.sleep(forTimeInterval: loggingDelay)
     }
     logMessages.append((message: log, level: level))
   }
