@@ -35,6 +35,8 @@ Available markers are :
 * F{'padding': 'padding value'} : the name of the file where the log was issued
 * f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
 * M{'padding': 'padding value'} : the name of the function in which the log was issued
+* t{'padding': 'padding value'} : the id of the current thread as hexadecimal
+* T{'padding': 'padding value'} : the name of the current thread or GCD queue
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
@@ -194,87 +196,103 @@ Available markers are :
         parserStatus.charactersAccumulator += "%\(markerName)".characters
       }
     }
-		
-		// This method is a factory that will generate a closure for a markers (one letter) and its parameters.
-		// Add an entry to this switch to create a new marker.
-		private func closureForMarker(marker: String, parameters: [String:AnyObject]) -> MarkerClosure? {
-			let generatedClosure: MarkerClosure?
-			
-			switch(marker) {
-				case "d":
-					generatedClosure = {(parameters, message, info) in
-						let result: String
-						let format = parameters["format"] as? String ?? "%F %T"
-						let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
-						var secondsSinceEpoch = Int(timestamp)
-						let date = withUnsafePointer(&secondsSinceEpoch) {
-							localtime($0)
-						}
-						let buffer = UnsafeMutablePointer<Int8>.alloc(80)
-						strftime(buffer, 80, format , date)
-						result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
-						buffer.destroy()
-						
-						return processCommonParameters(result, parameters: parameters)
-					}
-				case "D":
-					let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
-					let dateFormatter = NSDateFormatter()
-					dateFormatter.dateFormat = format
-					generatedClosure = {(parameters, message, info) in
-						let result: String
-						let date: NSDate
-						if let timestamp = info[.Timestamp] as? Double {
-							date = NSDate(timeIntervalSince1970: timestamp)
-						} else {
-							date = NSDate()
-						}
-						result = dateFormatter.stringFromDate(date)
-						
-						return processCommonParameters(result, parameters: parameters)
-					}
-				case "l":
-					generatedClosure = {(parameters, message, info) in
-						let logLevel = info[.LogLevel] ?? "-"
-						return processCommonParameters(logLevel, parameters: parameters)
-					}
-				case "n":
-					generatedClosure = {(parameters, message, info) in
-						let loggerName = info[.LoggerName] ?? "-"
-						return processCommonParameters(loggerName, parameters: parameters)
-					}
-				case "L":
-					generatedClosure = {(parameters, message, info) in
-						let line = info[.FileLine] ?? "-"
-						return processCommonParameters(line, parameters: parameters)
-					}
-				case "F":
-					generatedClosure = {(parameters, message, info) in
-						let filename = info[.FileName] ?? "-"
-						return processCommonParameters(filename, parameters: parameters)
-					}
-				case "f":
-					generatedClosure = {(parameters, message, info) in
-						let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent
-						return processCommonParameters(filename, parameters: parameters)
-					}
-				case "M":
-					generatedClosure = {(parameters, message, info) in
-						let function = info[.Function] ?? "-"
-						return processCommonParameters(function, parameters: parameters)
-					}
-				case "m":
-					generatedClosure = {(parameters, message, info) in
-						processCommonParameters(message as String, parameters: parameters)
-					}
-				case "%":
-					generatedClosure = {(parameters, message, info) in "%" }
-				default:
-					generatedClosure = nil
-			}
-			
-			return generatedClosure
-		}
+    
+    // This method is a factory that will generate a closure for a markers (one letter) and its parameters.
+    // Add an entry to this switch to create a new marker.
+    private func closureForMarker(marker: String, parameters: [String:AnyObject]) -> MarkerClosure? {
+      let generatedClosure: MarkerClosure?
+      
+      switch(marker) {
+      case "d":
+        generatedClosure = {(parameters, message, info) in
+          let result: String
+          let format = parameters["format"] as? String ?? "%F %T"
+          let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+          var secondsSinceEpoch = Int(timestamp)
+          let date = withUnsafePointer(&secondsSinceEpoch) {
+            localtime($0)
+          }
+          let buffer = UnsafeMutablePointer<Int8>.alloc(80)
+          strftime(buffer, 80, format , date)
+          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
+          buffer.destroy()
+          
+          return processCommonParameters(result, parameters: parameters)
+        }
+      case "D":
+        let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = format
+        generatedClosure = {(parameters, message, info) in
+          let result: String
+          let date: NSDate
+          if let timestamp = info[.Timestamp] as? Double {
+            date = NSDate(timeIntervalSince1970: timestamp)
+          } else {
+            date = NSDate()
+          }
+          result = dateFormatter.stringFromDate(date)
+          
+          return processCommonParameters(result, parameters: parameters)
+        }
+      case "l":
+        generatedClosure = {(parameters, message, info) in
+          let logLevel = info[.LogLevel] ?? "-"
+          return processCommonParameters(logLevel, parameters: parameters)
+        }
+      case "n":
+        generatedClosure = {(parameters, message, info) in
+          let loggerName = info[.LoggerName] ?? "-"
+          return processCommonParameters(loggerName, parameters: parameters)
+        }
+      case "L":
+        generatedClosure = {(parameters, message, info) in
+          let line = info[.FileLine] ?? "-"
+          return processCommonParameters(line, parameters: parameters)
+        }
+      case "F":
+        generatedClosure = {(parameters, message, info) in
+          let filename = info[.FileName] ?? "-"
+          return processCommonParameters(filename, parameters: parameters)
+        }
+      case "f":
+        generatedClosure = {(parameters, message, info) in
+          let filename = NSString(string: (info[.FileName] as? String ?? "-")).lastPathComponent
+          return processCommonParameters(filename, parameters: parameters)
+        }
+      case "M":
+        generatedClosure = {(parameters, message, info) in
+          let function = info[.Function] ?? "-"
+          return processCommonParameters(function, parameters: parameters)
+        }
+      case "t":
+        generatedClosure = {(parameters, message, info) in
+          let threadId: String
+          if let tid = info[.ThreadId] as? UInt64 {
+            threadId = String(tid, radix: 16, uppercase: false)
+          }
+          else {
+            threadId = "-"
+          }
+          return processCommonParameters(threadId, parameters: parameters)
+        }
+      case "T":
+        generatedClosure = {(parameters, message, info) in
+          let threadName = info[.ThreadName] ?? "-"
+          return processCommonParameters(threadName, parameters: parameters)
+        }
+      case "m":
+        generatedClosure = {(parameters, message, info) in
+          processCommonParameters(message as String, parameters: parameters)
+        }
+      case "%":
+        generatedClosure = {(parameters, message, info) in "%" }
+      default:
+        generatedClosure = nil
+      }
+      
+      return generatedClosure
+    }
   }
 }
 

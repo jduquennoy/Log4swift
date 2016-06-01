@@ -224,7 +224,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: NSDate().timeIntervalSince1970,
+        .ThreadId: l4s_get_thread_id(pthread_self()),
+        .ThreadName: threadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -251,7 +253,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: NSDate().timeIntervalSince1970,
+        .ThreadId: l4s_get_thread_id(pthread_self()),
+        .ThreadName: threadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -295,3 +299,19 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     return [StdOutAppender("defaultAppender")]
   }
 }
+
+/// returns the current thread name
+private func threadName() -> String {
+  if NSThread.isMainThread() {
+    return "main"
+  } else {
+    if let threadName = NSThread.currentThread().name where !threadName.isEmpty {
+      return threadName
+    } else if let queueName = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)) where !queueName.isEmpty {
+      return queueName
+    } else {
+      return String(format: "%p", NSThread.currentThread())
+    }
+  }
+}
+
