@@ -3,3 +3,7 @@ language: objective-c
 
 script:
   - xcodebuild build test -scheme log4swift-OSX
+
+branches:
+  only:
+    - master
