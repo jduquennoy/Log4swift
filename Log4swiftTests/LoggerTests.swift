@@ -664,24 +664,26 @@ class LoggerTests: XCTestCase {
         // Execute
         logger.debug("ping")
         
-        threadId = l4s_get_thread_id(pthread_self())
+        threadId = currentThreadId()
         logMessage = appender.logMessages[0].message
+      
+        if let expectation = object as? XCTestExpectation {
+          expectation.fulfill()
+        }
       }
     }
     
+    let expectation = expectationWithDescription("logIssued")
+    
     let myInstance = MyThreadClass()
     
-    let thread = NSThread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: myInstance)
+    let thread = NSThread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: expectation)
     thread.name = "someThreadName"
     thread.stackSize = 16000
     thread.threadPriority = 0.75
     thread.start()
     
-    var finished = false
-    
-    while !finished {
-      finished = thread.finished
-    }
+    waitForExpectationsWithTimeout(1.0, handler: nil)
     
     let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
     
@@ -691,40 +693,35 @@ class LoggerTests: XCTestCase {
   
   
   func testLoggerLogsGCDQueueNameAndId() {
-    class MyThreadClass {
-      var logMessage = ""
-      var threadId: UInt64 = 0
-      
-      func loggingMethod() {
-        let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
-        let appender = MemoryAppender()
-        appender.thresholdLevel = .Debug
-        appender.formatter = formatter
-        
-        let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
-        
-        // Execute
-        logger.debug("ping")
-        
-        threadId = l4s_get_thread_id(pthread_self())
-        logMessage = appender.logMessages[0].message
-      }
-    }
-    
-    let myInstance = MyThreadClass()
-    
+    var logMessage = ""
+    var tid: UInt64 = 0
+
+    let expectation = expectationWithDescription("logIssued")
+
     let gcdQueue = dispatch_queue_create("someQueueName", DISPATCH_QUEUE_CONCURRENT)
-    
+
     dispatch_async(gcdQueue) {
-      myInstance.loggingMethod()
+      let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
+      let appender = MemoryAppender()
+      appender.thresholdLevel = .Debug
+      appender.formatter = formatter
+
+      let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
+
+      // Execute
+      logger.debug("ping")
+
+      tid = currentThreadId()
+      logMessage = appender.logMessages[0].message
+
+      expectation.fulfill()
     }
+
+    waitForExpectationsWithTimeout(1.0, handler: nil)
     
-    while myInstance.logMessage.isEmpty {
-    }
-    
-    let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
+    let threadId = String(tid, radix: 16, uppercase: false)
     
     // Validate
-    XCTAssertEqual(myInstance.logMessage, "\(threadId) someQueueName ping")
+    XCTAssertEqual(logMessage, "\(threadId) someQueueName ping")
   }
 }

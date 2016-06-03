@@ -41,8 +41,6 @@
 		02F4E8701B3A0454004AB9EA /* LoggerCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8711B3A0454004AB9EA /* NSLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4E86D1B3A0454004AB9EA /* NSLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4E8781B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */; };
-		28FC259D1CFDBFCD009DE2B0 /* l4s_get_thread_id.c in Sources */ = {isa = PBXBuildFile; fileRef = 28FC259C1CFDBFCD009DE2B0 /* l4s_get_thread_id.c */; };
-		28FC259E1CFDBFCD009DE2B0 /* l4s_get_thread_id.c in Sources */ = {isa = PBXBuildFile; fileRef = 28FC259C1CFDBFCD009DE2B0 /* l4s_get_thread_id.c */; };
 		5E06D56C1B987F5700273AC7 /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 02664C0D1B2CE96500B695DE /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */; };
 		5E16DDBC1B3441A50035D8D8 /* PatternFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */; };
@@ -145,7 +143,6 @@
 		02F4E86C1B3A0454004AB9EA /* LoggerCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerCommon.h; sourceTree = "<group>"; };
 		02F4E86D1B3A0454004AB9EA /* NSLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogger.h; sourceTree = "<group>"; };
 		02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLoggerAppenderTests.swift; sourceTree = "<group>"; };
-		28FC259C1CFDBFCD009DE2B0 /* l4s_get_thread_id.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = l4s_get_thread_id.c; sourceTree = "<group>"; };
 		5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterPerformanceTests.swift; sourceTree = "<group>"; };
 		5E16DDBB1B3441A50035D8D8 /* PatternFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatter.swift; sourceTree = "<group>"; };
 		5E17F3261B341B1D00E262F5 /* PatternFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternFormatterTests.swift; sourceTree = "<group>"; };
@@ -241,7 +238,6 @@
 				5E66F7691B42C959009395CE /* Bool+utilities.swift */,
 				D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */,
 				0241A2D71C32ACD400A624CF /* FileObserver.swift */,
-				28FC259C1CFDBFCD009DE2B0 /* l4s_get_thread_id.c */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -600,7 +596,6 @@
 				02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */,
 				02664C311B2DA6A200B695DE /* Appender.swift in Sources */,
 				5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */,
-				28FC259D1CFDBFCD009DE2B0 /* l4s_get_thread_id.c in Sources */,
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
 				5E484E511B46843D00CA5C01 /* Errors.swift in Sources */,
 				5ED244E51B34408600453B31 /* Formatter.swift in Sources */,
@@ -666,7 +661,6 @@
 				5E3E71FC1B7A185400EEE46B /* LogLevel.swift in Sources */,
 				5E3E71FD1B7A185400EEE46B /* Logger.swift in Sources */,
 				5E3E71FE1B7A185400EEE46B /* Logger+convenience.swift in Sources */,
-				28FC259E1CFDBFCD009DE2B0 /* l4s_get_thread_id.c in Sources */,
 				5E3E72141B7A263100EEE46B /* LoggerClient.m in Sources */,
 				5E3E71FF1B7A185400EEE46B /* Logger+objectiveC.swift in Sources */,
 				5E3E72001B7A185400EEE46B /* LoggerFactory.swift in Sources */,

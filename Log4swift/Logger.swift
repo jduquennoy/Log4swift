@@ -225,7 +225,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LoggerName: self.identifier,
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
-        .ThreadId: l4s_get_thread_id(pthread_self()),
+        .ThreadId: currentThreadId(),
         .ThreadName: threadName()
       ]
       if let file = file {
@@ -254,7 +254,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LoggerName: self.identifier,
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
-        .ThreadId: l4s_get_thread_id(pthread_self()),
+        .ThreadId: currentThreadId(),
         .ThreadName: threadName()
       ]
       if let file = file {
@@ -315,3 +315,19 @@ private func threadName() -> String {
   }
 }
 
+internal func currentThreadId() -> UInt64 {
+  let machThread = pthread_mach_thread_np(pthread_self())
+  var info = thread_identifier_info_data_t()
+  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t) / sizeof(UInt64))
+  var threadId: UInt64 = 0
+
+  withUnsafeMutablePointer(&info) { infoPointer in
+    let result = thread_info(machThread, thread_flavor_t(THREAD_IDENTIFIER_INFO), thread_info_t(infoPointer), &infoCount)
+
+    if result == KERN_SUCCESS {
+      threadId = info.thread_id
+    }
+  }
+
+  return threadId
+}
