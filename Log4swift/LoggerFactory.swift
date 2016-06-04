@@ -59,6 +59,12 @@ The logger factory is responsible for
   }
   
   // MARK: Acccessing loggers
+  
+  /// Helper method to easily get logger.
+  /// This is equivalent to LoggerFactory.sharedInstance.getLogger(identifier)
+  @objc public class func getLogger(identifier: String) -> Logger {
+    return self.sharedInstance.getLogger(identifier)
+  }
 
   /// Returns the logger for the given identifier.
   /// If an exact match is found, the associated logger will be returned. If not, a new logger will be created on the fly base on the logger with with the longest maching identifier.
