@@ -612,23 +612,22 @@ class LoggerTests: XCTestCase {
     // nothing to test, it should just not crash
   }
   
-  
-  func testLoggerLogsThreadId() {
+  func testLoggerLogsHexadecimalThreadId() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %m")
     let appender = MemoryAppender()
     appender.thresholdLevel = .Debug
     appender.formatter = formatter
     
     let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
-    
+    let threadId = currentThreadId()
+    let hexaThreadId = String(threadId, radix: 16, uppercase: false)
+
     // Execute
     logger.debug("ping")
     
-    // Validate (regex used to avoid problems with unknown thread id)
-    let output = appender.logMessages[0].message
-    let validationRegexp = try! NSRegularExpression(pattern: "^[0-9a-f]+ ping$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(output, options: NSMatchingOptions(), range: NSMakeRange(0, output.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
-    XCTAssert(matches.count > 0, "Message '\(output)' is not valid")
+    // Validate
+    XCTAssert(threadId != 0, "Failed to get thread ID")
+    XCTAssertEqual(appender.logMessages.first!.message, "\(hexaThreadId) ping")
   }
   
   

@@ -226,7 +226,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
         .ThreadId: currentThreadId(),
-        .ThreadName: threadName()
+        .ThreadName: currentThreadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -255,7 +255,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
         .ThreadId: currentThreadId(),
-        .ThreadName: threadName()
+        .ThreadName: currentThreadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -301,7 +301,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 }
 
 /// returns the current thread name
-private func threadName() -> String {
+private func currentThreadName() -> String {
   if NSThread.isMainThread() {
     return "main"
   } else {
@@ -318,7 +318,7 @@ private func threadName() -> String {
 internal func currentThreadId() -> UInt64 {
   let machThread = pthread_mach_thread_np(pthread_self())
   var info = thread_identifier_info_data_t()
-  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t) / sizeof(UInt64))
+  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t) / sizeof(natural_t))
   var threadId: UInt64 = 0
 
   withUnsafeMutablePointer(&info) { infoPointer in
