@@ -224,7 +224,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: NSDate().timeIntervalSince1970,
+        .ThreadId: currentThreadId(),
+        .ThreadName: threadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -251,7 +253,9 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970
+        .Timestamp: NSDate().timeIntervalSince1970,
+        .ThreadId: currentThreadId(),
+        .ThreadName: threadName()
       ]
       if let file = file {
         info[.FileName] = file
@@ -294,4 +298,36 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   private final class func createDefaultAppenders() -> [Appender] {
     return [StdOutAppender("defaultAppender")]
   }
+}
+
+/// returns the current thread name
+private func threadName() -> String {
+  if NSThread.isMainThread() {
+    return "main"
+  } else {
+    if let threadName = NSThread.currentThread().name where !threadName.isEmpty {
+      return threadName
+    } else if let queueName = String(UTF8String: dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)) where !queueName.isEmpty {
+      return queueName
+    } else {
+      return String(format: "%p", NSThread.currentThread())
+    }
+  }
+}
+
+internal func currentThreadId() -> UInt64 {
+  let machThread = pthread_mach_thread_np(pthread_self())
+  var info = thread_identifier_info_data_t()
+  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t) / sizeof(UInt64))
+  var threadId: UInt64 = 0
+
+  withUnsafeMutablePointer(&info) { infoPointer in
+    let result = thread_info(machThread, thread_flavor_t(THREAD_IDENTIFIER_INFO), thread_info_t(infoPointer), &infoCount)
+
+    if result == KERN_SUCCESS {
+      threadId = info.thread_id
+    }
+  }
+
+  return threadId
 }
