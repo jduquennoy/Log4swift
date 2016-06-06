@@ -28,6 +28,8 @@ public enum LogInfoKeys {
   case FileLine
   case Function
   case Timestamp
+  case ThreadId
+  case ThreadName
 }
 
 /**

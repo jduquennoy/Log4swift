@@ -44,6 +44,13 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssert(sharedFactory1 === sharedFactory2, "Shared factory should always be the same object")
   }
   
+  func testClassMethodToGetLoggerReturnsSameLoggerAsSharedInstance() {
+    let logger1 = LoggerFactory.getLogger(identifier: "test.logger")
+    let logger2 = LoggerFactory.sharedInstance.getLogger("test.logger")
+    
+    XCTAssert(logger1 === logger2, "class method to get logger should return the same logger as shared instance")
+  }
+  
   func testFactoryThrowsErrorWhenTryingToRegisterALoggerWithEmptyIdentifier() {
     do {
       let logger = Logger(identifier: "", level: .Info, appenders: [])

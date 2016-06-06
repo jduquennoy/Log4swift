@@ -1,9 +1,13 @@
-# Log4swift versions changelog
+# Log4swift changelog
 
 ## 1.0 (-)
 
 ### Bug fixes
 - Fixed a problem causing the FileAppender to erase log file on all new sessions (Thanks to josealobato for this fix)
+
+### Pattern formatter enhancements (thanks to Darkdah for those improvements)
+- Added a new marker to the pattern formatter:
+  - %D: the date of the log using NSDateFormatter format (defined by [Unicode Technical Standard #35](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns)). This notably allows logging of miliseconds
 
 ## 1.0b5 (2016-03-22)
 
@@ -16,8 +20,8 @@
 ### Pattern formatter enhancements (thanks to Darkdah for those improvements)
 
 - Added two markers to the pattern formatter :
-  - %f : displays the name of the file where the log was issued (%F displays the full path)
-  - %M : the name of the method in which the log message was sent
+  - %f: displays the name of the file where the log was issued (%F displays the full path)
+  - %M: the name of the method in which the log message was sent
 
 ### Log configuration
 

@@ -11,7 +11,7 @@ import Log4swift
 
 class PatternFormatterPerformanceTests: XCTestCase {
   
-  func testFormatterPerformance() {
+  func testSimpleFormatterPerformance() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "[%l][%n][%d] %m")
     let info: LogInfoDictionary = [
       LogInfoKeys.LoggerName: "nameOfTheLogger",
@@ -19,10 +19,56 @@ class PatternFormatterPerformanceTests: XCTestCase {
     ]
     
     self.measureBlock() {
-      for _ in 1...1000 {
-        formatter.format("Log message", info: info)
-      }
-    }
-  }
-  
+			for _ in 1...10000 {
+				formatter.format("Log message", info: info)
+			}
+		}
+	}
+
+	func testStrftimeDateFormatterPerformance() {
+		let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%d{'format':'%d.%m.%y %k:%M:%s'}")
+		let info: LogInfoDictionary = [
+			LogInfoKeys.LoggerName: "nameOfTheLogger",
+			LogInfoKeys.LogLevel: LogLevel.Info
+		]
+		
+		self.measureBlock() {
+			for _ in 1...10000 {
+				formatter.format("Log message", info: info)
+			}
+		}
+	}
+
+	func testCocoaDateFormatterPerformance() {
+		let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'format':'dd.MM.yyyy HH:mm:ss.SSS'}")
+		let info: LogInfoDictionary = [
+			LogInfoKeys.LoggerName: "nameOfTheLogger",
+			LogInfoKeys.LogLevel: LogLevel.Info
+		]
+		
+		self.measureBlock() {
+			for _ in 1...10000 {
+				formatter.format("Log message", info: info)
+			}
+		}
+	}
+	
+	func testComplexFormatPerformance() {
+		let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'format':'yyyy-MM-dd HH:mm:ss.SSS'} [%l{'padding':'-5'}][%n][%f:%L][%M] %m")
+		let info: LogInfoDictionary = [
+			LogInfoKeys.LoggerName: "testName",
+			LogInfoKeys.LogLevel: LogLevel.Info,
+			LogInfoKeys.FileName: "/Users/test/Swift/test.swift",
+			LogInfoKeys.FileLine: 42,
+			LogInfoKeys.Function: "testFunction",
+			LogInfoKeys.Timestamp: 123456789.876
+		]
+		
+		self.measureBlock() {
+			for _ in 1...10000 {
+				formatter.format("Log message", info: info)
+			}
+		}
+	}
+	
 }

@@ -611,4 +611,116 @@ class LoggerTests: XCTestCase {
     // Validate
     // nothing to test, it should just not crash
   }
+  
+  func testLoggerLogsHexadecimalThreadId() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %m")
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Debug
+    appender.formatter = formatter
+    
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
+    let threadId = currentThreadId()
+    let hexaThreadId = String(threadId, radix: 16, uppercase: false)
+
+    // Execute
+    logger.debug("ping")
+    
+    // Validate
+    XCTAssert(threadId != 0, "Failed to get thread ID")
+    XCTAssertEqual(appender.logMessages.first!.message, "\(hexaThreadId) ping")
+  }
+  
+  
+  func testLoggerLogsMainAsThreadName() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%T %m")
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Debug
+    appender.formatter = formatter
+    
+    let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
+    
+    // Execute
+    logger.debug("ping")
+    
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "main ping")
+  }
+  
+  
+  func testLoggerLogsNSThreadNameAndId() {
+    @objc class MyThreadClass : NSObject {
+      var logMessage = ""
+      var threadId: UInt64 = 0
+      
+      @objc func loggingMethod(object: AnyObject?) {
+        let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
+        let appender = MemoryAppender()
+        appender.thresholdLevel = .Debug
+        appender.formatter = formatter
+        
+        let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
+        
+        // Execute
+        logger.debug("ping")
+        
+        threadId = currentThreadId()
+        logMessage = appender.logMessages[0].message
+      
+        if let expectation = object as? XCTestExpectation {
+          expectation.fulfill()
+        }
+      }
+    }
+    
+    let expectation = self.expectation(withDescription: "logIssued")
+    
+    let myInstance = MyThreadClass()
+    
+    let thread = NSThread(target: myInstance, selector: #selector(myInstance.loggingMethod(object:)), object: expectation)
+    thread.name = "someThreadName"
+    thread.stackSize = 16000
+    thread.threadPriority = 0.75
+    thread.start()
+    
+    waitForExpectations(withTimeout: 1.0, handler: nil)
+    
+    let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
+    
+    // Validate
+    XCTAssertEqual(myInstance.logMessage, "\(threadId) someThreadName ping")
+  }
+  
+  
+  func testLoggerLogsGCDQueueNameAndId() {
+    var logMessage = ""
+    var tid: UInt64 = 0
+
+    let expectation = self.expectation(withDescription: "logIssued")
+
+    let gcdQueue = dispatch_queue_create("someQueueName", DISPATCH_QUEUE_CONCURRENT)
+
+    dispatch_async(gcdQueue!) {
+      let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
+      let appender = MemoryAppender()
+      appender.thresholdLevel = .Debug
+      appender.formatter = formatter
+
+      let logger = Logger(identifier: "test.logger", level: LogLevel.Debug, appenders: [appender])
+
+      // Execute
+      logger.debug("ping")
+
+      tid = currentThreadId()
+      logMessage = appender.logMessages[0].message
+
+      expectation.fulfill()
+    }
+
+    waitForExpectations(withTimeout: 1.0, handler: nil)
+    
+    let threadId = String(tid, radix: 16, uppercase: false)
+    
+    // Validate
+    XCTAssertEqual(logMessage, "\(threadId) someQueueName ping")
+  }
 }
