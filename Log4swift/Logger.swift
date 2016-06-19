@@ -313,7 +313,10 @@ private func currentThreadName() -> String {
   } else {
     var name: String = Thread.current().name ?? ""
     if name.isEmpty {
-      name = DispatchQueue.main.label
+      let queueNameBytes = __dispatch_queue_get_label(nil)
+      if let queuName = String(validatingUTF8: queueNameBytes) {
+        name = queuName
+      }
     }
     if name.isEmpty {
       name = String(format: "%p", Thread.current())
