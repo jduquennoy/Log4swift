@@ -588,11 +588,11 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender])
     
     // Execute
-    let timestampBefore = NSDate().timeIntervalSince1970
-		logger.debug {NSThread.sleep(forTimeInterval: 2); return "This is a debug message";}
+    let timestampBefore = Date().timeIntervalSince1970
+		logger.debug {Thread.sleep(forTimeInterval: 2); return "This is a debug message";}
     
     // Validate
-    if let loggedMessageTime = NSTimeInterval(appender.logMessages[0].message) {
+    if let loggedMessageTime = TimeInterval(appender.logMessages[0].message) {
       XCTAssertEqualWithAccuracy(loggedMessageTime, timestampBefore, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
@@ -676,7 +676,7 @@ class LoggerTests: XCTestCase {
     
     let myInstance = MyThreadClass()
     
-    let thread = NSThread(target: myInstance, selector: #selector(myInstance.loggingMethod(object:)), object: expectation)
+    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(object:)), object: expectation)
     thread.name = "someThreadName"
     thread.stackSize = 16000
     thread.threadPriority = 0.75
@@ -697,9 +697,9 @@ class LoggerTests: XCTestCase {
 
     let expectation = self.expectation(withDescription: "logIssued")
 
-    let gcdQueue = dispatch_queue_create("someQueueName", DISPATCH_QUEUE_CONCURRENT)
+    let gcdQueue = DispatchQueue(label: "someQueueName", attributes: DispatchQueueAttributes.concurrent)
 
-    dispatch_async(gcdQueue!) {
+    gcdQueue.async {
       let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
       let appender = MemoryAppender()
       appender.thresholdLevel = .Debug

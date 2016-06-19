@@ -206,29 +206,29 @@ Available markers are :
         generatedClosure = {(parameters, message, info) in
           let result: String
           let format = parameters["format"] as? String ?? "%F %T"
-          let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+          let timestamp = info[.Timestamp] as? TimeInterval ?? NSDate().timeIntervalSince1970
           var secondsSinceEpoch = Int(timestamp)
           let date = withUnsafePointer(&secondsSinceEpoch) {
             localtime($0)
           }
           let buffer = UnsafeMutablePointer<Int8>(allocatingCapacity: 80)
           strftime(buffer, 80, format , date)
-          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
+          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: String.Encoding.utf8.rawValue) as! String
           buffer.deinitialize()
           
           return processCommonParameters(result, parameters: parameters)
         }
       case "D":
         let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         generatedClosure = {(parameters, message, info) in
           let result: String
-          let date: NSDate
+          let date: Date
           if let timestamp = info[.Timestamp] as? Double {
-            date = NSDate(timeIntervalSince1970: timestamp)
+            date = Date(timeIntervalSince1970: timestamp)
           } else {
-            date = NSDate()
+            date = Date()
           }
           result = dateFormatter.string(from: date)
           

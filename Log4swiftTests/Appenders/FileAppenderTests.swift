@@ -66,7 +66,7 @@ class FileAppenderTests: XCTestCase {
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
       
       // Validate
-      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
       XCTAssert(fileContent.length > 0, "Content of log file should not be empty")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -90,7 +90,7 @@ class FileAppenderTests: XCTestCase {
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
       
       // Validate
-      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
       XCTAssert(fileContent.length > 0, "Content of log file should not be empty")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -116,7 +116,7 @@ class FileAppenderTests: XCTestCase {
 			fileAppender!.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
       
       // Validate
-      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
       XCTAssert(fileContent.length >= logContent.characters.count * 2, "Content of log file should not be just the first ping")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -139,7 +139,7 @@ class FileAppenderTests: XCTestCase {
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
       
       // Validate
-      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
       XCTAssertEqual(fileContent as String, logContent + "\n", "Content of log file does not match expectation")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -162,7 +162,7 @@ class FileAppenderTests: XCTestCase {
       fileAppender.log(logContent, level: LogLevel.Debug, info: LogInfoDictionary())
       
       // Validate
-      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: NSUTF8StringEncoding)
+      let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
       XCTAssertEqual(fileContent as String, logContent, "Content of log file does not match expectation")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -189,7 +189,7 @@ class FileAppenderTests: XCTestCase {
       
       
       // Validate
-      let fileContent2 = try NSString(contentsOfFile: tempFilePath2, encoding: NSUTF8StringEncoding)
+      let fileContent2 = try NSString(contentsOfFile: tempFilePath2, encoding: String.Encoding.utf8.rawValue)
       XCTAssertEqual(fileContent2 as String, logContent2 + "\n", "Content of second log file does not match expectation")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
@@ -269,7 +269,7 @@ class FileAppenderTests: XCTestCase {
 		fileAppender.performLog("log", level: .Error, info: [:])
 		
 		// Analyze
-		XCTAssertFalse(NSFileManager.default().fileExists(atPath: filePath))
+		XCTAssertFalse(FileManager.default().fileExists(atPath: filePath))
 	}
 	
 }

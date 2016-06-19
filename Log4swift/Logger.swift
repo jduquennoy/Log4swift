@@ -30,10 +30,16 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     case Asynchronous = "Asynchronous"
   }
   
-  private static let loggingQueue: dispatch_queue_t = {
-    let createdQueue = dispatch_queue_create("log4swift.dispatchLoggingQueue", DISPATCH_QUEUE_SERIAL)
-    dispatch_set_target_queue(createdQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0))
-    return createdQueue!
+  private static let loggingQueue:DispatchQueue = {
+    let createdQueue: DispatchQueue
+    
+    if #available(OSXApplicationExtension 10.10, *) {
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [.serial, .qosBackground])
+    } else {
+      let backgroundQueue = DispatchQueue.global(attributes: .priorityBackground)
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [.serial], target: backgroundQueue)
+    }
+    return createdQueue
   }()
   
   /// The UTI string that identifies the logger. Example : product.module.feature
@@ -280,7 +286,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   // MARK: Private methods
   private func executeLogClosure(_ logClosure: () -> ()) {
     if(self.asynchronous) {
-      dispatch_async(Logger.loggingQueue, logClosure)
+      Logger.loggingQueue.async(execute: logClosure)
     } else {
       logClosure()
     }
@@ -302,17 +308,15 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
 /// returns the current thread name
 private func currentThreadName() -> String {
-  if NSThread.isMainThread() {
+  if Thread.isMainThread() {
     return "main"
   } else {
-    var name: String = NSThread.current().name ?? ""
+    var name: String = Thread.current().name ?? ""
     if name.isEmpty {
-      if let queueName = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) {
-        name = String(format: "%s", queueName)
-      }
+      name = DispatchQueue.main.label
     }
     if name.isEmpty {
-      name = String(format: "%p", NSThread.current())
+      name = String(format: "%p", Thread.current())
     }
     
     return name

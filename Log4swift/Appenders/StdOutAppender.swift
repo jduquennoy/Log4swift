@@ -57,8 +57,8 @@ public class StdOutAppender: Appender {
   internal private(set) var backgroundColors = [LogLevel: TTYColor]()
   
   public required init(_ identifier: String) {
-    let xcodeColors = NSProcessInfo().environment["XcodeColors"]
-    let terminalType = NSProcessInfo().environment["TERM"]
+    let xcodeColors = ProcessInfo().environment["XcodeColors"]
+    let terminalType = ProcessInfo().environment["TERM"]
     switch (xcodeColors, terminalType) {
     case (.some("YES"), _):
       self.ttyType = .XcodeColors

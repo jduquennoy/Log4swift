@@ -28,7 +28,7 @@ typealias LoggedMessage = (message: String, level: LogLevel)
  It can also add a delay when logging messages.
 */
 class MemoryAppender: Appender {
-  var loggingDelay: NSTimeInterval? = nil
+  var loggingDelay: TimeInterval? = nil
   var logMessages = [LoggedMessage]()
   
   init() {
@@ -41,7 +41,7 @@ class MemoryAppender: Appender {
   
   override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     if let loggingDelay = self.loggingDelay {
-      NSThread.sleep(forTimeInterval: loggingDelay)
+      Thread.sleep(forTimeInterval: loggingDelay)
     }
     logMessages.append((message: log, level: level))
   }

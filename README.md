@@ -10,6 +10,8 @@
 
 Log4Swift is a logging library written in swift 2. Therefore, **it requires Xcode 7.3 to compile**.
 
+A version is also available for swift 3 in branch swift3-preview1, this version requires either Xcode 7.3 with swift 3-preview 1 toolchain installed, or Xcode 8 beta.
+
 It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift 2 or objective-C (or a mix of those two).
 
 It is available as a cocoaPod for easy integration in your projects. Here is a sample Podfile to embed this library in an iOS project :

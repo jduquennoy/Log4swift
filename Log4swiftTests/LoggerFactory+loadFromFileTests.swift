@@ -429,7 +429,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
-    let filePath = NSBundle(for: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist")
+    let filePath = Bundle(for: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist")
     
     // Execute
 		_ = XCTAssertNoThrow  { try self.factory.readConfiguration(fromPlistFile: filePath!); }
@@ -459,12 +459,12 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
 		NSDictionary().write(toFile: configurationFilePath, atomically: true)
 		try! self.factory.readConfiguration(fromPlistFile: configurationFilePath, autoReload: true, reloadInterval: 0.5)
 
-		NSRunLoop.current().run(until: NSDate(timeIntervalSinceNow: 1.0))
+		RunLoop.current().run(until: Date(timeIntervalSinceNow: 1.0))
     
     // Execute
 		configuration.write(toFile: configurationFilePath, atomically: true)
 
-    NSRunLoop.current().run(until: NSDate(timeIntervalSinceNow: 1.0))
+    RunLoop.current().run(until: Date(timeIntervalSinceNow: 1.0))
     
 
     // Validate

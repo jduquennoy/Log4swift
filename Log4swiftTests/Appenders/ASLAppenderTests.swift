@@ -25,7 +25,7 @@ class ASLAppenderTests: XCTestCase {
   
   func testASLAppenderLogsFatalMessagesWithErrorLevel() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test fatal message " + NSUUID().uuidString
+    let logMessage = "Test fatal message " + UUID().uuidString
     
     // Execute
 		appender.log(logMessage, level: LogLevel.Fatal, info: LogInfoDictionary())
@@ -39,7 +39,7 @@ class ASLAppenderTests: XCTestCase {
   
   func testASLAppenderLogsErrorMessagesWithErrorLevel() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test error message " + NSUUID().uuidString
+    let logMessage = "Test error message " + UUID().uuidString
     
     // Execute
 		appender.log(logMessage, level: LogLevel.Error, info: LogInfoDictionary())
@@ -51,7 +51,7 @@ class ASLAppenderTests: XCTestCase {
   
   func testASLAppenderLogsWarningMessagesWithWarningLevel() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test warning message " + NSUUID().uuidString
+    let logMessage = "Test warning message " + UUID().uuidString
     
     // Execute
     appender.log(logMessage, level: LogLevel.Warning, info: LogInfoDictionary())
@@ -63,7 +63,7 @@ class ASLAppenderTests: XCTestCase {
   
   func testASLAppenderLogsWarningMessagesWithInfoLevel() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test info message " + NSUUID().uuidString
+    let logMessage = "Test info message " + UUID().uuidString
     
     // Execute
 		appender.log(logMessage, level: LogLevel.Info, info: LogInfoDictionary())
@@ -75,7 +75,7 @@ class ASLAppenderTests: XCTestCase {
   
   func testASLAppenderLogsWarningMessagesWithDebugLevel() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test debug message " + NSUUID().uuidString
+    let logMessage = "Test debug message " + UUID().uuidString
     
     // Execute
 		appender.log(logMessage, level: LogLevel.Debug, info: LogInfoDictionary())
@@ -87,7 +87,7 @@ class ASLAppenderTests: XCTestCase {
 
   func testASLAppenderUsesLoggerNameAsCategoryIfProvided() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test message with facility " + NSUUID().uuidString
+    let logMessage = "Test message with facility " + UUID().uuidString
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "That is a nice logger name"]
     
     // Execute
@@ -104,7 +104,7 @@ class ASLAppenderTests: XCTestCase {
 
   func testASLAppenderLogMessagesWithoutTryingToInterpretFormatMarkers() {
     let appender = ASLAppender("testAppender")
-    let logMessage = "Test message with uninterpretted formatting markers : %f (id=" + NSUUID().uuidString + ")"
+    let logMessage = "Test message with uninterpretted formatting markers : %f (id=" + UUID().uuidString + ")"
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "That is a nice logger name"]
     
     // Execute

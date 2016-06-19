@@ -158,8 +158,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
-		let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: RegularExpression.Options())
+		let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -171,8 +171,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -184,8 +184,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -197,8 +197,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -210,8 +210,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
-		let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: RegularExpression.Options())
+		let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -224,8 +224,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
-    let expectedTimestamp = NSDate().timeIntervalSince1970
-    if let loggedMessageTime = NSTimeInterval(formattedMessage) {
+    let expectedTimestamp = Date().timeIntervalSince1970
+    if let loggedMessageTime = TimeInterval(formattedMessage) {
       XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
@@ -498,8 +498,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09.876$", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -511,8 +511,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -524,8 +524,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876  $", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876  $", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -537,8 +537,8 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^  29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matches(in: formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: NSUTF8StringEncoding)))
+    let validationRegexp = try! RegularExpression(pattern: "^  29.11.73 [0-2][0-9]:33:09.876$", options: RegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: RegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -552,7 +552,7 @@ class PatternFormatterTests: XCTestCase {
     let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
     let decodedDate = dateFormatter.date(from: formattedMessage)
     XCTAssertEqualWithAccuracy(decodedDate?.timeIntervalSince1970 ?? 0.0, timestamp, accuracy: 0.01, "Formatted date '\(formattedMessage)' is not valid")
@@ -562,15 +562,15 @@ class PatternFormatterTests: XCTestCase {
     let format = "dd.MM.yy HH:mm:ss.SSS"
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'format':'\(format)'}")
     
-    let expectedDate = NSDate()
+    let expectedDate = Date()
     
     // Execute
     let formattedMessage = formatter.format(message: "", info: [:])
     
     // Validate
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
-    let decodedDate = dateFormatter.date(from: formattedMessage) ?? NSDate.distantPast()
+    let decodedDate = dateFormatter.date(from: formattedMessage) ?? Date.distantPast
     XCTAssert(abs(expectedDate.timeIntervalSince(decodedDate)) < 0.01, "Formatted date is not now when no timestamp is provided")
   }
   

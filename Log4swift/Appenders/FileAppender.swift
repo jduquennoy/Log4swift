@@ -39,7 +39,7 @@ public class FileAppender : Appender {
       didLogFailure = false
     }
   }
-  private var fileHandler: NSFileHandle?
+  private var fileHandler: FileHandle?
   private var didLogFailure = false
 
   public init(identifier: String, filePath: String) {
@@ -73,14 +73,14 @@ public class FileAppender : Appender {
     if(!normalizedLog.hasSuffix("\n")) {
       normalizedLog = normalizedLog + "\n"
     }
-    if let dataToLog = normalizedLog.data(using: NSUTF8StringEncoding, allowLossyConversion: true) {
+    if let dataToLog = normalizedLog.data(using: String.Encoding.utf8, allowLossyConversion: true) {
       self.fileHandler?.write(dataToLog)
     }
   }
 	
 	/// - returns: true if the file handler can be used, false if not.
   private func createFileHandlerIfNeeded() -> Bool {
-    let fileManager = NSFileManager.default()
+    let fileManager = FileManager.default()
     
     do {
 			if !fileManager.fileExists(atPath: self.filePath) {
@@ -92,7 +92,7 @@ public class FileAppender : Appender {
 				fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
       }
       if fileHandler == nil {
-        self.fileHandler = NSFileHandle(forWritingAtPath: self.filePath)
+        self.fileHandler = FileHandle(forWritingAtPath: self.filePath)
         self.fileHandler?.seekToEndOfFile()
       }
       didLogFailure = false

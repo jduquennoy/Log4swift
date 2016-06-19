@@ -24,19 +24,19 @@ import XCTest
 class StdOutAppenderTests: XCTestCase {
   let savedStdout = dup(fileno(stdout))
   let savedStderr = dup(fileno(stderr))
-  var stdoutReadFileHandle = NSFileHandle()
-  var stderrReadFileHandle = NSFileHandle()
+  var stdoutReadFileHandle = FileHandle()
+  var stderrReadFileHandle = FileHandle()
   
   override func setUp() {
     super.setUp()
     
     // Capture stdout and stderr
     
-    let stdoutPipe = NSPipe()
+    let stdoutPipe = Pipe()
     self.stdoutReadFileHandle = stdoutPipe.fileHandleForReading
     dup2(stdoutPipe.fileHandleForWriting.fileDescriptor, fileno(stdout))
     
-    let stderrPipe = NSPipe()
+    let stderrPipe = Pipe()
     self.stderrReadFileHandle = stderrPipe.fileHandleForReading
     dup2(stderrPipe.fileHandleForWriting.fileDescriptor, fileno(stderr))
   }
@@ -514,14 +514,14 @@ class StdOutAppenderTests: XCTestCase {
   
   // MARK: - Private methods
 
-  private func getFileHandleContentAsString(_ fileHandle: NSFileHandle) -> String? {
+  private func getFileHandleContentAsString(_ fileHandle: FileHandle) -> String? {
     let expectation = self.expectation(withDescription: "filHandle content received")
     var expectationIsExpired = false
     var stringContent: String?
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+    DispatchQueue.global().async { () -> Void in
       let data = fileHandle.availableData
-      stringContent = NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+      stringContent = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
       if(!expectationIsExpired) {
         expectation.fulfill()
       }
