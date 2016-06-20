@@ -18,9 +18,9 @@ class PatternFormatterPerformanceTests: XCTestCase {
       LogInfoKeys.LogLevel: LogLevel.Info
     ]
     
-    self.measureBlock() {
+    self.measure() {
 			for _ in 1...10000 {
-				formatter.format("Log message", info: info)
+				_ = formatter.format(message: "Log message", info: info)
 			}
 		}
 	}
@@ -32,9 +32,9 @@ class PatternFormatterPerformanceTests: XCTestCase {
 			LogInfoKeys.LogLevel: LogLevel.Info
 		]
 		
-		self.measureBlock() {
+		self.measure() {
 			for _ in 1...10000 {
-				formatter.format("Log message", info: info)
+        _ = formatter.format(message: "Log message", info: info)
 			}
 		}
 	}
@@ -46,9 +46,9 @@ class PatternFormatterPerformanceTests: XCTestCase {
 			LogInfoKeys.LogLevel: LogLevel.Info
 		]
 		
-		self.measureBlock() {
+		self.measure() {
 			for _ in 1...10000 {
-				formatter.format("Log message", info: info)
+				_ = formatter.format(message: "Log message", info: info)
 			}
 		}
 	}
@@ -64,9 +64,9 @@ class PatternFormatterPerformanceTests: XCTestCase {
 			LogInfoKeys.Timestamp: 123456789.876
 		]
 		
-		self.measureBlock() {
+		self.measure() {
 			for _ in 1...10000 {
-				formatter.format("Log message", info: info)
+        _ = formatter.format(message: "Log message", info: info)
 			}
 		}
 	}

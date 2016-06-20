@@ -25,7 +25,7 @@ class PerformanceTests: XCTestCase {
 
   func testNSLogPerformanceTest() {
     // This is an example of a performance test case.
-    self.measureBlock() {
+    self.measure() {
       for _ in 0...5000 {
         NSLog("This is a simple log")
       }
@@ -41,7 +41,7 @@ class PerformanceTests: XCTestCase {
     logger.appenders = [stdOutAppender]
     
     // This is an example of a performance test case.
-    self.measureBlock() {
+    self.measure() {
       for _ in 0...5000 {
         logger.error("This is a simple log")
       }
@@ -58,7 +58,7 @@ class PerformanceTests: XCTestCase {
     logger.asynchronous = true
     
     // This is an example of a performance test case.
-    self.measureBlock() {
+    self.measure() {
       for _ in 0...5000 {
         logger.error("This is a simple log")
       }
@@ -67,14 +67,14 @@ class PerformanceTests: XCTestCase {
   
   func testFileLoggerWithFormatterPerformanceTest() {
     let formatter = try! PatternFormatter(identifier: "formatter", pattern: "%d %m")
-    let tempFilePath = try! self.createTemporaryFilePath("log")
+    let tempFilePath = try! self.createTemporaryFilePath(fileExtension: "log")
     let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath)
     fileAppender.formatter = formatter
     let logger = Logger(identifier: "")
     logger.appenders = [fileAppender]
     
     // This is an example of a performance test case.
-    self.measureBlock() {
+    self.measure() {
       for _ in 0...5000 {
         logger.error("This is a simple log")
       }
@@ -89,7 +89,7 @@ class PerformanceTests: XCTestCase {
     logger.appenders = [aslAppender]
     
     // This is an example of a performance test case.
-    self.measureBlock() {
+    self.measure() {
       for _ in 0...5000 {
         logger.error("This is a perf test log")
       }
@@ -104,9 +104,9 @@ class PerformanceTests: XCTestCase {
       try! factory.registerLogger(Logger(identifier: "test.identifier.\(index)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
-    self.measureBlock() {
+    self.measure() {
       for _ in 1...10000 {
-        factory.getLogger("test.identifier")
+        _ = factory.getLogger("test.identifier")
       }
     }
   }
@@ -117,9 +117,9 @@ class PerformanceTests: XCTestCase {
       try! factory.registerLogger(Logger(identifier: "test.identifier.\(index * 100)", level: .Info, appenders: [StdOutAppender("test.appender")]))
     }
     
-    self.measureBlock() {
+    self.measure() {
       for index in 1...10000 {
-        factory.getLogger("test.identifier.\(index)")
+        _ = factory.getLogger("test.identifier.\(index)")
       }
     }
   }
