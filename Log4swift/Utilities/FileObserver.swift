@@ -60,7 +60,7 @@ public class FileObserver {
       self?.poolForChange()
     }
     
-    if #available(OSXApplicationExtension 10.10, *) {
+    if #available(OSX 10.10, *) {
       DispatchQueue.main.after(when: nextPoolingTime, qos: DispatchQoS.background, execute: poolClosure)
     } else {
       DispatchQueue.main.after(when: nextPoolingTime, execute: poolClosure)
