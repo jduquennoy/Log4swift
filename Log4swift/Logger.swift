@@ -308,10 +308,10 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
 /// returns the current thread name
 private func currentThreadName() -> String {
-  if Thread.isMainThread() {
+  if Thread.isMainThread {
     return "main"
   } else {
-    var name: String = Thread.current().name ?? ""
+    var name: String = Thread.current.name ?? ""
     if name.isEmpty {
       let queueNameBytes = __dispatch_queue_get_label(nil)
       if let queuName = String(validatingUTF8: queueNameBytes) {
@@ -319,7 +319,7 @@ private func currentThreadName() -> String {
       }
     }
     if name.isEmpty {
-      name = String(format: "%p", Thread.current())
+      name = String(format: "%p", Thread.current)
     }
     
     return name
@@ -329,7 +329,7 @@ private func currentThreadName() -> String {
 internal func currentThreadId() -> UInt64 {
   let machThread = pthread_mach_thread_np(pthread_self())
   var info = thread_identifier_info_data_t()
-  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t) / sizeof(natural_t))
+  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t.self) / sizeof(natural_t.self))
   var threadId: UInt64 = 0
 
   withUnsafeMutablePointer(&info) { infoPointer in

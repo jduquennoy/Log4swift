@@ -80,7 +80,7 @@ public class FileAppender : Appender {
 	
 	/// - returns: true if the file handler can be used, false if not.
   private func createFileHandlerIfNeeded() -> Bool {
-    let fileManager = FileManager.default()
+    let fileManager = FileManager.default
     
     do {
 			if !fileManager.fileExists(atPath: self.filePath) {

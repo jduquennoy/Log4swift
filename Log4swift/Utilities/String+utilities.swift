@@ -22,7 +22,7 @@ extension String {
   /// Return a new string by removing everything after the last occurence of the provided marker and including the marker.  
   /// If the marker is not found, an empty string is returned.
   public func stringByRemovingLastComponent(withDelimiter delimiter: String) -> String {
-		let markerIndex = self.range(of: delimiter, options: NSString.CompareOptions.backwardsSearch, range: nil)
+		let markerIndex = self.range(of: delimiter, options: NSString.CompareOptions.backwards, range: nil)
 
     let result: String
     if let markerIndex = markerIndex {

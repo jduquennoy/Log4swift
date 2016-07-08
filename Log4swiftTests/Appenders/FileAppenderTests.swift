@@ -269,7 +269,7 @@ class FileAppenderTests: XCTestCase {
 		fileAppender.performLog("log", level: .Error, info: [:])
 		
 		// Analyze
-		XCTAssertFalse(FileManager.default().fileExists(atPath: filePath))
+		XCTAssertFalse(FileManager.default.fileExists(atPath: filePath))
 	}
 	
 }

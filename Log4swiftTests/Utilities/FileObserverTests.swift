@@ -44,7 +44,7 @@ class FileObserverTests: XCTestCase {
     // Execute
     // man nothing to execute : the test is to validate behavior when nothing happens.
     
-		RunLoop.current().run(until: Date(timeIntervalSinceNow: 1.0))
+		RunLoop.current.run(until: Date(timeIntervalSinceNow: 1.0))
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 0, "Delegate should have received no modification notification")
