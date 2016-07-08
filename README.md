@@ -74,16 +74,18 @@ One logger can have multiple appenders. You can for exemple define a logger that
 
 ```
 let logger = Logger.getLogger("test.logger");
-let consoleAppender = ConsoleAppender(identifier: "console");
-let fileAppender = try FileAppender(identifier: "errorFile", filePath: "/var/log/error.log");
+let stdOutAppender = StdOutAppender("console");
+let fileAppender = FileAppender(identifier: "errorFile", filePath: "/var/log/error.log");
 
-consoleAppender.thresholdLevel = .debug;
-fileAppender.thresholdLevel = .error;
-logger.appenders = [consoleAppender, fileAppender];
+stdOutAppender.thresholdLevel = .Debug;
+fileAppender.thresholdLevel = .Error;
+logger.appenders = [stdOutAppender, fileAppender];
 
 logger.debug ("This message will go to the console");
-logger.error ("This message will go to the console and the error log file");
+logger.error ("This message will go to the console and the error log file");  }
 ```
+
+(this code compiles on Xcode 7.3, using swift 2.2)
 
 ### Formatters associated to appenders
 Formatters allows you to apply a specific formatting to your log message, either modifying the message to have it complying to some constraintes or adding information to the logged message.  
