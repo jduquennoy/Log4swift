@@ -53,7 +53,7 @@ class FileObserverTests: XCTestCase {
   func testDelegateIsNotifiedWhenFileChanges() {
     let filePath = try! self.createTemporaryFilePath(fileExtension: "txt")
 		try! "original test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
-		let expectation = self.expectation(withDescription: "File modification notified")
+		let expectation = self.expectation(description: "File modification notified")
     let delegate = FakeObserverDelegate(expectation: expectation)
     let observer = FileObserver(filePath: filePath, poolInterval: 0.1)
     observer.delegate = delegate
@@ -63,7 +63,7 @@ class FileObserverTests: XCTestCase {
     // Execute
 		try! "modified test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
     
-		waitForExpectations(withTimeout: Double(observer.poolInterval * 2.0), handler: nil)
+		waitForExpectations(timeout: Double(observer.poolInterval * 2.0), handler: nil)
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 1, "Delegate should have received one modification notification")
@@ -71,7 +71,7 @@ class FileObserverTests: XCTestCase {
   
   func testDelegateIsNotifiedWhenNonExistingFileIsCreated() {
     let filePath = try! self.createTemporaryFilePath(fileExtension: "txt")
-		let expectation = self.expectation(withDescription: "File modification notified")
+		let expectation = self.expectation(description: "File modification notified")
     let delegate = FakeObserverDelegate(expectation: expectation)
     let observer = FileObserver(filePath: filePath, poolInterval: 0.1)
     observer.delegate = delegate
@@ -79,7 +79,7 @@ class FileObserverTests: XCTestCase {
     // Execute
 		try! "modified test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
     
-		waitForExpectations(withTimeout: Double(observer.poolInterval * 2.0), handler: nil)
+		waitForExpectations(timeout: Double(observer.poolInterval * 2.0), handler: nil)
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 1, "Delegate should have received one modification notification")

@@ -515,7 +515,7 @@ class StdOutAppenderTests: XCTestCase {
   // MARK: - Private methods
 
   private func getFileHandleContentAsString(_ fileHandle: FileHandle) -> String? {
-    let expectation = self.expectation(withDescription: "filHandle content received")
+    let expectation = self.expectation(description: "filHandle content received")
     var expectationIsExpired = false
     var stringContent: String?
     
@@ -527,7 +527,7 @@ class StdOutAppenderTests: XCTestCase {
       }
     }
     
-		waitForExpectations(withTimeout: 1, handler: { error in
+		waitForExpectations(timeout: 1, handler: { error in
       expectationIsExpired = true
     })
     return stringContent

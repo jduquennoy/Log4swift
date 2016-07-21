@@ -672,7 +672,7 @@ class LoggerTests: XCTestCase {
       }
     }
     
-    let expectation = self.expectation(withDescription: "logIssued")
+    let expectation = self.expectation(description: "logIssued")
     
     let myInstance = MyThreadClass()
     
@@ -682,7 +682,7 @@ class LoggerTests: XCTestCase {
     thread.threadPriority = 0.75
     thread.start()
     
-    waitForExpectations(withTimeout: 1.0, handler: nil)
+    waitForExpectations(timeout: 1.0, handler: nil)
     
     let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
     
@@ -695,7 +695,7 @@ class LoggerTests: XCTestCase {
     var logMessage = ""
     var tid: UInt64 = 0
 
-    let expectation = self.expectation(withDescription: "logIssued")
+    let expectation = self.expectation(description: "logIssued")
 
     let gcdQueue = DispatchQueue(label: "someQueueName", attributes: DispatchQueueAttributes.concurrent)
 
@@ -716,7 +716,7 @@ class LoggerTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectations(withTimeout: 1.0, handler: nil)
+    waitForExpectations(timeout: 1.0, handler: nil)
     
     let threadId = String(tid, radix: 16, uppercase: false)
     
