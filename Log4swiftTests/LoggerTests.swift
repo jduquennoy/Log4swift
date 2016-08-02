@@ -697,7 +697,7 @@ class LoggerTests: XCTestCase {
 
     let expectation = self.expectation(description: "logIssued")
 
-    let gcdQueue = DispatchQueue(label: "someQueueName", attributes: DispatchQueueAttributes.concurrent)
+    let gcdQueue = DispatchQueue(label: "someQueueName", attributes: .concurrent)
 
     gcdQueue.async {
       let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")

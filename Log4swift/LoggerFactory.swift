@@ -30,7 +30,7 @@ The logger factory is responsible for
   static public let sharedInstance = LoggerFactory()
   
   /// Errors that can be thrown by logger factory
-  public enum Error: ErrorProtocol {
+  public enum LoggerError: Error {
     case InvalidLoggerIdentifier
   }
   
@@ -46,7 +46,7 @@ The logger factory is responsible for
   /// Adding a logger with an empty identifier will cause an error. Use the root logger instead of defining a logger with an empty identifier.
   @objc public func registerLogger(_ newLogger: Logger) throws {
     if(newLogger.identifier.isEmpty) {
-      throw Error.InvalidLoggerIdentifier
+      throw LoggerError.InvalidLoggerIdentifier
     }
     
     self.loggers[newLogger.identifier] = newLogger

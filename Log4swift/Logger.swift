@@ -34,10 +34,10 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     let createdQueue: DispatchQueue
     
     if #available(OSX 10.10, *) {
-      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [.serial, .qosBackground])
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", qos: .background, attributes: []) //(label: "log4swift.dispatchLoggingQueue", attributes: [.serial, .background])
     } else {
-      let backgroundQueue = DispatchQueue.global(attributes: .priorityBackground)
-      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [.serial], target: backgroundQueue)
+      let backgroundQueue = DispatchQueue.global(priority: .background)
+      createdQueue = DispatchQueue(label: "log4swift.dispatchLoggingQueue", attributes: [], target: backgroundQueue)
     }
     return createdQueue
   }()

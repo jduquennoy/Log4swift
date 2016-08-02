@@ -45,7 +45,7 @@ Available markers are :
 */
 @objc public final class PatternFormatter: NSObject, Formatter {
   /// Definition of errors the PatternFormatter can throw
-  public enum Error : ErrorProtocol {
+  public enum FormatterError : Error {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
   }
@@ -141,7 +141,7 @@ Available markers are :
         case .Parameters:
           parserStatus.charactersAccumulator.append(currentCharacter)
         case .End:
-          throw Error.InvalidFormatSyntax
+          throw FormatterError.InvalidFormatSyntax
         }
       }
       try setParserState(.End)
@@ -171,13 +171,13 @@ Available markers are :
       case .Parameters(let markerName):
         switch(newState) {
         case .End:
-          throw Error.NotClosedMarkerParameter
+          throw FormatterError.NotClosedMarkerParameter
         default:
           do {
             try processMarker(markerName, parameters: parserStatus.getParameterValues())
           }
           catch {
-            throw Error.InvalidFormatSyntax
+            throw FormatterError.InvalidFormatSyntax
           }
 
           parserStatus.charactersAccumulator.removeAll()
@@ -211,7 +211,7 @@ Available markers are :
           let date = withUnsafePointer(&secondsSinceEpoch) {
             localtime($0)
           }
-          let buffer = UnsafeMutablePointer<Int8>(allocatingCapacity: 80)
+          let buffer = UnsafeMutablePointer<Int8>.allocate(capacity: 80)
           strftime(buffer, 80, format , date)
           result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: String.Encoding.utf8.rawValue) as! String
           buffer.deinitialize()

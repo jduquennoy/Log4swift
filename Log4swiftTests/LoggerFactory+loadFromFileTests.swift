@@ -429,7 +429,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
-    let filePath = Bundle(for: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist")
+    let filePath = Bundle(for: self.dynamicType).path(forResource: "ValidCompleteConfiguration", ofType: "plist")
     
     // Execute
 		_ = XCTAssertNoThrow  { try self.factory.readConfiguration(fromPlistFile: filePath!); }

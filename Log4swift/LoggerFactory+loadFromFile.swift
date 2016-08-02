@@ -82,7 +82,7 @@ extension LoggerFactory : FileObserverDelegate {
     
     // Loggers
     if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, AnyObject>> {
-      let sortedLoggersArray = loggersArray.sorted(isOrderedBefore: { (a, b) -> Bool in
+      let sortedLoggersArray = loggersArray.sorted(by: { (a, b) -> Bool in
         do {
           let identifierA: String = try self.identifierFromConfigurationDictionary(a)
           let identifierB: String = try self.identifierFromConfigurationDictionary(b)

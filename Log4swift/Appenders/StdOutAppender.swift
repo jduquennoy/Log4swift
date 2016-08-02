@@ -189,57 +189,57 @@ extension StdOutAppender {
     
     private func xtermCode() -> Int {
       switch(self) {
-      case Black : return 0
-      case DarkGrey : return 238
-      case Grey : return 241
-      case LightGrey : return 251
-      case White : return 15
-      case LightRed : return 199
-      case Red : return 9
-      case DarkRed : return 1
-      case LightGreen : return 46
-      case Green : return 2
-      case DarkGreen : return 22
-      case LightBlue : return 45
-      case Blue : return 21
-      case DarkBlue : return 18
-      case LightYellow : return 228
-      case Yellow : return 11
-      case DarkYellow : return 3
-      case Purple : return 93
-      case LightPurple : return 135
-      case DarkPurple : return 55
-      case LightOrange: return 215
-      case Orange: return 208
-      case DarkOrange: return 166
+      case .Black : return 0
+      case .DarkGrey : return 238
+      case .Grey : return 241
+      case .LightGrey : return 251
+      case .White : return 15
+      case .LightRed : return 199
+      case .Red : return 9
+      case .DarkRed : return 1
+      case .LightGreen : return 46
+      case .Green : return 2
+      case .DarkGreen : return 22
+      case .LightBlue : return 45
+      case .Blue : return 21
+      case .DarkBlue : return 18
+      case .LightYellow : return 228
+      case .Yellow : return 11
+      case .DarkYellow : return 3
+      case .Purple : return 93
+      case .LightPurple : return 135
+      case .DarkPurple : return 55
+      case .LightOrange: return 215
+      case .Orange: return 208
+      case .DarkOrange: return 166
       }
     }
     
     private func xcodeCode() -> String {
       switch(self) {
-      case Black : return "0,0,0"
-      case DarkGrey : return "68,68,68"
-      case Grey : return "98,98,98"
-      case LightGrey : return "200,200,200"
-      case White : return "255,255,255"
-      case LightRed : return "255,37,174"
-      case Red : return "255,0,0"
-      case DarkRed : return "201,14,19"
-      case LightGreen : return "57,255,42"
-      case Green : return "0,255,0"
-      case DarkGreen : return "18,94,11"
-      case LightBlue : return "47,216,255"
-      case Blue : return "0,0,255"
-      case DarkBlue : return "0,18,133"
-      case LightYellow : return "255,255,143"
-      case Yellow : return "255,255,56"
-      case DarkYellow : return "206,203,43"
-      case Purple : return "131,46,252"
-      case LightPurple : return "172,105,252"
-      case DarkPurple : return "92,28,173"
-      case LightOrange: return "255,176,95"
-      case Orange: return "255,135,0"
-      case DarkOrange: return "216,96,0"
+      case .Black : return "0,0,0"
+      case .DarkGrey : return "68,68,68"
+      case .Grey : return "98,98,98"
+      case .LightGrey : return "200,200,200"
+      case .White : return "255,255,255"
+      case .LightRed : return "255,37,174"
+      case .Red : return "255,0,0"
+      case .DarkRed : return "201,14,19"
+      case .LightGreen : return "57,255,42"
+      case .Green : return "0,255,0"
+      case .DarkGreen : return "18,94,11"
+      case .LightBlue : return "47,216,255"
+      case .Blue : return "0,0,255"
+      case .DarkBlue : return "0,18,133"
+      case .LightYellow : return "255,255,143"
+      case .Yellow : return "255,255,56"
+      case .DarkYellow : return "206,203,43"
+      case .Purple : return "131,46,252"
+      case .LightPurple : return "172,105,252"
+      case .DarkPurple : return "92,28,173"
+      case .LightOrange: return "255,176,95"
+      case .Orange: return "255,135,0"
+      case .DarkOrange: return "216,96,0"
       }
     }
     

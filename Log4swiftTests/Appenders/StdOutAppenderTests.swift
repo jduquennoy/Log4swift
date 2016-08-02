@@ -519,12 +519,16 @@ class StdOutAppenderTests: XCTestCase {
     var expectationIsExpired = false
     var stringContent: String?
     
-    DispatchQueue.global().async { () -> Void in
-      let data = fileHandle.availableData
-      stringContent = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
-      if(!expectationIsExpired) {
-        expectation.fulfill()
-      }
+    if #available(OSX 10.10, *) {
+        DispatchQueue.global().async { () -> Void in
+          let data = fileHandle.availableData
+          stringContent = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
+          if(!expectationIsExpired) {
+            expectation.fulfill()
+          }
+        }
+    } else {
+        // Fallback on earlier versions
     }
     
 		waitForExpectations(timeout: 1, handler: { error in

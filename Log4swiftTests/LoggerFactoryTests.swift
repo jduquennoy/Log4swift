@@ -72,7 +72,7 @@ class LoggerFactoryTests: XCTestCase {
     // Validate
     let rootLogger = self.factory.rootLogger
     XCTAssertEqual(foundLogger.thresholdLevel, rootLogger.thresholdLevel, "The obtained logger should have the same threshold as the root logger")
-    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one")
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, by: {$0 === $1}), "The created logger should have the same appenders as the closest one")
     XCTAssertEqual(foundLogger.identifier, "undefined.identifer", "The created logger should have the requested identifier")
   }
 
@@ -104,7 +104,7 @@ class LoggerFactoryTests: XCTestCase {
     XCTAssertFalse(foundLogger === logger2, "The factory should have created a new logger")
     XCTAssertEqual(foundLogger.identifier, "test.logger.identifier.plus.some.more", "The created logger should have the requested identifier")
     XCTAssertEqual(foundLogger.thresholdLevel, logger2.thresholdLevel, "The created logger should have the same threshold as the closest one")
-    XCTAssertTrue(foundLogger.appenders.elementsEqual(logger2.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one")
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(logger2.appenders, by: {$0 === $1}), "The created logger should have the same appenders as the closest one")
   }
 
   func testRequestingTwiceTheSameNonDefinedLoggerShouldReturnTheSameObject() {
@@ -133,7 +133,7 @@ class LoggerFactoryTests: XCTestCase {
     // Validate
     let rootLogger = self.factory.rootLogger
     XCTAssertEqual(foundLogger.thresholdLevel, rootLogger.thresholdLevel, "The obtained logger should have the same threshold as the root logger")
-    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, isEquivalent: {$0 === $1}), "The created logger should have the same appenders as the closest one")
+    XCTAssertTrue(foundLogger.appenders.elementsEqual(rootLogger.appenders, by: {$0 === $1}), "The created logger should have the same appenders as the closest one")
     XCTAssertEqual(foundLogger.identifier, "test.logger.identifier", "The created logger should have the requested identifier")
   }
   
