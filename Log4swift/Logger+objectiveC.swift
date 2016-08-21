@@ -90,63 +90,63 @@ extension Logger {
 
   /// Logs a trace message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "trace" method.
-  @objc public func logTraceBloc(_ closure:() -> (String)) {
+  @objc public func logTraceBloc(_ closure: @escaping () -> (String)) {
 		self.log(closure: closure, level: LogLevel.Trace)
   }
   /// Logs a debug message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "debug" method.
-  @objc public func logDebugBloc(_ closure:() -> (String)) {
+  @objc public func logDebugBloc(_ closure: @escaping () -> (String)) {
     self.log(closure: closure, level: LogLevel.Debug)
   }
   /// Logs info message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "info" method.
-  @objc public func logInfoBloc(_ closure:() -> (String)) {
+  @objc public func logInfoBloc(_ closure: @escaping () -> (String)) {
     self.log(closure: closure, level: LogLevel.Info)
   }
   /// Logs a warning message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "warning" method.
-  @objc public func logWarningBloc(_ closure:() -> (String)) {
+  @objc public func logWarningBloc(_ closure: @escaping () -> (String)) {
     self.log(closure: closure, level: LogLevel.Warning)
   }
   /// Logs a error message. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "error" method.
-  @objc public func logErrorBloc(_ closure:() -> (String)) {
+  @objc public func logErrorBloc(_ closure: @escaping () -> (String)) {
     self.log(closure: closure, level: LogLevel.Error)
   }
   /// Logs a fatal closure. This method is meant to be used from Objective-C.
   /// When in swift, prefer the "fatal" method.
-  @objc public func logFatalBloc(_ closure:() -> (String)) {
+  @objc public func logFatalBloc(_ closure: @escaping () -> (String)) {
     self.log(closure: closure, level: LogLevel.Fatal)
   }
 
   /// Logs a trace message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "trace" method.
-  @objc public func logTraceBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logTraceBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Trace, file: file, line: line, function: function)
   }
   /// Logs a debug message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "debug" method.
-  @objc public func logDebugBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logDebugBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Debug, file: file, line: line, function: function)
   }
   /// Logs a info message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "info" method.
-  @objc public func logInfoBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logInfoBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Info, file: file, line: line, function: function)
   }
   /// Logs a warning message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "warning" method.
-  @objc public func logWarningBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logWarningBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Warning, file: file, line: line, function: function)
   }
   /// Logs a error message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "error" method.
-  @objc public func logErrorBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logErrorBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Error, file: file, line: line, function: function)
   }
   /// Logs a fatal message. This method is meant to be used in macros when using Objective-C, to provide the file, line and function using the __FILE__, __LINE__ and __FUNCTION__ macros.
   /// When in swift, prefer the "fatal" method.
-  @objc public func logFatalBloc(_ closure:() -> (String), file: String, line: Int, function: String) {
+  @objc public func logFatalBloc(_ closure: @escaping () -> (String), file: String, line: Int, function: String) {
     self.log(closure: closure, level: LogLevel.Fatal, file: file, line: line, function: function)
   }
   

@@ -38,7 +38,7 @@ This class is the base class, from which all appenders should inherit.
     self.identifier = identifier
   }
   
-  internal func update(withDictionary dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  internal func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
      if let safeThresholdString = (dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String) {
       if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold

@@ -57,7 +57,7 @@ Available markers are :
   
   public let identifier: String
   
-  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String
+  typealias FormattingClosure = (_ message: String, _ infos: LogInfoDictionary) -> String
   private var formattingClosuresSequence = [FormattingClosure]()
   
   /// This initialiser will throw an error if the pattern is not valid.
@@ -74,7 +74,7 @@ Available markers are :
   
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-	public func update(withDictionary dictionary: Dictionary<String, AnyObject>) throws {
+	public func update(withDictionary dictionary: Dictionary<String, Any>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
       let parser = PatternParser()
       self.formattingClosuresSequence = try parser.parsePattern(safePattern)
@@ -84,11 +84,11 @@ Available markers are :
   }
   
   public func format(message: String, info: LogInfoDictionary) -> String {
-    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) }
+    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message, info) }
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String
+    typealias MarkerClosure = (_ parameters: [String:AnyObject], _ message: String, _ info: LogInfoDictionary) -> String
     // MARK: Formater parser state machine
     // This machine has two main methods :
     // - parsePattern : the main loop, that iterates on the characters of the pattern
@@ -116,7 +116,7 @@ Available markers are :
     private var parsedClosuresSequence = [FormattingClosure]()
     
     // Converts a textual pattern into a sequence of closure that can be executed to render a messaage.
-    private func parsePattern(_ pattern: String) throws -> [FormattingClosure] {
+    fileprivate func parsePattern(_ pattern: String) throws -> [FormattingClosure] {
       parsedClosuresSequence = [FormattingClosure]()
       
       for currentCharacter in pattern.characters
@@ -190,7 +190,7 @@ Available markers are :
     
     private func processMarker(_ markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = self.closureForMarker(markerName, parameters: parameters) {
-        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) })
+        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters, message, info) })
       } else {
         parserStatus.charactersAccumulator += "%\(markerName)".characters
       }
@@ -208,7 +208,7 @@ Available markers are :
           let format = parameters["format"] as? String ?? "%F %T"
           let timestamp = info[.Timestamp] as? TimeInterval ?? NSDate().timeIntervalSince1970
           var secondsSinceEpoch = Int(timestamp)
-          let date = withUnsafePointer(&secondsSinceEpoch) {
+          let date = withUnsafePointer(to: &secondsSinceEpoch) {
             localtime($0)
           }
           let buffer = UnsafeMutablePointer<Int8>.allocate(capacity: 80)

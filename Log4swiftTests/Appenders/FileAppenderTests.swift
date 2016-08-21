@@ -197,14 +197,14 @@ class FileAppenderTests: XCTestCase {
   }
   
   func testUpdatingAppenderFromDictionaryWithNoIdentifierThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>()
+    let dictionary = Dictionary<String, Any>()
     let appender = FileAppender("testAppender")
     
 		XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
   func testUpdatingAppenderFromDictionaryWithNoFilePathThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>()
+    let dictionary = Dictionary<String, Any>()
     let appender = FileAppender("testAppender")
     
     // Execute & Analyze

@@ -467,7 +467,7 @@ class PatternFormatterTests: XCTestCase {
   }
 
   func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>()
+    let dictionary = Dictionary<String, Any>()
     let formatter = PatternFormatter("testFormatter")
     
     XCTAssertThrows { try formatter.update(withDictionary: dictionary) }

@@ -303,7 +303,7 @@ class LoggerTests: XCTestCase {
   //MARK: Configuration from dictionary
 
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "invalidLevel"]
 
     let logger = Logger(identifier: "testLogger")
@@ -313,7 +313,7 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];    
     
     let logger = Logger(identifier: "testLogger")
@@ -326,7 +326,7 @@ class LoggerTests: XCTestCase {
   }
 
   func testUpdateLoggerFromDictionaryWithoutAppenderDoesNotChangeExistingAppenders() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     
     let logger = Logger(identifier: "testLogger")
@@ -341,7 +341,7 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerFromDictionaryWithEmptyAppendersArrayRemovesThem() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info",
     Logger.DictionaryKey.AppenderIds.rawValue: []]
     
@@ -358,7 +358,7 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerWithNotAvailableAppenderIdThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]]
   
     let logger = Logger(identifier: "testLogger")
@@ -368,7 +368,7 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerWithAsynchronousKeyAppliesKey() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.Asynchronous.rawValue: true]
     
     let logger = Logger(identifier: "testLogger")
@@ -384,7 +384,7 @@ class LoggerTests: XCTestCase {
     let appender1 = StdOutAppender("id1")
     let appender2 = StdOutAppender("id2")
     
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]]
     
     let logger = Logger(identifier: "testLogger")
@@ -629,7 +629,6 @@ class LoggerTests: XCTestCase {
     XCTAssert(threadId != 0, "Failed to get thread ID")
     XCTAssertEqual(appender.logMessages.first!.message, "\(hexaThreadId) ping")
   }
-  
   
   func testLoggerLogsMainAsThreadName() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%T %m")

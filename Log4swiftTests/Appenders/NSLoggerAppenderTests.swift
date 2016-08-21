@@ -80,7 +80,7 @@ class NSLoggerAppenderTests: XCTestCase {
   }
 
   func testUpdatingAppenderFromDictionaryWithIdentifierButNoRemoteHostNorServiceNameThrowsError () {
-    let dictionary = Dictionary<String, AnyObject>()
+    let dictionary = Dictionary<String, Any>()
     let appender = NSLoggerAppender("testAppender")
     
     // Execute
@@ -160,7 +160,7 @@ class NSLoggerAppenderTests: XCTestCase {
   }
   
   func testUpdatingAppenderFromDictionaryWithRemoteHostAndPortAsIntUsesProvidedValue () {
-    let dictionary = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
+    let dictionary:[String: Any] = [NSLoggerAppender.DictionaryKey.RemoteHost.rawValue: "remoteHost",
       NSLoggerAppender.DictionaryKey.RemotePort.rawValue: 1235]
     let appender = NSLoggerAppender("testAppender")
     

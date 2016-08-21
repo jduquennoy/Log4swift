@@ -53,8 +53,8 @@ public class StdOutAppender: Appender {
   /// Change that only if you need to override the automatic detection.
   public var ttyType: TTYType
   public var errorThresholdLevel: LogLevel? = .Error
-  internal private(set) var textColors = [LogLevel: TTYColor]()
-  internal private(set) var backgroundColors = [LogLevel: TTYColor]()
+  internal fileprivate(set) var textColors = [LogLevel: TTYColor]()
+  internal fileprivate(set) var backgroundColors = [LogLevel: TTYColor]()
   
   public required init(_ identifier: String) {
     let xcodeColors = ProcessInfo().environment["XcodeColors"]
@@ -71,7 +71,7 @@ public class StdOutAppender: Appender {
     super.init(identifier)
   }
   
-  public override func update(withDictionary dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
     
 		try super.update(withDictionary: dictionary, availableFormatters: availableFormatters)
     
@@ -243,7 +243,7 @@ extension StdOutAppender {
       }
     }
     
-    private func code(forTTYType type: TTYType) -> String {
+    fileprivate func code(forTTYType type: TTYType) -> String {
       switch(type) {
       case .XtermColor: return String(self.xtermCode())
       case .XcodeColors: return self.xcodeCode()
@@ -284,7 +284,7 @@ extension StdOutAppender {
     }
   }
   
-  private func colorizeLog(log: String, level: LogLevel) ->  String {
+  fileprivate func colorizeLog(log: String, level: LogLevel) ->  String {
     var shouldResetColors = false
     var colorizedLog = ""
     

@@ -189,7 +189,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithTextColorsUsesThem() {
     let textColors = [LogLevel.Error.description: "red",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.TextColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
@@ -204,7 +204,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithInvalidTextColorsThrowsError() {
     let textColors = [LogLevel.Error.description: "Invalide color",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.TextColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
@@ -216,7 +216,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithInvalidLevelInTextColorsThrowsError() {
     let textColors = ["Invalid level": "Red",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.TextColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
@@ -228,7 +228,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithBackgroundColorsUsesThem() {
     let textColors = [LogLevel.Error.description: "red",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
@@ -241,7 +241,7 @@ class StdOutAppenderTests: XCTestCase {
   }
   
   func testUpdatingAppenderFromDictionaryWithForcedXtermTTYTypeUsesSpecifiedType() {
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "xTeRm"]
     let appender = StdOutAppender("test appender")
     appender.ttyType = .XcodeColors
@@ -254,7 +254,7 @@ class StdOutAppenderTests: XCTestCase {
   }
   
   func testUpdatingAppenderFromDictionaryWithForcedXcodeColorsTTYTypeUsesSpecifiedType() {
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "xCoDEcolors"]
     let appender = StdOutAppender("test appender")
     appender.ttyType = .XtermColor
@@ -267,7 +267,7 @@ class StdOutAppenderTests: XCTestCase {
   }
   
   func testUpdatingAppenderFromDictionaryWithUnknownTTYTypeUsesOtherType() {
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.ForcedTTYType.rawValue: "UnknownType"]
     let appender = StdOutAppender("test appender")
     appender.ttyType = .XtermColor
@@ -282,7 +282,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithInvalidBackgroundColorsThrowsError() {
     let textColors = [LogLevel.Error.description: "Invalide color",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
@@ -294,7 +294,7 @@ class StdOutAppenderTests: XCTestCase {
   func testUpdatingAppenderFromDictionaryWithInvalidLevelInBackgroundColorsThrowsError() {
     let textColors = ["Invalid level": "Red",
       LogLevel.Info.description: "Green"]
-    let dictionary: [String: AnyObject] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
+    let dictionary: [String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
       StdOutAppender.DictionaryKey.BackgroundColors.rawValue: textColors]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug

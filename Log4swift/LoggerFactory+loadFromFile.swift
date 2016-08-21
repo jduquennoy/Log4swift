@@ -36,7 +36,7 @@ extension LoggerFactory : FileObserverDelegate {
   public func readConfiguration(fromPlistFile filePath: String, autoReload: Bool = false, reloadInterval: TimeInterval = 5.0) throws {
     let expandedFilePath = (filePath as NSString).expandingTildeInPath
     let configurationNSDictionary = NSDictionary(contentsOfFile: expandedFilePath)
-    if let configurationDictionary = configurationNSDictionary as? Dictionary<String, AnyObject> {
+    if let configurationDictionary = configurationNSDictionary as? Dictionary<String, Any> {
 			try self.readConfiguration(fromDictionary: configurationDictionary)
     }
     if autoReload {
@@ -46,19 +46,19 @@ extension LoggerFactory : FileObserverDelegate {
   }
   
   /// Reads a whole configuration from the given dictionary.
-  public func readConfiguration(fromDictionary configurationDictionary: Dictionary<String, AnyObject>) throws {
+  public func readConfiguration(fromDictionary configurationDictionary: Dictionary<String, Any>) throws {
     _ = try self.readConfigurationToTupple(fromDictionary: configurationDictionary)
   }
   
   // This internal method returns all created objects in a tupple, to make testing easier.
   // The public version does not return a tupple, an thus is compatible with Objective-C.
-  internal func readConfigurationToTupple(fromDictionary configurationDictionary: Dictionary<String, AnyObject>) throws -> (Array<Formatter>, Array<Appender>, Array<Logger>) {
+  internal func readConfigurationToTupple(fromDictionary configurationDictionary: Dictionary<String, Any>) throws -> (Array<Formatter>, Array<Appender>, Array<Logger>) {
     var formatters = Array<Formatter>()
     var appenders = Array<Appender>()
     var loggers = Array<Logger>()
     
     // Formatters
-    if let formattersArray = configurationDictionary[DictionaryKey.Formatters.rawValue] as? Array<Dictionary<String, AnyObject>> {
+    if let formattersArray = configurationDictionary[DictionaryKey.Formatters.rawValue] as? Array<Dictionary<String, Any>> {
       for currentFormatterDefinition in formattersArray {
         let formatter = try processFormatterDictionary(currentFormatterDefinition)
         formatters.append(formatter)
@@ -66,7 +66,7 @@ extension LoggerFactory : FileObserverDelegate {
     }
     
     // Appenders
-    if let appendersArray = configurationDictionary[DictionaryKey.Appenders.rawValue] as? Array<Dictionary<String, AnyObject>> {
+    if let appendersArray = configurationDictionary[DictionaryKey.Appenders.rawValue] as? Array<Dictionary<String, Any>> {
       for currentAppenderDefinition in appendersArray {
         let appender = try processAppenderDictionary(currentAppenderDefinition, formatters: formatters)
         appenders.append(appender)
@@ -74,14 +74,14 @@ extension LoggerFactory : FileObserverDelegate {
     }
     
     // Root logger
-    if let rootLoggerDictionary = configurationDictionary[DictionaryKey.RootLogger.rawValue] as? Dictionary<String, AnyObject> {
+    if let rootLoggerDictionary = configurationDictionary[DictionaryKey.RootLogger.rawValue] as? Dictionary<String, Any> {
 			try self.rootLogger.update(withDictionary: rootLoggerDictionary, availableAppenders: appenders)
     } else if configurationDictionary[DictionaryKey.RootLogger.rawValue] != nil {
 			throw NSError.Log4swiftError(description: "The '\(DictionaryKey.RootLogger.rawValue)' parameter should be a dictionary")
     }
     
     // Loggers
-    if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, AnyObject>> {
+    if let loggersArray = configurationDictionary[DictionaryKey.Loggers.rawValue] as? Array<Dictionary<String, Any>> {
       let sortedLoggersArray = loggersArray.sorted(by: { (a, b) -> Bool in
         do {
           let identifierA: String = try self.identifierFromConfigurationDictionary(a)
@@ -102,7 +102,7 @@ extension LoggerFactory : FileObserverDelegate {
     return (formatters, appenders, loggers)
   }
   
-  private func processFormatterDictionary(_ dictionary: Dictionary<String, AnyObject>) throws -> Formatter {
+  private func processFormatterDictionary(_ dictionary: Dictionary<String, Any>) throws -> Formatter {
     let identifier = try identifierFromConfigurationDictionary(dictionary)
     let formatter: Formatter
     if let className = dictionary[DictionaryKey.ClassName.rawValue] as? String {
@@ -130,7 +130,7 @@ extension LoggerFactory : FileObserverDelegate {
     return type
   }
 
-  private func processAppenderDictionary(_ dictionary: Dictionary<String, AnyObject>, formatters: Array<Formatter>) throws -> Appender {
+  private func processAppenderDictionary(_ dictionary: Dictionary<String, Any>, formatters: Array<Formatter>) throws -> Appender {
     let identifier = try identifierFromConfigurationDictionary(dictionary)
     let appender: Appender
     if let className = dictionary[DictionaryKey.ClassName.rawValue] as? String {
@@ -166,7 +166,7 @@ extension LoggerFactory : FileObserverDelegate {
     return type
   }
 
-  private func processLoggerDictionary(_ dictionary: Dictionary<String, AnyObject>, appenders: Array<Appender>) throws -> Logger {
+  private func processLoggerDictionary(_ dictionary: Dictionary<String, Any>, appenders: Array<Appender>) throws -> Logger {
     let identifier = try identifierFromConfigurationDictionary(dictionary)
     let logger = self.getLogger(identifier)
     
@@ -175,7 +175,7 @@ extension LoggerFactory : FileObserverDelegate {
     return logger
   }
   
-  private func identifierFromConfigurationDictionary(_ configurationDictionary: Dictionary<String, AnyObject>) throws -> String {
+  private func identifierFromConfigurationDictionary(_ configurationDictionary: Dictionary<String, Any>) throws -> String {
     let identifier: String
     if let safeIdentifier = configurationDictionary[DictionaryKey.Identifier.rawValue] as? String {
       if(safeIdentifier.isEmpty) {

@@ -27,7 +27,7 @@ public protocol Formatter {
   
   init (_ identifier: String)
   
-  func update(withDictionary dictionary: Dictionary<String, AnyObject>) throws
+  func update(withDictionary dictionary: Dictionary<String, Any>) throws
   
   /// Formats the given message, using the provided info dictionary.
   /// Info dictionary contains additional infos that can be rendered as a string and that can be used by matchers.

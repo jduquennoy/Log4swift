@@ -96,12 +96,3 @@ extension String {
     return dict
   }
 }
-
-
-
-extension String : CustomStringConvertible {
-  /// Returns the string itself (needed to conform to the CustomStringConvertible protocol)
-  public var description: String {
-    get {return self;}
-  }
-}

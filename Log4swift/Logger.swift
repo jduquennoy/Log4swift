@@ -121,7 +121,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   }
   
   /// Updates the logger with the content of the configuration dictionary.
-  internal func update(withDictionary dictionary: Dictionary<String, AnyObject>, availableAppenders: Array<Appender>) throws {
+  internal func update(withDictionary dictionary: Dictionary<String, Any>, availableAppenders: Array<Appender>) throws {
     breakDependencyWithParent()
     
     if let safeLevelString = dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String {
@@ -189,32 +189,32 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
   /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func trace(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func trace(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
 		self.log(closure: closure, level: LogLevel.Trace, file: file, line: line, function: function)
   }
   /// Logs a the message returned by the closure with a debug level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func debug(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func debug(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
     self.log(closure: closure, level: LogLevel.Debug, file: file, line: line, function: function)
   }
   /// Logs a the message returned by the closure with an info level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func info(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func info(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
     self.log(closure: closure, level: LogLevel.Info, file: file, line: line, function: function)
   }
   /// Logs a the message returned by the closure with a warning level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func warning(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func warning(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
     self.log(closure: closure, level: LogLevel.Warning, file: file, line: line, function: function)
   }
   /// Logs a the message returned by the closure with an error level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func error(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func error(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
     self.log(closure: closure, level: LogLevel.Error, file: file, line: line, function: function)
   }
   /// Logs a the message returned by the closure with a fatal level
   /// If the logger's or appender's configuration prevents the message to be issued, the closure will not be called.
-  @nonobjc public func fatal(file: String = #file, line: Int = #line, function: String = #function, closure: () -> String) {
+  @nonobjc public func fatal(file: String = #file, line: Int = #line, function: String = #function, closure: @escaping () -> String) {
     self.log(closure: closure, level: LogLevel.Fatal, file: file, line: line, function: function)
   }
   
@@ -254,7 +254,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
   }
   
-  @nonobjc internal func log(closure: () -> (String), level: LogLevel, file: String? = nil, line: Int? = nil, function: String? = nil) {
+  @nonobjc internal func log(closure: @escaping () -> (String), level: LogLevel, file: String? = nil, line: Int? = nil, function: String? = nil) {
     if(self.willIssueLogForLevel(level)) {
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
@@ -284,7 +284,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   }
   
   // MARK: Private methods
-  private func executeLogClosure(_ logClosure: () -> ()) {
+  private func executeLogClosure(_ logClosure: @escaping () -> ()) {
     if(self.asynchronous) {
       Logger.loggingQueue.async(execute: logClosure)
     } else {
@@ -327,18 +327,9 @@ private func currentThreadName() -> String {
 }
 
 internal func currentThreadId() -> UInt64 {
-  let machThread = pthread_mach_thread_np(pthread_self())
-  var info = thread_identifier_info_data_t()
-  var infoCount = mach_msg_type_number_t(sizeof(thread_identifier_info_data_t.self) / sizeof(natural_t.self))
   var threadId: UInt64 = 0
-
-  withUnsafeMutablePointer(&info) { infoPointer in
-    let result = thread_info(machThread, thread_flavor_t(THREAD_IDENTIFIER_INFO), thread_info_t(infoPointer), &infoCount)
-
-    if result == KERN_SUCCESS {
-      threadId = info.thread_id
-    }
+  if (pthread_threadid_np(nil, &threadId) != 0) {
+    threadId = UInt64(pthread_mach_thread_np(pthread_self()));
   }
-
   return threadId
 }

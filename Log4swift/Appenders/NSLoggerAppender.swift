@@ -59,7 +59,7 @@ public class NSLoggerAppender : Appender {
     super.init(identifier)
   }
 
-  public override func update(withDictionary dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  public override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
 		try super.update(withDictionary: dictionary, availableFormatters: availableFormatters)
     
     let bonjourMode = (dictionary[DictionaryKey.BonjourServiceName.rawValue] != nil)
