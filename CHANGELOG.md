@@ -1,6 +1,8 @@
 # Log4swift changelog
 
-## 1.0 (-)
+## 1.0
+
+This is the first verison to drop the "beta" flag. After using it in different projects for a while, with no problem, it seems safe to advertise it as non beta now.
 
 ### Bug fixes
 - Fixed a problem causing the FileAppender to erase log file on all new sessions (Thanks to josealobato for this fix)

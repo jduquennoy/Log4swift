@@ -3,31 +3,31 @@
             )](http://mit-license.org)
 [![Platform](http://img.shields.io/badge/platform-OS X/iOS-lightgrey.svg?style=flat
              )](https://developer.apple.com/resources/)
-[![Language](http://img.shields.io/badge/language-swift2-orange.svg?style=flat
+[![Language](http://img.shields.io/badge/language-swift3-orange.svg?style=flat
              )](https://developer.apple.com/swift)
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
 [![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
 
-Log4Swift is a logging library written in swift.
+Log4Swift is a logging library written in swift, that is meant to be very configurable both in code at compile time, or using a configuration file at runtime.
 
 Starting with v1.0, it is swift 3 code, and thus requires Xcode 8.
 
 Use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
-It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift 2 or objective-C (or a mix of those two).
+It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift or objective-C (or a mix of those two).
 
 It is available as a cocoaPod for easy integration in your projects. Here is a sample Podfile to embed this library in an iOS project :
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.0.0b5'
+pod 'Log4swift', '1.0.0'
 use_frameworks!
 ```
 And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.0.0b5'
+pod 'Log4swift', '1.0.0'
 use_frameworks!
 ```
 
@@ -35,13 +35,13 @@ use_frameworks!
 Here are the main features you can expect from Log4swift :
 
 * straightforward to use for simple cases : default configuration should just work, one-line configuration for typical uses like logging to IDE console or to system logs
-* powerful for more complexe cases, with multi-destination logging for exemple
-* ability to log over the network, using an NSLogger backend.
+* powerful for more complexe cases, with multi-destination logging and hierarchic loggers configuration
+* ability to log over the network, using an NSLogger backend
 * dynamically configurable by code
 * configurable by file
+* possibility to auto-reload configuration file automatically (opt-in feature)
 * capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color256
-* logs synchronously by default, but can log asynchronously on request. Async behavior can be configured per logger.
-* possibility to auto-reload configuration file automatically (disabled by default)
+* asynchronous logging, performed on a secondary thread (opt-in feature). Async behavior can be activated per logger.
 
 
 Another goal, that I think we all share, is to have readable and tested code.
