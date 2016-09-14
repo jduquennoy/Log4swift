@@ -8,12 +8,11 @@
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
 [![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
 
-Log4Swift is a logging library written in swift 2. Therefore, **it requires Xcode 7.3 to compile**.
+Log4Swift is a logging library written in swift.
 
-An xcode 8 / swift 3 version is also available in branch xcode8-beta. Use this pod definition if you want to use it in a pod-based environment :
-```
-pod 'Log4swift', :git => 'https://github.com/jduquennoy/Log4swift.git', :branch => 'xcode8-beta'
-```
+Starting with v1.0, it is swift 3 code, and thus requires Xcode 8.
+
+Use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
 It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift 2 or objective-C (or a mix of those two).
 

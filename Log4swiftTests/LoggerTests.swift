@@ -303,30 +303,30 @@ class LoggerTests: XCTestCase {
   //MARK: Configuration from dictionary
 
   func testCreateLoggerFromDictionaryWithInvalidLevelThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "invalidLevel"]
 
     let logger = Logger(identifier: "testLogger")
     
     // Execute & Validate
-    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: []) }
+    XCTAssertThrows { try logger.update(withDictionary: dictionary, availableAppenders: []) }
   }
   
   func testUpdateLoggerFromDictionaryWithValidLevelUsesProvidedValue() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"];    
     
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.thresholdLevel, LogLevel.Info)
   }
 
   func testUpdateLoggerFromDictionaryWithoutAppenderDoesNotChangeExistingAppenders() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     
     let logger = Logger(identifier: "testLogger")
@@ -334,14 +334,14 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(MemoryAppender())
 
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.appenders.count, 2)
   }
   
   func testUpdateLoggerFromDictionaryWithEmptyAppendersArrayRemovesThem() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info",
     Logger.DictionaryKey.AppenderIds.rawValue: []]
     
@@ -350,7 +350,7 @@ class LoggerTests: XCTestCase {
     logger.appenders.append(MemoryAppender())
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertEqual(logger.appenders.count, 0)
@@ -358,23 +358,23 @@ class LoggerTests: XCTestCase {
   }
   
   func testUpdateLoggerWithNotAvailableAppenderIdThrowsError() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]]
   
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    XCTAssertThrows { try logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>()) }
+    XCTAssertThrows { try logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>()) }
   }
   
   func testUpdateLoggerWithAsynchronousKeyAppliesKey() {
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.Asynchronous.rawValue: true]
     
     let logger = Logger(identifier: "testLogger")
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: Array<Appender>())
+    try! logger.update(withDictionary: dictionary, availableAppenders: Array<Appender>())
     
     // Validate
     XCTAssertTrue(logger.asynchronous)
@@ -384,14 +384,14 @@ class LoggerTests: XCTestCase {
     let appender1 = StdOutAppender("id1")
     let appender2 = StdOutAppender("id2")
     
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let dictionary: Dictionary<String, Any> = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
     Logger.DictionaryKey.AppenderIds.rawValue: ["id1", "id2"]]
     
     let logger = Logger(identifier: "testLogger")
     logger.appenders.append(StdOutAppender("appenderThatShouldBeRemoved"))
     
     // Execute
-    try! logger.updateWithDictionary(dictionary, availableAppenders: [appender1, appender2])
+    try! logger.update(withDictionary: dictionary, availableAppenders: [appender1, appender2])
   
     // Validate
     XCTAssertEqual(logger.appenders.count, 2)
@@ -458,12 +458,12 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.logger", level: LogLevel.Trace, appenders: [appender])
     
     // Execute
-    logger.trace("ping %@ %02x", "blabla", 12)
+		logger.trace("ping %@ %02x", "blabla", 12)
     logger.debug("ping %@ %02x", "blabla", 12)
     logger.info("ping %@ %02x", "blabla", 12)
     logger.warning("ping %@ %02x", "blabla", 12)
     logger.error("ping %@ %02x", "blabla", 12)
-    logger.fatal("ping %@ %02x", "blabla", 12)
+		logger.fatal("ping %@ %02x", "blabla", 12)
     
     // Validate
     XCTAssertEqual(appender.logMessages[0].message, "ping blabla 0c")
@@ -588,11 +588,11 @@ class LoggerTests: XCTestCase {
     let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender])
     
     // Execute
-    let timestampBefore = NSDate().timeIntervalSince1970
-    logger.debug {NSThread.sleepForTimeInterval(2); return "This is a debug message";}
+    let timestampBefore = Date().timeIntervalSince1970
+		logger.debug {Thread.sleep(forTimeInterval: 2); return "This is a debug message";}
     
     // Validate
-    if let loggedMessageTime = NSTimeInterval(appender.logMessages[0].message) {
+    if let loggedMessageTime = TimeInterval(appender.logMessages[0].message) {
       XCTAssertEqualWithAccuracy(loggedMessageTime, timestampBefore, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
@@ -629,7 +629,6 @@ class LoggerTests: XCTestCase {
     XCTAssert(threadId != 0, "Failed to get thread ID")
     XCTAssertEqual(appender.logMessages.first!.message, "\(hexaThreadId) ping")
   }
-  
   
   func testLoggerLogsMainAsThreadName() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%T %m")
@@ -672,17 +671,17 @@ class LoggerTests: XCTestCase {
       }
     }
     
-    let expectation = expectationWithDescription("logIssued")
+    let expectation = self.expectation(description: "logIssued")
     
     let myInstance = MyThreadClass()
     
-    let thread = NSThread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: expectation)
+    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(object:)), object: expectation)
     thread.name = "someThreadName"
     thread.stackSize = 16000
     thread.threadPriority = 0.75
     thread.start()
     
-    waitForExpectationsWithTimeout(1.0, handler: nil)
+    waitForExpectations(timeout: 1.0, handler: nil)
     
     let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
     
@@ -695,11 +694,11 @@ class LoggerTests: XCTestCase {
     var logMessage = ""
     var tid: UInt64 = 0
 
-    let expectation = expectationWithDescription("logIssued")
+    let expectation = self.expectation(description: "logIssued")
 
-    let gcdQueue = dispatch_queue_create("someQueueName", DISPATCH_QUEUE_CONCURRENT)
+    let gcdQueue = DispatchQueue(label: "someQueueName", attributes: .concurrent)
 
-    dispatch_async(gcdQueue) {
+    gcdQueue.async {
       let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
       let appender = MemoryAppender()
       appender.thresholdLevel = .Debug
@@ -716,7 +715,7 @@ class LoggerTests: XCTestCase {
       expectation.fulfill()
     }
 
-    waitForExpectationsWithTimeout(1.0, handler: nil)
+    waitForExpectations(timeout: 1.0, handler: nil)
     
     let threadId = String(tid, radix: 16, uppercase: false)
     

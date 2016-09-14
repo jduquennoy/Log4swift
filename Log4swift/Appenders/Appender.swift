@@ -38,34 +38,34 @@ This class is the base class, from which all appenders should inherit.
     self.identifier = identifier
   }
   
-  internal func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
+  internal func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
      if let safeThresholdString = (dictionary[DictionaryKey.ThresholdLevel.rawValue] as? String) {
       if let safeThreshold = LogLevel(safeThresholdString) {
         thresholdLevel = safeThreshold
       } else {
-        throw NSError.Log4swiftErrorWithDescription("Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' for appender '\(self.identifier)'")
+        throw NSError.Log4swiftError(description: "Invalid '\(DictionaryKey.ThresholdLevel.rawValue)' for appender '\(self.identifier)'")
       }
     }
     
     if let safeFormatterId = (dictionary[DictionaryKey.FormatterId.rawValue] as? String) {
-      if let formatter = availableFormatters.find({ $0.identifier == safeFormatterId }) {
+      if let formatter = availableFormatters.find(filter: { $0.identifier == safeFormatterId }) {
         self.formatter = formatter
       } else {
-        throw NSError.Log4swiftErrorWithDescription("No such formatter '\(safeFormatterId)' for appender \(self.identifier)")
+        throw NSError.Log4swiftError(description: "No such formatter '\(safeFormatterId)' for appender \(self.identifier)")
       }
     }
   }
   
-  func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
+  func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     // To be overriden by subclasses
   }
   
-  final func log(log: String, level: LogLevel, info: LogInfoDictionary) {
+  final func log(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     if(level.rawValue >= self.thresholdLevel.rawValue) {
       let logMessage: String
       
       if let formatter = self.formatter {
-        logMessage = formatter.format(log, info: info)
+        logMessage = formatter.format(message: log, info: info)
       } else {
         logMessage = log
       }

@@ -17,7 +17,7 @@ private class FakeObserverDelegate: FileObserverDelegate {
     self.expectation = expectation
   }
   
-  func fileChanged(filePath: String) {
+  func fileChanged(atPath filePath: String) {
     changes.append(filePath)
     expectation?.fulfill()
   }
@@ -34,8 +34,8 @@ class FileObserverTests: XCTestCase {
   }
   
   func testDelegateIsNotNotifiedIfFileIsNotModified() {
-    let filePath = try! self.createTemporaryFilePath("txt")
-    try! "original test file content".writeToFile(filePath, atomically: false, encoding: NSUTF8StringEncoding)
+    let filePath = try! self.createTemporaryFilePath(fileExtension: "txt")
+		try! "original test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
     //    let expectation = expectationWithDescription("File modification notified")
     let delegate = FakeObserverDelegate()
     let observer = FileObserver(filePath: filePath, poolInterval: 0.1)
@@ -44,16 +44,16 @@ class FileObserverTests: XCTestCase {
     // Execute
     // man nothing to execute : the test is to validate behavior when nothing happens.
     
-    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1.0))
+		RunLoop.current.run(until: Date(timeIntervalSinceNow: 1.0))
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 0, "Delegate should have received no modification notification")
   }
   
   func testDelegateIsNotifiedWhenFileChanges() {
-    let filePath = try! self.createTemporaryFilePath("txt")
-    try! "original test file content".writeToFile(filePath, atomically: false, encoding: NSUTF8StringEncoding)
-    let expectation = expectationWithDescription("File modification notified")
+    let filePath = try! self.createTemporaryFilePath(fileExtension: "txt")
+		try! "original test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
+		let expectation = self.expectation(description: "File modification notified")
     let delegate = FakeObserverDelegate(expectation: expectation)
     let observer = FileObserver(filePath: filePath, poolInterval: 0.1)
     observer.delegate = delegate
@@ -61,25 +61,25 @@ class FileObserverTests: XCTestCase {
     sleep(1); // the modification date resolution for file is 1 second, we should not be faster.
     
     // Execute
-    try! "modified test file content".writeToFile(filePath, atomically: false, encoding: NSUTF8StringEncoding)
+		try! "modified test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
     
-    waitForExpectationsWithTimeout(Double(observer.poolInterval * 2.0), handler: nil)
+		waitForExpectations(timeout: Double(observer.poolInterval * 2.0), handler: nil)
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 1, "Delegate should have received one modification notification")
   }
   
   func testDelegateIsNotifiedWhenNonExistingFileIsCreated() {
-    let filePath = try! self.createTemporaryFilePath("txt")
-    let expectation = expectationWithDescription("File modification notified")
+    let filePath = try! self.createTemporaryFilePath(fileExtension: "txt")
+		let expectation = self.expectation(description: "File modification notified")
     let delegate = FakeObserverDelegate(expectation: expectation)
     let observer = FileObserver(filePath: filePath, poolInterval: 0.1)
     observer.delegate = delegate
 
     // Execute
-    try! "modified test file content".writeToFile(filePath, atomically: false, encoding: NSUTF8StringEncoding)
+		try! "modified test file content".write(toFile: filePath, atomically: false, encoding: String.Encoding.utf8)
     
-    waitForExpectationsWithTimeout(Double(observer.poolInterval * 2.0), handler: nil)
+		waitForExpectations(timeout: Double(observer.poolInterval * 2.0), handler: nil)
     
     // Validate
     XCTAssertEqual(delegate.changes.count, 1, "Delegate should have received one modification notification")

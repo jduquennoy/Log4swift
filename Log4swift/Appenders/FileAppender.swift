@@ -35,16 +35,16 @@ public class FileAppender : Appender {
         safeHandler.closeFile()
         self.fileHandler = nil
       }
-      self.filePath = (self.filePath as NSString).stringByExpandingTildeInPath
+      self.filePath = (self.filePath as NSString).expandingTildeInPath
       didLogFailure = false
     }
   }
-  private var fileHandler: NSFileHandle?
+  private var fileHandler: FileHandle?
   private var didLogFailure = false
 
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil
-    self.filePath = (filePath as NSString).stringByExpandingTildeInPath
+    self.filePath = (filePath as NSString).expandingTildeInPath
 
     super.init(identifier)
   }
@@ -53,18 +53,18 @@ public class FileAppender : Appender {
     self.init(identifier: identifier, filePath: "/dev/null")
   }
   
-  public override func updateWithDictionary(dictionary: Dictionary<String, AnyObject>, availableFormatters: Array<Formatter>) throws {
-    try super.updateWithDictionary(dictionary, availableFormatters: availableFormatters)
+	public override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
+		try super.update(withDictionary: dictionary, availableFormatters: availableFormatters)
     
     if let safeFilePath = (dictionary[DictionaryKey.FilePath.rawValue] as? String) {
       self.filePath = safeFilePath
     } else {
       self.filePath = "placeholder"
-      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'")
+			throw NSError.Log4swiftError(description: "Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'")
     }
   }
   
-  override func performLog(log: String, level: LogLevel, info: LogInfoDictionary) {
+  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
 		guard createFileHandlerIfNeeded() else {
 			return
 		}
@@ -73,26 +73,26 @@ public class FileAppender : Appender {
     if(!normalizedLog.hasSuffix("\n")) {
       normalizedLog = normalizedLog + "\n"
     }
-    if let dataToLog = normalizedLog.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true) {
-      self.fileHandler?.writeData(dataToLog)
+    if let dataToLog = normalizedLog.data(using: String.Encoding.utf8, allowLossyConversion: true) {
+      self.fileHandler?.write(dataToLog)
     }
   }
 	
 	/// - returns: true if the file handler can be used, false if not.
   private func createFileHandlerIfNeeded() -> Bool {
-    let fileManager = NSFileManager.defaultManager()
+    let fileManager = FileManager.default
     
     do {
-      if !fileManager.fileExistsAtPath(self.filePath) {
+			if !fileManager.fileExists(atPath: self.filePath) {
 				self.fileHandler = nil
 				
-        let directoryPath = (filePath as NSString).stringByDeletingLastPathComponent
-        try fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
+        let directoryPath = (filePath as NSString).deletingLastPathComponent
+				try fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
         
-        fileManager.createFileAtPath(filePath, contents: nil, attributes: nil)
+				fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
       }
       if fileHandler == nil {
-        self.fileHandler = NSFileHandle(forWritingAtPath: self.filePath)
+        self.fileHandler = FileHandle(forWritingAtPath: self.filePath)
         self.fileHandler?.seekToEndOfFile()
       }
       didLogFailure = false

@@ -22,7 +22,7 @@ import XCTest
 
 extension XCTestCase {
 
-  func XCTAssertThrows(file: StaticString = #file, line: UInt = #line, _ closure:() throws -> Void) {
+  func XCTAssertThrows(_ file: StaticString = #file, line: UInt = #line, _ closure:() throws -> Void) {
     do {
       try closure()
       XCTFail("Closure did not throw an error", file: file, line: line)
@@ -31,7 +31,7 @@ extension XCTestCase {
     }
   }
   
-  func XCTAssertNoThrow<T>(file: StaticString = #file, line: UInt = #line, _ closure:() throws -> T) -> T? {
+  func XCTAssertNoThrow<T>(_ file: StaticString = #file, line: UInt = #line, _ closure:() throws -> T) -> T? {
     do {
       return try closure()
     } catch let error {

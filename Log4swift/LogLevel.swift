@@ -39,20 +39,20 @@ Trace < Debug < Info < Warning < Error < Fatal < Off
   /// Converts a string to a log level if possible.
   /// This initializer is not case sensitive
   public init?(_ stringValue: String) {
-    switch(stringValue.lowercaseString) {
-    case LogLevel.Trace.description.lowercaseString:
+    switch(stringValue.lowercased()) {
+    case LogLevel.Trace.description.lowercased():
       self = .Trace
-    case LogLevel.Debug.description.lowercaseString:
+    case LogLevel.Debug.description.lowercased():
       self = .Debug
-    case LogLevel.Info.description.lowercaseString:
+    case LogLevel.Info.description.lowercased():
       self = .Info
-    case LogLevel.Warning.description.lowercaseString:
+    case LogLevel.Warning.description.lowercased():
       self = .Warning
-    case LogLevel.Error.description.lowercaseString:
+    case LogLevel.Error.description.lowercased():
       self = .Error
-    case LogLevel.Fatal.description.lowercaseString:
+    case LogLevel.Fatal.description.lowercased():
       self = .Fatal
-    case LogLevel.Off.description.lowercaseString:
+    case LogLevel.Off.description.lowercased():
       self = .Off
     default:
       return nil

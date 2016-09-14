@@ -22,7 +22,7 @@ import XCTest
 
 extension XCTestCase {
   func createTemporaryFilePath(fileExtension: String) throws -> String {
-    let temporaryFilePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(NSUUID().UUIDString + "." + fileExtension)
+    let temporaryFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent(UUID().uuidString + "." + fileExtension)
     return temporaryFilePath
   }
 }

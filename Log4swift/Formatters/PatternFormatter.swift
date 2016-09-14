@@ -45,7 +45,7 @@ Available markers are :
 */
 @objc public final class PatternFormatter: NSObject, Formatter {
   /// Definition of errors the PatternFormatter can throw
-  public enum Error : ErrorType {
+  public enum FormatterError : Error {
     case InvalidFormatSyntax
     case NotClosedMarkerParameter
   }
@@ -57,7 +57,7 @@ Available markers are :
   
   public let identifier: String
   
-  typealias FormattingClosure = (message: String, infos: LogInfoDictionary) -> String
+  typealias FormattingClosure = (_ message: String, _ infos: LogInfoDictionary) -> String
   private var formattingClosuresSequence = [FormattingClosure]()
   
   /// This initialiser will throw an error if the pattern is not valid.
@@ -74,22 +74,21 @@ Available markers are :
   
   /// This initialiser will create a PatternFormatter with the informations provided as a dictionnary.
   /// It will throw an error if a mandatory parameter is missing of if the pattern is invalid.
-  public func updateWithDictionary(dictionary: Dictionary<String, AnyObject>) throws {
+	public func update(withDictionary dictionary: Dictionary<String, Any>) throws {
     if let safePattern = (dictionary[DictionaryKey.Pattern.rawValue] as? String) {
       let parser = PatternParser()
       self.formattingClosuresSequence = try parser.parsePattern(safePattern)
     } else {
-      throw NSError.Log4swiftErrorWithDescription("Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'")
+			throw NSError.Log4swiftError(description: "Missing '\(DictionaryKey.Pattern.rawValue)' parameter for pattern formatter '\(self.identifier)'")
     }
   }
   
   public func format(message: String, info: LogInfoDictionary) -> String {
-    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message: message, infos: info) }
+    return formattingClosuresSequence.reduce("") { (accumulatedValue, currentItem) in accumulatedValue + currentItem(message, info) }
   }
   
   private class PatternParser {
-    typealias MarkerClosure = (parameters: [String:AnyObject], message: String, info: LogInfoDictionary) -> String
-		
+    typealias MarkerClosure = (_ parameters: [String:AnyObject], _ message: String, _ info: LogInfoDictionary) -> String
     // MARK: Formater parser state machine
     // This machine has two main methods :
     // - parsePattern : the main loop, that iterates on the characters of the pattern
@@ -117,7 +116,7 @@ Available markers are :
     private var parsedClosuresSequence = [FormattingClosure]()
     
     // Converts a textual pattern into a sequence of closure that can be executed to render a messaage.
-    private func parsePattern(pattern: String) throws -> [FormattingClosure] {
+    fileprivate func parsePattern(_ pattern: String) throws -> [FormattingClosure] {
       parsedClosuresSequence = [FormattingClosure]()
       
       for currentCharacter in pattern.characters
@@ -142,7 +141,7 @@ Available markers are :
         case .Parameters:
           parserStatus.charactersAccumulator.append(currentCharacter)
         case .End:
-          throw Error.InvalidFormatSyntax
+          throw FormatterError.InvalidFormatSyntax
         }
       }
       try setParserState(.End)
@@ -150,7 +149,7 @@ Available markers are :
       return parsedClosuresSequence
     }
     
-    private func setParserState(newState: ParserState) throws {
+    private func setParserState(_ newState: ParserState) throws {
       switch(parserStatus.machineState) {
       case .Text where parserStatus.charactersAccumulator.count > 0:
         let parsedString = String(parserStatus.charactersAccumulator)
@@ -172,13 +171,13 @@ Available markers are :
       case .Parameters(let markerName):
         switch(newState) {
         case .End:
-          throw Error.NotClosedMarkerParameter
+          throw FormatterError.NotClosedMarkerParameter
         default:
           do {
             try processMarker(markerName, parameters: parserStatus.getParameterValues())
           }
           catch {
-            throw Error.InvalidFormatSyntax
+            throw FormatterError.InvalidFormatSyntax
           }
 
           parserStatus.charactersAccumulator.removeAll()
@@ -189,9 +188,9 @@ Available markers are :
       parserStatus.machineState = newState
     }
     
-    private func processMarker(markerName: String, parameters: [String:AnyObject] = [:]) {
+    private func processMarker(_ markerName: String, parameters: [String:AnyObject] = [:]) {
       if let closureForMarker = self.closureForMarker(markerName, parameters: parameters) {
-        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters: parameters, message: message, info: info) })
+        parsedClosuresSequence.append({(message, info) in closureForMarker(parameters, message, info) })
       } else {
         parserStatus.charactersAccumulator += "%\(markerName)".characters
       }
@@ -199,7 +198,7 @@ Available markers are :
     
     // This method is a factory that will generate a closure for a markers (one letter) and its parameters.
     // Add an entry to this switch to create a new marker.
-    private func closureForMarker(marker: String, parameters: [String:AnyObject]) -> MarkerClosure? {
+    private func closureForMarker(_ marker: String, parameters: [String:AnyObject]) -> MarkerClosure? {
       let generatedClosure: MarkerClosure?
       
       switch(marker) {
@@ -207,31 +206,31 @@ Available markers are :
         generatedClosure = {(parameters, message, info) in
           let result: String
           let format = parameters["format"] as? String ?? "%F %T"
-          let timestamp = info[.Timestamp] as? NSTimeInterval ?? NSDate().timeIntervalSince1970
+          let timestamp = info[.Timestamp] as? TimeInterval ?? NSDate().timeIntervalSince1970
           var secondsSinceEpoch = Int(timestamp)
-          let date = withUnsafePointer(&secondsSinceEpoch) {
+          let date = withUnsafePointer(to: &secondsSinceEpoch) {
             localtime($0)
           }
-          let buffer = UnsafeMutablePointer<Int8>.alloc(80)
+          let buffer = UnsafeMutablePointer<Int8>.allocate(capacity: 80)
           strftime(buffer, 80, format , date)
-          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: NSUTF8StringEncoding) as! String
-          buffer.destroy()
+          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: String.Encoding.utf8.rawValue) as! String
+          buffer.deinitialize()
           
           return processCommonParameters(result, parameters: parameters)
         }
       case "D":
         let format = parameters["format"] as? String ?? "yyyy-MM-dd HH:mm:ss.SSS"
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         generatedClosure = {(parameters, message, info) in
           let result: String
-          let date: NSDate
+          let date: Date
           if let timestamp = info[.Timestamp] as? Double {
-            date = NSDate(timeIntervalSince1970: timestamp)
+            date = Date(timeIntervalSince1970: timestamp)
           } else {
-            date = NSDate()
+            date = Date()
           }
-          result = dateFormatter.stringFromDate(date)
+          result = dateFormatter.string(from: date)
           
           return processCommonParameters(result, parameters: parameters)
         }
@@ -302,7 +301,7 @@ Available markers are :
 /// - parameter parameters: Dictionary of formatting key/values
 ///
 /// - returns: The processed value
-func processCommonParameters(value: CustomStringConvertible, parameters: [String:AnyObject]) -> String
+func processCommonParameters(_ value: CustomStringConvertible, parameters: [String:AnyObject]) -> String
 {
   var width: Int = 0
 
@@ -310,5 +309,5 @@ func processCommonParameters(value: CustomStringConvertible, parameters: [String
     width = widthString.integerValue
   }
 
-  return value.description.padToWidth(width)
+	return value.description.pad(toWidth: width)
 }

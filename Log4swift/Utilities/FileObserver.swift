@@ -23,10 +23,10 @@ It only observes a single file, which will make the cost of pooling for changes 
 public class FileObserver {
   public var delegate: FileObserverDelegate?
   public let filePath: String
-  public let poolInterval: NSTimeInterval
+  public let poolInterval: Double
   private var lastModificationTime = timespec(tv_sec: 0, tv_nsec: 0)
   
-  init(filePath: String, poolInterval: NSTimeInterval = 2.0) {
+  init(filePath: String, poolInterval: Double = 2.0) {
     self.filePath = filePath
     self.poolInterval = poolInterval
     self.lastModificationTime = self.getFileModificationDate()
@@ -48,17 +48,23 @@ public class FileObserver {
   func poolForChange() {
     let modificationDate = self.getFileModificationDate()
     if modificationDate > self.lastModificationTime {
-      delegate?.fileChanged(self.filePath)
+			delegate?.fileChanged(atPath: self.filePath)
       self.lastModificationTime = modificationDate
     }
     self.scheduleNextPooling()
   }
   
   private func scheduleNextPooling() {
-    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(Float(self.poolInterval) * Float(NSEC_PER_SEC)))
-    dispatch_after(time, dispatch_get_main_queue(), { [weak self] in
+    let nextPoolingTime = DispatchTime.now() + self.poolInterval
+    let poolClosure:@convention(block) () -> Void = {[weak self] in
       self?.poolForChange()
-    })
+    }
+    
+    if #available(OSX 10.10, *) {
+      DispatchQueue.main.asyncAfter(deadline: nextPoolingTime, qos: .background, execute: poolClosure)
+    } else {
+      DispatchQueue.main.asyncAfter(deadline: nextPoolingTime, execute: poolClosure)
+    }
   }
 }
 

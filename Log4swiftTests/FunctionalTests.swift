@@ -88,10 +88,10 @@ class FunctionalTests: XCTestCase {
     let file = #file
     let function = #function
     let previousLine: Int
-    
+		
     // Execute
     previousLine = #line
-    logger.debug("This is a %@ message", LogLevel.Debug.description)
+		logger.debug("This is a %@ message", LogLevel.Debug.description)
     
     // Validate
     XCTAssertEqual(appender.logMessages[0].message, "[\(file)]:[\(previousLine + 1)]:[\(function)] This is a \(LogLevel.Debug.description) message")

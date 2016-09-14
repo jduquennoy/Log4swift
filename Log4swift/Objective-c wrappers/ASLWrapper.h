@@ -27,10 +27,10 @@
 */
 @interface ASLWrapper : NSObject 
 
-- (instancetype)init;
+- (nonnull instancetype)init;
 
-- (void)logMessage:(NSString *)log level:(int)level category:(NSString *)category;
+- (void)logMessage:(nonnull NSString *)log level:(int)level category:(nonnull NSString *)category;
 
-- (int)getLevelOfMessageMatchingText:(NSString *)message;
-- (NSString *)getFacilityOfMessageMatchingText:(NSString *)message;
+- (int)getLevelOfMessageMatchingText:(nonnull NSString *)message;
+- (nullable NSString *)getFacilityOfMessageMatchingText:(nonnull NSString *)message;
 @end

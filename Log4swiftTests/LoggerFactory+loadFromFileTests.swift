@@ -48,7 +48,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]]
     
     // Execute & validate
-    XCTAssertThrows { try self.factory.readConfiguration(dictionary) }
+		XCTAssertThrows { try self.factory.readConfiguration(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithUnknownFormatterClassThrowsError() {
@@ -57,7 +57,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]]
     
     // Execute & validate
-    XCTAssertThrows { try self.factory.readConfiguration(dictionary) }
+    XCTAssertThrows { try self.factory.readConfiguration(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithNoFormatterIdentifierThrowsError() {
@@ -65,7 +65,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]]
     
     // Execute & validate
-    XCTAssertThrows { try self.factory.readConfiguration(dictionary) }
+    XCTAssertThrows { try self.factory.readConfiguration(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithEmptyFormatterFormatterIdentifierThrowsError() {
@@ -75,7 +75,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]]
     
     // Execute & validate
-    XCTAssertThrows { try self.factory.readConfiguration(dictionary) }
+    XCTAssertThrows { try self.factory.readConfiguration(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithPatternFormatterClassCreatesRequestedFormatter() {
@@ -86,7 +86,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary]]
     
     // Execute
-    let (formatters, _, _) = try! factory.readConfigurationToTupple(dictionary)
+		let (formatters, _, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     // validate
     XCTAssertEqual(formatters.count, 1)
@@ -106,7 +106,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Formatters.rawValue: [formattersDictionary1, formattersDictionary2]]
     
     // Execute
-    let (formatters, _, _) = try! factory.readConfigurationToTupple(dictionary)
+		let (formatters, _, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     // validate
     XCTAssertEqual(formatters.count, 2)
@@ -122,7 +122,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]]
     
     // Execute
-    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) }
+    XCTAssertThrows { _ = try self.factory.readConfigurationToTupple(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithUnknownAppenderClassThrowsError() {
@@ -132,7 +132,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]]
     
     // Execute
-    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) }
+    XCTAssertThrows { _ = try self.factory.readConfigurationToTupple(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithNoAppenderIdentifierThrowsError() {
@@ -141,7 +141,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]]
     
     // Execute
-    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) }
+    XCTAssertThrows { _ = try self.factory.readConfigurationToTupple(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithEmptyAppenderIdentifierThrowsError() {
@@ -151,7 +151,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]]
     
     // Execute
-    XCTAssertThrows { try self.factory.readConfigurationToTupple(dictionary) }
+    XCTAssertThrows { _ = try self.factory.readConfigurationToTupple(fromDictionary: dictionary) }
   }
   
   func testLoadDictionaryWithStdOutAppenderAndFormatCreatesRequestedAppender() {
@@ -166,7 +166,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary]]
     
     // Execute
-    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(dictionary)
+    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     // Validate
     XCTAssertEqual(appenders.count, 1)
@@ -195,7 +195,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary1, appenderDictionary2]]
     
     // Execute
-    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(dictionary)
+    let (formatters, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     // Validate
     XCTAssertEqual(appenders.count, 2)
@@ -223,11 +223,11 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
     
     // Execute
-    let (_, appenders, _) = try! factory.readConfigurationToTupple(dictionary)
+    let (_, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     XCTAssertEqual(appenders.count, 5)
     for currentAppender in appenders {
-      XCTAssertEqual(currentAppender.identifier, currentAppender.className.componentsSeparatedByString(".").last!)
+			XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
     }
   }
   
@@ -248,11 +248,11 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
     
     // Execute
-    let (_, appenders, _) = try! factory.readConfigurationToTupple(dictionary)
+    let (_, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     XCTAssertEqual(appenders.count, 5)
     for currentAppender in appenders {
-      XCTAssertEqual(currentAppender.identifier, currentAppender.className.componentsSeparatedByString(".").last!)
+      XCTAssertEqual(currentAppender.identifier, currentAppender.className.components(separatedBy: ".").last!)
     }
   }
   
@@ -261,15 +261,15 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   func testReadConfigurationWithNewLoggerAddsItToLoggersPool() {
     let appenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"]
-    let loggerDictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let loggerDictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [loggerDictionary]]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     let logger = factory.getLogger("test.logger")
@@ -283,18 +283,18 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   func testReadConfigurationWithExistingLoggerUpdatesIt() {
     let appenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"]
-    let loggerDictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
+    let loggerDictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     
     let existingLogger = Logger(identifier: "test.logger", level: .Error, appenders: [MemoryAppender("MemoryAppender")])
     try! factory.registerLogger(existingLogger)
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [loggerDictionary]]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     let logger = factory.getLogger("test.logger")
@@ -311,17 +311,17 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"]
     let appender2Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "second appender"]
-    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+    let logger1Dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
-    let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger",
+    let logger2Dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["second appender"]]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary, appender2Dictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary, appender2Dictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [logger1Dictionary, logger2Dictionary]]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     let sonLogger = factory.getLogger("test.parentLogger.sonLogger")
@@ -336,17 +336,17 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   func testLoggerFromConfigurationDictionaryInheritsAppendersFromParentIfNotSpecified() {
     let appender1Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"]
-    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+    let logger1Dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger",
       Logger.DictionaryKey.ThresholdLevel.rawValue: "warning"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [logger1Dictionary, logger2Dictionary]]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     let sonLogger = factory.getLogger("test.parentLogger.sonLogger")
@@ -361,16 +361,16 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   func testLoggersInheritFromParentEvenIfOutOfOrder() {
     let appender1Dictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "first appender"]
-    let logger1Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
+    let logger1Dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger",
       Logger.DictionaryKey.AppenderIds.rawValue: ["first appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     let logger2Dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "test.parentLogger.sonLogger"]
     
-    let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appender1Dictionary],
       LoggerFactory.DictionaryKey.Loggers.rawValue: [logger2Dictionary, logger1Dictionary]]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     let sonLogger = factory.getLogger("test.parentLogger.sonLogger")
@@ -390,7 +390,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
       LoggerFactory.DictionaryKey.Loggers.rawValue: loggersDictionary
     ]
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
 
     // Validate
     let asyncCreatedLogger = factory.getLogger("test.asyncLogger")
@@ -402,17 +402,17 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   func testReadConfigurationWithRootLoggerUpdatesIt() {
     let appenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "StdOutAppender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test appender"]
-    let rootLoggerDictionary = [Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
+    let rootLoggerDictionary:[String: Any] = [Logger.DictionaryKey.AppenderIds.rawValue: ["test appender"],
       Logger.DictionaryKey.ThresholdLevel.rawValue: "info"]
     
     factory.rootLogger.thresholdLevel = LogLevel.Error
     factory.rootLogger.appenders = [MemoryAppender("MemoryAppender")]
     
-    let dictionary: Dictionary<String, AnyObject> = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
+    let dictionary:[String: Any] = [LoggerFactory.DictionaryKey.Appenders.rawValue: [appenderDictionary],
       LoggerFactory.DictionaryKey.RootLogger.rawValue: rootLoggerDictionary]
     
     // Execute
-    try! factory.readConfiguration(dictionary)
+    try! factory.readConfiguration(fromDictionary: dictionary)
     
     // Validate
     XCTAssertEqual(factory.rootLogger.thresholdLevel, LogLevel.Info)
@@ -424,15 +424,15 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   func testReadConfigurationWithNonDictionaryRootLoggerThrowsError() {
     // Execute & validate
-    XCTAssertThrows { try self.factory.readConfiguration(["RootLogger": "string value"]); }
+    XCTAssertThrows { try self.factory.readConfiguration(fromDictionary: ["RootLogger": "string value"]); }
   }
   
   // Mark: Load from file tests
   func testLoadValidCompletePlistFile() {
-    let filePath = NSBundle(forClass: self.dynamicType).pathForResource("ValidCompleteConfiguration", ofType: "plist")
+    let filePath = Bundle(for: type(of: self)).path(forResource: "ValidCompleteConfiguration", ofType: "plist")
     
     // Execute
-    XCTAssertNoThrow  { try self.factory.readConfigurationFromPlistFile(filePath!); }
+		_ = XCTAssertNoThrow  { try self.factory.readConfiguration(fromPlistFile: filePath!); }
     
     // Validate loggers
     XCTAssertEqual(self.factory.rootLogger.thresholdLevel, LogLevel.Info)
@@ -452,19 +452,19 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // Mark: Configuration file observing
   func testLoadedConfigFileIsReloadedWhenModifiedIfRequested() {
-    let configurationFilePath = try! self.createTemporaryFilePath("plist")
+    let configurationFilePath = try! self.createTemporaryFilePath(fileExtension: "plist")
     let loggerDictionary = [
       LoggerFactory.DictionaryKey.Identifier.rawValue: "test.logger"]
     let configuration: NSDictionary = [LoggerFactory.DictionaryKey.Loggers.rawValue: [loggerDictionary]]
-    NSDictionary().writeToFile(configurationFilePath, atomically: true)
-    try! self.factory.readConfigurationFromPlistFile(configurationFilePath, autoReload: true, reloadInterval: 0.5)
+		NSDictionary().write(toFile: configurationFilePath, atomically: true)
+		try! self.factory.readConfiguration(fromPlistFile: configurationFilePath, autoReload: true, reloadInterval: 0.5)
 
-    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1.0))
+		RunLoop.current.run(until: Date(timeIntervalSinceNow: 1.0))
     
     // Execute
-    configuration.writeToFile(configurationFilePath, atomically: true)
+		configuration.write(toFile: configurationFilePath, atomically: true)
 
-    NSRunLoop.currentRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 1.0))
+    RunLoop.current.run(until: Date(timeIntervalSinceNow: 1.0))
     
 
     // Validate
@@ -474,7 +474,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // MARK: Utility methods
   
-  private func classNameAsString(obj: Any) -> String {
-    return String(obj.dynamicType)
+  private func classNameAsString(_ obj: Any) -> String {
+    return String(describing: type(of: obj))
   }
 }

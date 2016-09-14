@@ -38,7 +38,7 @@ class PatternFormatterTests: XCTestCase {
     let formatter = PatternFormatter("identifier")
     
     let message = "test message"
-    XCTAssertEqual(formatter.format(message, info: LogInfoDictionary()), message)
+    XCTAssertEqual(formatter.format(message: message, info: LogInfoDictionary()), message)
   }
   
   func testCreateFormatterWithNonClosedParametersThrowsError() {
@@ -49,7 +49,7 @@ class PatternFormatterTests: XCTestCase {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%l")
 
     // Execute
-    let formattedMessage = formatter.format("", info: [LogInfoKeys.LogLevel: LogLevel.Error])
+    let formattedMessage = formatter.format(message: "", info: [LogInfoKeys.LogLevel: LogLevel.Error])
     
     // validate
     XCTAssertEqual(formattedMessage, LogLevel.Error.description)
@@ -63,7 +63,7 @@ class PatternFormatterTests: XCTestCase {
 	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info)
+	let formattedMessage = formatter.format(message: "Log message", info: info)
 	
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)   ][nameOfTheLogger] Log message")
@@ -77,7 +77,7 @@ class PatternFormatterTests: XCTestCase {
 	  ]
 	  
 	  // Execute
-	  let formattedMessage = formatter.format("Log message", info: info)
+	  let formattedMessage = formatter.format(message: "Log message", info: info)
 	  
 	  // Validate
 	  XCTAssertEqual(formattedMessage, "[   \(LogLevel.Warning)][nameOfTheLogger] Log message")
@@ -91,7 +91,7 @@ class PatternFormatterTests: XCTestCase {
 	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info)
+	let formattedMessage = formatter.format(message: "Log message", info: info)
 	
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message")
@@ -102,7 +102,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "loggername"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
 
     // Validate
     XCTAssertEqual(formattedMessage, "loggername")
@@ -116,7 +116,7 @@ class PatternFormatterTests: XCTestCase {
 	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info)
+	let formattedMessage = formatter.format(message: "Log message", info: info)
 	
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name      ] Log message")
@@ -130,7 +130,7 @@ class PatternFormatterTests: XCTestCase {
 	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info)
+	let formattedMessage = formatter.format(message: "Log message", info: info)
 	
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][      name] Log message")
@@ -144,7 +144,7 @@ class PatternFormatterTests: XCTestCase {
 	]
 	
 	// Execute
-	let formattedMessage = formatter.format("Log message", info: info)
+	let formattedMessage = formatter.format(message: "Log message", info: info)
 	
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][name] Log message")
@@ -155,11 +155,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09$", options: NSRegularExpression.Options())
+		let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -168,11 +168,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09$", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -181,11 +181,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33:09  $", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -194,11 +194,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^     11/29/73 [0-2][0-9]:33$", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -207,11 +207,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.0]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^11/29/73 [0-2][0-9]:33$", options: NSRegularExpression.Options())
+		let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
 
@@ -221,11 +221,11 @@ class PatternFormatterTests: XCTestCase {
     let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
-    let expectedTimestamp = NSDate().timeIntervalSince1970
-    if let loggedMessageTime = NSTimeInterval(formattedMessage) {
+    let expectedTimestamp = Date().timeIntervalSince1970
+    if let loggedMessageTime = TimeInterval(formattedMessage) {
       XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
@@ -237,7 +237,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.LogLevel: LogLevel.Debug]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test \(LogLevel.Debug)")
@@ -248,7 +248,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "testFileName"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test testFileName")
@@ -259,7 +259,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345     ")
@@ -270,7 +270,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test      12345")
@@ -281,7 +281,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345")
@@ -292,7 +292,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/testFileName.txt"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test testFileName.txt")
@@ -303,7 +303,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345     ")
@@ -314,7 +314,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test      12345")
@@ -325,7 +325,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileName: "/test/12345"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345")
@@ -336,7 +336,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 42")
@@ -347,7 +347,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 42   ")
@@ -358,7 +358,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test    42")
@@ -369,7 +369,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.FileLine: 42]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 42")
@@ -380,7 +380,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.Function: "testFunction"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
 
     // Validate
     XCTAssertEqual(formattedMessage, "test testFunction")
@@ -391,7 +391,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
 
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345     ")
@@ -402,7 +402,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
 
     // Validate
     XCTAssertEqual(formattedMessage, "test      12345")
@@ -413,7 +413,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.Function: "12345"]
 
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
 
     // Validate
     XCTAssertEqual(formattedMessage, "test 12345")
@@ -424,7 +424,7 @@ class PatternFormatterTests: XCTestCase {
     let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test %")
@@ -435,7 +435,7 @@ class PatternFormatterTests: XCTestCase {
     let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "%x %y %z are unknown markers")
@@ -449,7 +449,7 @@ class PatternFormatterTests: XCTestCase {
     ]
     
     // Execute
-    let formattedMessage = formatter.format("Log message", info: info)
+    let formattedMessage = formatter.format(message: "Log message", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message")
@@ -460,33 +460,33 @@ class PatternFormatterTests: XCTestCase {
     let info = LogInfoDictionary()
     
     // Execute
-    let formattedMessage = formatter.format("Log message", info: info)
+    let formattedMessage = formatter.format(message: "Log message", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "[-][-][-][-][-][-][-][-] Log message")
   }
 
   func testUpdatingFormatterFromDictionaryWithNoPatternThrowsError() {
-    let dictionary = Dictionary<String, AnyObject>()
+    let dictionary = Dictionary<String, Any>()
     let formatter = PatternFormatter("testFormatter")
     
-    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) }
+    XCTAssertThrows { try formatter.update(withDictionary: dictionary) }
   }
 
   func testUpdatingFormatterFromDictionaryWithInvalidPatternThrowsError() {
     let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "%x{"]
     let formatter = PatternFormatter("testFormatter")
     
-    XCTAssertThrows { try formatter.updateWithDictionary(dictionary) }
+    XCTAssertThrows { try formatter.update(withDictionary: dictionary) }
   }
   
   func testUpdatingFormatterFromDictionaryWithValidParametersCreatesFormatter() {
     let dictionary = [PatternFormatter.DictionaryKey.Pattern.rawValue: "static test pattern"]
     let formatter = PatternFormatter("testFormatter")
 
-    XCTAssertNoThrow { try formatter.updateWithDictionary(dictionary); }
+    _ = XCTAssertNoThrow { try formatter.update(withDictionary: dictionary); }
 
-    let formattedMessage = formatter.format("", info: LogInfoDictionary())
+    let formattedMessage = formatter.format(message: "", info: LogInfoDictionary())
     XCTAssertEqual(formattedMessage, dictionary[PatternFormatter.DictionaryKey.Pattern.rawValue]!)
   }
   
@@ -495,11 +495,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.876]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^1973-11-29 [0-2][0-9]:33:09.876$", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -508,11 +508,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.876]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -521,11 +521,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.876]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876  $", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^29.11.73 [0-2][0-9]:33:09.876  $", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -534,11 +534,11 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: 123456789.876]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate (regex used to avoid problems with time shift)
-    let validationRegexp = try! NSRegularExpression(pattern: "^  29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpressionOptions())
-    let matches = validationRegexp.matchesInString(formattedMessage, options: NSMatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+    let validationRegexp = try! NSRegularExpression(pattern: "^  29.11.73 [0-2][0-9]:33:09.876$", options: NSRegularExpression.Options())
+    let matches = validationRegexp.matches(in: formattedMessage, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, formattedMessage.lengthOfBytes(using: String.Encoding.utf8)))
     XCTAssert(matches.count > 0, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -549,12 +549,12 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.Timestamp: timestamp]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
-    let decodedDate = dateFormatter.dateFromString(formattedMessage)
+    let decodedDate = dateFormatter.date(from: formattedMessage)
     XCTAssertEqualWithAccuracy(decodedDate?.timeIntervalSince1970 ?? 0.0, timestamp, accuracy: 0.01, "Formatted date '\(formattedMessage)' is not valid")
   }
   
@@ -562,16 +562,16 @@ class PatternFormatterTests: XCTestCase {
     let format = "dd.MM.yy HH:mm:ss.SSS"
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'format':'\(format)'}")
     
-    let expectedDate = NSDate()
+    let expectedDate = Date()
     
     // Execute
-    let formattedMessage = formatter.format("", info: [:])
+    let formattedMessage = formatter.format(message: "", info: [:])
     
     // Validate
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
-    let decodedDate = dateFormatter.dateFromString(formattedMessage) ?? NSDate.distantPast()
-    XCTAssert(abs(expectedDate.timeIntervalSinceDate(decodedDate)) < 0.01, "Formatted date is not now when no timestamp is provided")
+    let decodedDate = dateFormatter.date(from: formattedMessage) ?? Date.distantPast
+    XCTAssert(abs(expectedDate.timeIntervalSince(decodedDate)) < 0.01, "Formatted date is not now when no timestamp is provided")
   }
   
   func testFormatterAppliesThreadIdMarker() {
@@ -579,7 +579,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadId: UInt64(0x1234567890ABCDEF)]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 1234567890abcdef")
@@ -590,7 +590,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadId: UInt64(0x1234567890ABCDEF)]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 1234567890abcdef    ")
@@ -601,7 +601,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadId: UInt64(0x1234567890ABCDEF)]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     // Validate
     XCTAssertEqual(formattedMessage, "test     1234567890abcdef")
   }
@@ -611,7 +611,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadId: UInt64(0x1234567890ABCDEF)]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test 1234567890abcdef")
@@ -622,7 +622,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadName: "nameOfThread"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test nameOfThread")
@@ -633,7 +633,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadName: "nameOfThread"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test nameOfThread   ")
@@ -644,7 +644,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadName: "nameOfThread"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test    nameOfThread")
@@ -655,7 +655,7 @@ class PatternFormatterTests: XCTestCase {
     let info: LogInfoDictionary = [.ThreadName: "nameOfThread"]
     
     // Execute
-    let formattedMessage = formatter.format("", info: info)
+    let formattedMessage = formatter.format(message: "", info: info)
     
     // Validate
     XCTAssertEqual(formattedMessage, "test nameOfThread")
