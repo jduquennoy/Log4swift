@@ -1,5 +1,9 @@
 # Log4swift changelog
 
+## 1.0.1
+
+- Compiles with Xcode 8.1
+
 ## 1.0
 
 This is the first verison to drop the "beta" flag. After using it in different projects for a while, with no problem, it seems safe to advertise it as non beta now.
