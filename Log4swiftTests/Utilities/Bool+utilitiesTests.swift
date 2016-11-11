@@ -38,7 +38,7 @@ class BoolUtilitiesTests: XCTestCase {
   }
   
   func testBoolParsesNilStringAsFalse() {
-    XCTAssertFalse(Bool(nil as String?))
+    XCTAssertFalse(Bool((nil as String?)))
   }
   
 }

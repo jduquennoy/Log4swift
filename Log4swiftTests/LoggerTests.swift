@@ -651,7 +651,7 @@ class LoggerTests: XCTestCase {
       var logMessage = ""
       var threadId: UInt64 = 0
       
-      @objc func loggingMethod(object: AnyObject?) {
+      @objc func loggingMethod(_ object: AnyObject?) {
         let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%t %T %m")
         let appender = MemoryAppender()
         appender.thresholdLevel = .Debug
@@ -675,7 +675,7 @@ class LoggerTests: XCTestCase {
     
     let myInstance = MyThreadClass()
     
-    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(object:)), object: expectation)
+    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: expectation)
     thread.name = "someThreadName"
     thread.stackSize = 16000
     thread.threadPriority = 0.75

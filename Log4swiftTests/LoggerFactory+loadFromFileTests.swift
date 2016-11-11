@@ -474,7 +474,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
   
   // MARK: Utility methods
   
-  private func classNameAsString(_ obj: Any) -> String {
+  fileprivate func classNameAsString(_ obj: Any) -> String {
     return String(describing: type(of: obj))
   }
 }

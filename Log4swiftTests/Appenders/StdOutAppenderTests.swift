@@ -514,7 +514,7 @@ class StdOutAppenderTests: XCTestCase {
   
   // MARK: - Private methods
 
-  private func getFileHandleContentAsString(_ fileHandle: FileHandle) -> String? {
+  fileprivate func getFileHandleContentAsString(_ fileHandle: FileHandle) -> String? {
     let expectation = self.expectation(description: "filHandle content received")
     var expectationIsExpired = false
     var stringContent: String?

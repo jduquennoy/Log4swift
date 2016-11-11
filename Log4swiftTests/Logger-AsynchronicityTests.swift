@@ -162,7 +162,7 @@ class LoggerAsynchronicityTests: XCTestCase {
   
   //MARK: private methods
   
-  private func waitUntilTrue(_ conditionClosure: () -> Bool) {
+  fileprivate func waitUntilTrue(_ conditionClosure: () -> Bool) {
     let timeout = 5.0
     let loopDelay = 0.1
     var loopCounter = 0
