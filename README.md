@@ -10,9 +10,9 @@
 
 Log4Swift is a logging library written in swift, that is meant to be very configurable both in code at compile time, or using a configuration file at runtime.
 
-Starting with v1.0, it is swift 3 code, and thus requires Xcode 8.
+Starting with v1.0.1, it requires Xcode 8.1.
 
-Use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
+Use versino 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
 It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift or objective-C (or a mix of those two).
 
@@ -20,14 +20,14 @@ It is available as a cocoaPod for easy integration in your projects. Here is a s
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.0.0'
+pod 'Log4swift', '1.0.1'
 use_frameworks!
 ```
 And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.0.0'
+pod 'Log4swift', '1.0.1'
 use_frameworks!
 ```
 
