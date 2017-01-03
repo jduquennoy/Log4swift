@@ -722,4 +722,5 @@ class LoggerTests: XCTestCase {
     // Validate
     XCTAssertEqual(logMessage, "\(threadId) someQueueName ping")
   }
+
 }

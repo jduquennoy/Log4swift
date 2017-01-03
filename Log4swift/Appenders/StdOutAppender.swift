@@ -116,7 +116,7 @@ public class StdOutAppender: Appender {
     }
   }
   
-  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     var destinationFile = stdout
     
     if let errorThresholdLevel = self.errorThresholdLevel {
