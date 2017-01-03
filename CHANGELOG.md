@@ -3,6 +3,7 @@
 ## 1.0.1
 
 - Compiles with Xcode 8.1
+- PerformLog method accessor changed to open to enable subclassing of Appenders
 
 ## 1.0
 
