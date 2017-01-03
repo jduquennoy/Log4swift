@@ -126,7 +126,7 @@ public class NSLoggerAppender : Appender {
     LoggerStop(self.logger)
   }
   
-  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     var loggerId = ""
     if let safeLoggerId = info[LogInfoKeys.LoggerName] {
       loggerId = safeLoggerId.description

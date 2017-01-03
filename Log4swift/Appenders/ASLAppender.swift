@@ -31,7 +31,7 @@ public class ASLAppender : Appender {
     
   }
   
-  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     let category: String
     if let categoryFromInfo = info[LogInfoKeys.LoggerName] {
       category = categoryFromInfo.description

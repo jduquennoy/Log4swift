@@ -64,7 +64,7 @@ public class FileAppender : Appender {
     }
   }
   
-  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
 		guard createFileHandlerIfNeeded() else {
 			return
 		}

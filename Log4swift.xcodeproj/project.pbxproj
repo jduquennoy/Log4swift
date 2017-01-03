@@ -112,6 +112,7 @@
 		5EFEFA931B69383A00A28A53 /* ASLAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFEFA921B69383A00A28A53 /* ASLAppender.swift */; };
 		5EFEFA971B69388800A28A53 /* ASLWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EFEFA951B69388800A28A53 /* ASLWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EFEFA981B69388800A28A53 /* ASLWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EFEFA961B69388800A28A53 /* ASLWrapper.m */; };
+		780744AF1E1BA14C003FA519 /* SubclassingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780744AE1E1BA14C003FA519 /* SubclassingTests.swift */; };
 		D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */; };
 		D9B229E41B443B670001EE9A /* Array+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */; };
 /* End PBXBuildFile section */
@@ -191,6 +192,7 @@
 		5EFEFA921B69383A00A28A53 /* ASLAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASLAppender.swift; sourceTree = "<group>"; };
 		5EFEFA951B69388800A28A53 /* ASLWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASLWrapper.h; path = "Log4swift/Objective-c wrappers/ASLWrapper.h"; sourceTree = "<group>"; };
 		5EFEFA961B69388800A28A53 /* ASLWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASLWrapper.m; path = "Log4swift/Objective-c wrappers/ASLWrapper.m"; sourceTree = "<group>"; };
+		780744AE1E1BA14C003FA519 /* SubclassingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubclassingTests.swift; sourceTree = "<group>"; };
 		D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilities.swift"; sourceTree = "<group>"; };
 		D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilitiesTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -381,6 +383,7 @@
 				02568DAD1B3631FD00EDDFFE /* StdOutAppenderTests.swift */,
 				02F4E8771B3B3C7F004AB9EA /* NSLoggerAppenderTests.swift */,
 				5E6727CD1B6B5AB200BFFD93 /* ASLAppenderTests.swift */,
+				780744AE1E1BA14C003FA519 /* SubclassingTests.swift */,
 			);
 			path = Appenders;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				024FD7A01B2DE47C00A8609C /* MemoryAppender.swift in Sources */,
 				02664C351B2DB25C00B695DE /* LoggerTests.swift in Sources */,
 				5E17F3271B341B1D00E262F5 /* PatternFormatterTests.swift in Sources */,
+				780744AF1E1BA14C003FA519 /* SubclassingTests.swift in Sources */,
 				021DCE491BE17C4F0026633E /* Logger-AsynchronicityTests.swift in Sources */,
 				5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */,
 				02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */,

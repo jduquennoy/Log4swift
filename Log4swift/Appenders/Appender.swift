@@ -56,7 +56,7 @@ This class is the base class, from which all appenders should inherit.
     }
   }
   
-  func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  open func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     // To be overriden by subclasses
   }
   
