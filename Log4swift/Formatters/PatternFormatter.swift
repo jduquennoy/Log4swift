@@ -213,7 +213,7 @@ Available markers are :
           }
           let buffer = UnsafeMutablePointer<Int8>.allocate(capacity: 80)
           strftime(buffer, 80, format , date)
-          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: String.Encoding.utf8.rawValue) as! String
+          result = NSString(bytes: buffer, length: Int(strlen(buffer)), encoding: String.Encoding.utf8.rawValue) as String? ?? "dateError"
           buffer.deinitialize()
           
           return processCommonParameters(result, parameters: parameters)
