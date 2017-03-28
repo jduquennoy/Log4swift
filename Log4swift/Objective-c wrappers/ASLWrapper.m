@@ -31,7 +31,7 @@
   self = [super init];
   if (self) {
     logClient = asl_open(NULL, NULL, 0);
-    char filter = ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG);
+    char filter = (char) ASL_FILTER_MASK_UPTO(ASL_LEVEL_DEBUG);
     asl_set_filter(logClient, filter); // We don't want ASL to filter messages
     loggingQueue = dispatch_queue_create("Log4swift.ASLLoggingQueue", DISPATCH_QUEUE_SERIAL);
   }
