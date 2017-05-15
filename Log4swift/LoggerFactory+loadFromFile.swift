@@ -148,14 +148,18 @@ extension LoggerFactory : FileObserverDelegate {
   }
   
   private func appenderForClassName(_ className: String) -> Appender.Type? {
+    #if !os(watchOS)
+        if className.lowercased() == "nsloggerappender" {
+            return NSLoggerAppender.self
+        }
+    #endif
+    
     let type: Appender.Type?
     switch(className.lowercased()) {
     case "stdoutappender":
       type = StdOutAppender.self
     case "fileappender":
       type = FileAppender.self
-    case "nsloggerappender":
-      type = NSLoggerAppender.self
     case "nslogappender":
       type = NSLogAppender.self
     case "aslappender":

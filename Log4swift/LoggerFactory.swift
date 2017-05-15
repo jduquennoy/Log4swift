@@ -155,6 +155,7 @@ extension LoggerFactory {
   
   **This method will replace your current configuration by a new one.**
   */
+  #if !os(watchOS)
   public func configureForNSLogger(remoteHost: String = "127.0.0.1", remotePort: UInt32 = 50000, thresholdLevel: LogLevel = .Debug) {
     self.resetConfiguration()
     
@@ -163,4 +164,5 @@ extension LoggerFactory {
     
     self.rootLogger.appenders = [nsloggerAppender]
   }
+  #endif
 }
