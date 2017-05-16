@@ -115,7 +115,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   /// Create a logger that is a child of the given logger.
   /// The created logger will follow the parent logger's configuration until it is manually modified.
-  convenience init(parentLogger: Logger, identifier: String) {
+  public convenience init(parentLogger: Logger, identifier: String) {
     self.init(identifier: identifier, level: parentLogger.thresholdLevel, appenders: [Appender]() + parentLogger.appenders)
     self.parent = parentLogger
   }
