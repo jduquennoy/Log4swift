@@ -113,6 +113,9 @@
 		5EFEFA971B69388800A28A53 /* ASLWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EFEFA951B69388800A28A53 /* ASLWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EFEFA981B69388800A28A53 /* ASLWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EFEFA961B69388800A28A53 /* ASLWrapper.m */; };
 		780744AF1E1BA14C003FA519 /* SubclassingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780744AE1E1BA14C003FA519 /* SubclassingTests.swift */; };
+		78389E471ECC26B0008898E7 /* Class+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78389E461ECC26B0008898E7 /* Class+utilities.swift */; };
+		78389E481ECC26B0008898E7 /* Class+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78389E461ECC26B0008898E7 /* Class+utilities.swift */; };
+		78389E491ECC26B0008898E7 /* Class+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78389E461ECC26B0008898E7 /* Class+utilities.swift */; };
 		D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */; };
 		D9B229E41B443B670001EE9A /* Array+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */; };
 /* End PBXBuildFile section */
@@ -193,6 +196,7 @@
 		5EFEFA951B69388800A28A53 /* ASLWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASLWrapper.h; path = "Log4swift/Objective-c wrappers/ASLWrapper.h"; sourceTree = "<group>"; };
 		5EFEFA961B69388800A28A53 /* ASLWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASLWrapper.m; path = "Log4swift/Objective-c wrappers/ASLWrapper.m"; sourceTree = "<group>"; };
 		780744AE1E1BA14C003FA519 /* SubclassingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubclassingTests.swift; sourceTree = "<group>"; };
+		78389E461ECC26B0008898E7 /* Class+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Class+utilities.swift"; sourceTree = "<group>"; };
 		D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilities.swift"; sourceTree = "<group>"; };
 		D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilitiesTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -275,6 +279,7 @@
 				5E66F7691B42C959009395CE /* Bool+utilities.swift */,
 				D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */,
 				0241A2D71C32ACD400A624CF /* FileObserver.swift */,
+				78389E461ECC26B0008898E7 /* Class+utilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -673,6 +678,7 @@
 				D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */,
 				5E4D39121B690DC40006961C /* NSLogAppender.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
+				78389E471ECC26B0008898E7 /* Class+utilities.swift in Sources */,
 				5EA3F1571B5D2DEA00B7C420 /* Logger+objectiveC.swift in Sources */,
 				024FD79C1B2DD3FE00A8609C /* String+utilities.swift in Sources */,
 				02664C2B1B2D97DE00B695DE /* LogLevel.swift in Sources */,
@@ -739,6 +745,7 @@
 				5E3F86EA1DC25EE3008F296C /* StdOutAppender.swift in Sources */,
 				5E3F86E81DC25EDF008F296C /* Errors.swift in Sources */,
 				5E3F86F31DC25EED008F296C /* Array+utilities.swift in Sources */,
+				78389E491ECC26B0008898E7 /* Class+utilities.swift in Sources */,
 				5E3F86E11DC25EDF008F296C /* LogInformation.swift in Sources */,
 				5E3F86F81DC25F0F008F296C /* LoggerClient.m in Sources */,
 				5E3F86ED1DC25EE3008F296C /* NSLogAppender.swift in Sources */,
@@ -768,6 +775,7 @@
 				5E3E72051B7A186700EEE46B /* StdOutAppender.swift in Sources */,
 				5E3E72061B7A186700EEE46B /* FileAppender.swift in Sources */,
 				5E3E72071B7A186700EEE46B /* NSLoggerAppender.swift in Sources */,
+				78389E481ECC26B0008898E7 /* Class+utilities.swift in Sources */,
 				5E3E72081B7A186700EEE46B /* NSLogAppender.swift in Sources */,
 				5E3E72091B7A186700EEE46B /* ASLAppender.swift in Sources */,
 				5E3E720A1B7A186700EEE46B /* Formatter.swift in Sources */,
