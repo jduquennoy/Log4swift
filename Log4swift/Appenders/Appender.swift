@@ -74,3 +74,23 @@ This class is the base class, from which all appenders should inherit.
     }
   }
 }
+
+fileprivate struct AppenderSubclassEnumerator {
+  static let availableAppenderTypes: [Appender.Type] = getAvailableAppenderTypes
+  
+  static private var getAvailableAppenderTypes: [Appender.Type] {
+    let motherClassInfo = ClassInfo(Appender.self)
+    
+    let result = motherClassInfo.subclasses.map {
+      return $0.classObject as! Appender.Type
+    }
+    
+    return result
+  }
+}
+
+extension Appender {
+  static var availableAppenderTypes: [Appender.Type] {
+    return AppenderSubclassEnumerator.availableAppenderTypes
+  }
+}

@@ -22,7 +22,6 @@ import XCTest
 @testable import Log4swift
 
 class ASLAppenderTests: XCTestCase {
-  
   func testASLAppenderLogsFatalMessagesWithErrorLevel() {
     let appender = ASLAppender("testAppender")
     let logMessage = "Test fatal message " + UUID().uuidString
@@ -33,7 +32,7 @@ class ASLAppenderTests: XCTestCase {
     sleep(1)
     
     // Validate
-		let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
+    let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Fatal.rawValue))
   }
   
@@ -45,7 +44,7 @@ class ASLAppenderTests: XCTestCase {
 		appender.log(logMessage, level: LogLevel.Error, info: LogInfoDictionary())
     
     // Validate
-		let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
+    let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Error.rawValue))
   }
   
@@ -57,7 +56,7 @@ class ASLAppenderTests: XCTestCase {
     appender.log(logMessage, level: LogLevel.Warning, info: LogInfoDictionary())
     
     // Validate
-		let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
+    let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Warning.rawValue))
   }
   
@@ -66,10 +65,10 @@ class ASLAppenderTests: XCTestCase {
     let logMessage = "Test info message " + UUID().uuidString
     
     // Execute
-		appender.log(logMessage, level: LogLevel.Info, info: LogInfoDictionary())
+    appender.log(logMessage, level: LogLevel.Info, info: LogInfoDictionary())
     
     // Validate
-		let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
+    let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Info.rawValue))
   }
   
@@ -78,10 +77,10 @@ class ASLAppenderTests: XCTestCase {
     let logMessage = "Test debug message " + UUID().uuidString
     
     // Execute
-		appender.log(logMessage, level: LogLevel.Debug, info: LogInfoDictionary())
+    appender.log(logMessage, level: LogLevel.Debug, info: LogInfoDictionary())
     
     // Validate
-		let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
+    let levelOfMessageInAsl = appender.aslClient.getLevelOfMessage(matchingText: logMessage)
     XCTAssertEqual(levelOfMessageInAsl, Int32(LogLevel.Debug.rawValue))
   }
 
@@ -91,10 +90,10 @@ class ASLAppenderTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "That is a nice logger name"]
     
     // Execute
-		appender.log(logMessage, level: LogLevel.Debug, info: info)
+    appender.log(logMessage, level: LogLevel.Debug, info: info)
     
     // Validate
-		let messageFacility = appender.aslClient.getFacilityOfMessage(matchingText: logMessage)
+    let messageFacility = appender.aslClient.getFacilityOfMessage(matchingText: logMessage)
     if let messageFacility = messageFacility {
       XCTAssertEqual(messageFacility, info[LogInfoKeys.LoggerName]!.description)
     } else {
@@ -108,10 +107,10 @@ class ASLAppenderTests: XCTestCase {
     let info: LogInfoDictionary = [LogInfoKeys.LoggerName: "That is a nice logger name"]
     
     // Execute
-		appender.log(logMessage, level: LogLevel.Error, info: info)
+    appender.log(logMessage, level: LogLevel.Error, info: info)
     
     // Validate
-		let messageFacility = appender.aslClient.getFacilityOfMessage(matchingText: logMessage)
+    let messageFacility = appender.aslClient.getFacilityOfMessage(matchingText: logMessage)
     XCTAssertTrue(messageFacility != nil, "Logged message not found in ASL")
   }
 }

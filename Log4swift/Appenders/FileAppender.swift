@@ -29,7 +29,7 @@ public class FileAppender : Appender {
     case FilePath = "FilePath"
   }
   
-  internal var filePath : String {
+  public internal(set) var filePath : String {
     didSet {
       if let safeHandler = self.fileHandler {
         safeHandler.closeFile()

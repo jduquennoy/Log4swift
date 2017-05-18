@@ -148,22 +148,15 @@ extension LoggerFactory : FileObserverDelegate {
   }
   
   private func appenderForClassName(_ className: String) -> Appender.Type? {
-    let type: Appender.Type?
-    switch(className.lowercased()) {
-    case "stdoutappender":
-      type = StdOutAppender.self
-    case "fileappender":
-      type = FileAppender.self
-    case "nsloggerappender":
-      type = NSLoggerAppender.self
-    case "nslogappender":
-      type = NSLogAppender.self
-    case "aslappender":
-      type = ASLAppender.self
-    default:
-      type = nil
+    let classNameLowercased = className.lowercased()
+    
+    for appenderType in Appender.availableAppenderTypes {
+      if NSStringFromClass(appenderType).lowercased().hasSuffix("." + classNameLowercased)  {
+        return appenderType
+      }
     }
-    return type
+    
+    return nil
   }
 
   private func processLoggerDictionary(_ dictionary: Dictionary<String, Any>, appenders: Array<Appender>) throws -> Logger {

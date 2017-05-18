@@ -23,6 +23,7 @@ import Foundation
 /**
 The NSLogger appender relies on the NSLogger project (see https://github.com/fpillet/NSLogger) to send log messages over the network.  
 */
+@available(iOS 8.0, *)
 public class NSLoggerAppender : Appender {
   public enum DictionaryKey: String {
     case BonjourServiceName = "BonjourServiceName"
