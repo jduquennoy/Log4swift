@@ -151,7 +151,7 @@ extension LoggerFactory : FileObserverDelegate {
     let classNameLowercased = className.lowercased()
     
     for appenderType in Appender.availableAppenderTypes {
-      if NSStringFromClass(appenderType).lowercased().hasSuffix("." + classNameLowercased)  {
+      if String(describing: appenderType).lowercased() == classNameLowercased  {
         return appenderType
       }
     }
