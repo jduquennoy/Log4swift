@@ -14,7 +14,7 @@ Starting with v1.0.1, it requires Xcode 8.1.
 
 Use versino 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
-It can be used in projects targetting either OS X (>= 10.8) or iOS (>= iOS 8), and written either in swift or objective-C (or a mix of those two).
+It can be used in projects targetting either OS X (>= 10.8), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
 
 It is available as a cocoaPod for easy integration in your projects. Here is a sample Podfile to embed this library in an iOS project :
 
