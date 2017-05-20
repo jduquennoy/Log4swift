@@ -1,10 +1,14 @@
 # Log4swift changelog
 
+## 1.0.2
+
+- Added watchOS compatibility (Thanks Igor)
+- Compiles with swift 3.1 (Thanks Guillem)
+
 ## 1.0.1
 
 - Compiles with Xcode 8.1
 - PerformLog method accessor changed to open to enable subclassing of Appenders
-- Added watchOS compatibility (Thanks Igor)
 
 ## 1.0
 
