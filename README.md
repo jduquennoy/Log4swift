@@ -1,7 +1,7 @@
 # Log4Swift
-[![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg
+[![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg?style=flat
             )](http://mit-license.org)
-[![Platform](http://img.shields.io/badge/platform-OS X/iOS-lightgrey.svg?style=flat
+[![Platform](http://img.shields.io/badge/platform-OS X, iOS, tvOS-lightgrey.svg?style=flat
              )](https://developer.apple.com/resources/)
 [![Language](http://img.shields.io/badge/language-swift3-orange.svg?style=flat
              )](https://developer.apple.com/swift)
@@ -11,6 +11,8 @@
 Log4Swift is a logging library written in swift, that is meant to be very configurable both in code at compile time, or using a configuration file at runtime.
 
 Starting with v1.0.1, it requires Xcode 8.1.
+
+**A version for Xcode 9 and swift 4 betas is available in branch swift4-xcode9**
 
 Use versino 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
