@@ -76,13 +76,13 @@ The logger factory is responsible for
     if let loggerFromCache = self.loggers[identifierToFind] {
       foundLogger = loggerFromCache
     } else {
-			var reducedIdentifier = identifierToFind.stringByRemovingLastComponent(withDelimiter: ".")
+			var reducedIdentifier = identifierToFind.stringByRemovingLastComponent(withDelimiter: ".") ?? ""
       var loggerToCopy = self.rootLogger
       while (loggerToCopy === self.rootLogger && !reducedIdentifier.isEmpty) {
-        if let loggerFromCache = self.loggers[reducedIdentifier] {
+        if let loggerFromCache = self.loggers[String(reducedIdentifier)] {
           loggerToCopy = loggerFromCache
         }
-        reducedIdentifier = reducedIdentifier.stringByRemovingLastComponent(withDelimiter: ".")
+        reducedIdentifier = reducedIdentifier.stringByRemovingLastComponent(withDelimiter: ".") ?? ""
       }
       
       foundLogger = Logger(parentLogger: loggerToCopy, identifier: identifierToFind)

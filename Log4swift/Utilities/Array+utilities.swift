@@ -21,7 +21,7 @@
 import Foundation
 
 extension Array {
-  public func find(filter:(Array.Generator.Element) -> Bool) -> Element? {
+  public func find(filter:(Array.Iterator.Element) -> Bool) -> Element? {
 		if let itemIndex = self.index(where: filter) {
       return self[itemIndex]
     }

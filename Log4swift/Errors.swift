@@ -22,6 +22,6 @@ import Foundation
 
 extension NSError {
   class func Log4swiftError(description: String) -> NSError {
-    return NSError(domain: "Log4swift", code: 0, userInfo: [(NSLocalizedFailureReasonErrorKey as String) : description as NSString, NSLocalizedDescriptionKey as NSString: description as NSString])
+    return NSError(domain: "Log4swift", code: 0, userInfo: [(NSLocalizedFailureReasonErrorKey as String) : description as NSString, (NSLocalizedDescriptionKey as NSString) as String: description as NSString])
   }
 }

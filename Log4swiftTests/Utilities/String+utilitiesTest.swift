@@ -20,14 +20,14 @@ class String_utilitiesTest: XCTestCase {
     XCTAssertEqual(truncatedString, "This is a")
   }
   
-  func testRemovingLastComponentWitDelimiterReturnsEmptyStringIfDelimiterIsNotFound() {
+  func testRemovingLastComponentWitDelimiterReturnsNilIfDelimiterIsNotFound() {
     let exempleString = "This is a string"
     
     // Execute
 		let truncatedString = exempleString.stringByRemovingLastComponent(withDelimiter: ",")
     
     // Validate
-    XCTAssertEqual(truncatedString, "")
+    XCTAssertNil(truncatedString)
   }
   
   func testPadToWidthTruncatesEndOfStringIfWidthIsSmallerThanStringLength() {

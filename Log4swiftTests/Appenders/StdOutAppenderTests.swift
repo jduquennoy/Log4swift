@@ -520,13 +520,13 @@ class StdOutAppenderTests: XCTestCase {
     var stringContent: String?
     
     if #available(OSX 10.10, *) {
-        DispatchQueue.global().async { () -> Void in
-          let data = fileHandle.availableData
-          stringContent = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String
-          if(!expectationIsExpired) {
-            expectation.fulfill()
-          }
+      DispatchQueue.global().async(execute: {
+        let data = fileHandle.availableData
+        stringContent = String(data: data, encoding: .utf8)
+        if(!expectationIsExpired) {
+          expectation.fulfill()
         }
+      })
     } else {
         // Fallback on earlier versions
     }

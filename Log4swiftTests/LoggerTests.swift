@@ -593,7 +593,7 @@ class LoggerTests: XCTestCase {
     
     // Validate
     if let loggedMessageTime = TimeInterval(appender.logMessages[0].message) {
-      XCTAssertEqualWithAccuracy(loggedMessageTime, timestampBefore, accuracy: 1.0)
+      XCTAssertEqual(loggedMessageTime, timestampBefore, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
     }

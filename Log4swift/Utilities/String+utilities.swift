@@ -18,21 +18,20 @@
 // limitations under the License.
 //
 
-extension String {
+extension StringProtocol {
   /// Return a new string by removing everything after the last occurence of the provided marker and including the marker.  
   /// If the marker is not found, an empty string is returned.
-  public func stringByRemovingLastComponent(withDelimiter delimiter: String) -> String {
-		let markerIndex = self.range(of: delimiter, options: NSString.CompareOptions.backwards, range: nil)
+  public func stringByRemovingLastComponent(withDelimiter delimiter: String) -> SubSequence? {
+    guard let markerIndex = self.reversed().index(of: Character(delimiter)) else { return nil }
+    let endIndex = self.index(markerIndex.base, offsetBy: -1)
 
-    let result: String
-    if let markerIndex = markerIndex {
-			result = self.substring(to: markerIndex.lowerBound)
-    } else {
-      result = ""
-    }
+    let result = self[self.startIndex..<endIndex]
     return result
   }
 
+}
+
+extension String {
   public func format(args: [CVarArg]) -> String {
     guard args.count > 0 else {
       return self
@@ -42,8 +41,7 @@ extension String {
       NSString(format: self, arguments: argsListPointer) as String
     }
   }
-
-
+  
   /// Pads string left or right to a certain width.
   ///
   /// :parameter: width: The width of the final string.  Positive values left-justify the value,
@@ -62,9 +60,9 @@ extension String {
     
     if self.characters.count > abs(width) {
       if width < 0 {
-				paddedString = self.substring(from: self.index(self.endIndex, offsetBy: width))
+				paddedString = String(self.suffix(abs(width)))
       } else {
-				paddedString = self.substring(to: self.index(self.startIndex, offsetBy: width))
+				paddedString = String(self.prefix(width))
       }
     }
 

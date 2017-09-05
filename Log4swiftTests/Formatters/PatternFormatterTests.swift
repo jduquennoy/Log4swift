@@ -226,7 +226,7 @@ class PatternFormatterTests: XCTestCase {
     // Validate
     let expectedTimestamp = Date().timeIntervalSince1970
     if let loggedMessageTime = TimeInterval(formattedMessage) {
-      XCTAssertEqualWithAccuracy(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
+      XCTAssertEqual(loggedMessageTime, expectedTimestamp, accuracy: 1.0)
     } else {
       XCTAssertTrue(false, "Could not read logged time")
     }
@@ -555,7 +555,7 @@ class PatternFormatterTests: XCTestCase {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
     let decodedDate = dateFormatter.date(from: formattedMessage)
-    XCTAssertEqualWithAccuracy(decodedDate?.timeIntervalSince1970 ?? 0.0, timestamp, accuracy: 0.01, "Formatted date '\(formattedMessage)' is not valid")
+    XCTAssertEqual(decodedDate?.timeIntervalSince1970 ?? 0.0, timestamp, accuracy: 0.01, "Formatted date '\(formattedMessage)' is not valid")
   }
   
   func testFormatterAppliesCocoaDateMarkerWithCurrentTimestampIfNoneIsProvided() {

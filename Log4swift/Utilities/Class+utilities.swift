@@ -48,7 +48,7 @@ internal struct ClassInfo {
     let classList = objc_copyClassList(&count)!
     
     for i in 0..<Int(count) {
-      let classInfo = ClassInfo(classList[i]!)
+      let classInfo = ClassInfo(classList[i])
       if classInfo.isSubclass(of: self) {
         subclassList.append(classInfo)
       }
