@@ -1,8 +1,7 @@
 # Log4Swift
 [![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg?style=flat
             )](http://mit-license.org)
-[![Platform](http://img.shields.io/badge/platform-OS X, iOS, tvOS-lightgrey.svg?style=flat
-             )](https://developer.apple.com/resources/)
+![Platform](http://img.shields.io/badge/platform-macOS,iOS,tvOS-lightgrey.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-swift3-orange.svg?style=flat
              )](https://developer.apple.com/swift)
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
