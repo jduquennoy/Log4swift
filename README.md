@@ -13,7 +13,7 @@ Starting with v1.0.1, it requires Xcode 8.1.
 
 **A version for Xcode 9 and swift 4 betas is available in branch swift4-xcode9**
 
-Use versino 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
+Use version 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
 
 It can be used in projects targetting either OS X (>= 10.8), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
 
