@@ -970,7 +970,6 @@
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
-				SYMROOT = build;
 			};
 			name = Debug;
 		};
@@ -991,7 +990,6 @@
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
-				SYMROOT = build;
 			};
 			name = Release;
 		};
@@ -1121,7 +1119,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
-				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1146,7 +1143,6 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
-				SYMROOT = build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
