@@ -2,22 +2,31 @@
 [![License](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg?style=flat
             )](http://mit-license.org)
 ![Platform](http://img.shields.io/badge/platform-macOS,iOS,tvOS-lightgrey.svg?style=flat)
-[![Language](http://img.shields.io/badge/language-swift3-orange.svg?style=flat
+[![Language](http://img.shields.io/badge/language-swift-orange.svg?style=flat
              )](https://developer.apple.com/swift)
 [![Cocoapod](http://img.shields.io/cocoapods/v/Log4swift.svg?style=flat)](http://cocoadocs.org/docsets/Log4swift/)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Travis-ci Build Status](https://travis-ci.org/jduquennoy/Log4swift.svg)](https://travis-ci.org/jduquennoy/Log4swift)
 
-Log4Swift is a logging library written in swift, that is meant to be very configurable both in code at compile time, or using a configuration file at runtime.
+Log4Swift is a logging library for swift projects, that will allow you to log in a very flexible way.
 
-Starting with v1.0.1, it requires Xcode 8.1.
+Its ultimate goal is to be the tool you need to make your logs as valuable as possible, both in your developpment environment and in production.
 
-**A version for Xcode 9 and swift 4 betas is available in branch swift4-xcode9**
+## Compatibility
+Current version requires Xcode 8.1 and swift 3. It works flowlessly with swift 4's compatibility mode.
 
-Use version 1.0 to compile on Xcode 8.0, use version 1.0.0b5 ([tag version/1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/versions%2F1.0.0b5)) if you need a swift 2.3 version.
+- A version for Xcode 9 and swift 4 is available in branch ([swift4-xcode9](https://github.com/jduquennoy/Log4swift/tree/swift4-xcode9))
+- For Xcode 8.0 / swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.0b5))
 
 It can be used in projects targetting either OS X (>= 10.8), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
 
-It is available as a cocoaPod for easy integration in your projects. Here is a sample Podfile to embed this library in an iOS project :
+## How to use
+
+### Manually
+Clone the repo on your machine, and compile the target that feets your need (OS X, iOS, ...). It will produce a library that you can use in your project.
+
+### CocoaPod
+Add those lines to your Podfile to embed this library in an iOS project (with the versions you want for the lib and the target):
 
 ```
 platform :ios, '8'
@@ -32,23 +41,31 @@ pod 'Log4swift', '1.0.1'
 use_frameworks!
 ```
 
+### Carthage
+Add this line to your Cartfile (with the version you want):
+
+```
+github "jduquennoy/Log4swift" ~> 1.0.2
+```
+
 ## Features
 Here are the main features you can expect from Log4swift :
 
 * straightforward to use for simple cases : default configuration should just work, one-line configuration for typical uses like logging to IDE console or to system logs
-* powerful for more complexe cases, with multi-destination logging and hierarchic loggers configuration
-* ability to log over the network, using an NSLogger backend
+* flexible for more complexe cases, with multi-destination logging, hierarchic loggers configuration, ...
+* multiple destinations available, including network logging, using NSLogger
+  * file logging
+  * network logging using NSLogger
+  * Xcode console logging, including colorized logs (with the XcodeColors plugin installed)
 * dynamically configurable by code
-* configurable by file
-* possibility to auto-reload configuration file automatically (opt-in feature)
-* capable of printing colorized logs both in Xcode (with the XcodeColors plugin installed) and in an XTerm-color256
+* configurable by file, with auto-reload on update possibility (opt-in feature)
 * asynchronous logging, performed on a secondary thread (opt-in feature). Async behavior can be activated per logger.
 
 
 Another goal, that I think we all share, is to have readable and tested code.
 
 * The code coverage of Log4swift's code (excluding third party code) is 100% for most of the source files, and very close to it for others.
-* Feel free to send feedbacks if you find the code not readable enough, or if you have ideas to highen the quality of that code !
+* Feel free to send feedbacks or contribute if you find the code not readable enough, or if you have ideas to highen the quality of that code !
 
 ## Concepts
 The three main concepts of this library are borrowed from log4j :
@@ -68,9 +85,9 @@ Appenders also have a threshold to filter out messages.
 ### Formatters
 Formatters are attached to appenders. Their job is to modify the message to apply it a specific formatting before it is sent to its final destination. One formatter might be attached to multiple appenders.
 
-## Features
+## Some more details on features
 ### Mutliple appenders per logger
-One logger can have multiple appenders. You can for exemple define a logger that will log everything to the console, but that will also send error messages to a file for latter use.
+One logger can have multiple appenders. You can for exemple define a logger that will log everything to the console, but that will also log error messages to a file for latter use.
 
 ```
 let logger = Logger.getLogger("test.logger");
@@ -88,7 +105,9 @@ logger.error ("This message will go to the console and the error log file");  }
 (this code compiles on Xcode 7.3, using swift 2.2)
 
 ### Formatters associated to appenders
-Formatters allows you to apply a specific formatting to your log message, either modifying the message to have it complying to some constraintes or adding information to the logged message.  
+Formatters allows you to apply a specific formatting to your log message, either adding information to the logged message or modifying the message to have it complying to some constraintes.
+
+Formatters are associated to appenders. This way, you can log human readable logs to Xcode's console, while logging with more info regexp friendly format in a file.
 
 ### Log with closures
 Providing a closure instead of a string is pretty handy if the code that generates the message is heavy : the closure will only be executed if the logs are to be issued. No need to encapsulate the code in an if structure.
@@ -97,17 +116,27 @@ Providing a closure instead of a string is pretty handy if the code that generat
 Logger.debug { someHeavyCodeThatGeneratesTheLogMessage() }
 ```
 
+Note that creating the bloc is not completely free (some magic happen behind the scene, like variable capture). But for most uses, the cost should be negligible.
+
 ### Log asynchronously
 Loggers can be configured individualy to log asynchronously. Asynchronous logging will return almost immediately when a log is requested, while the real log will be issued in background on a low priority thread.
 
 Order of messages logged to asynchronous loggers is guaranteed.
 
+Note that if asychronous loggers will execute logged closures later in time, and on an external thread.
+
 ### Flexible configuration
-Configuration of the logging system can be loaded from a file, or done in software.
+Loggers can be configured from a file, or using the library's API.
 
-In software, you can configure it using a dictionary, that you can then store and load from anywhere you want (a web service, a database, a preference file, ...).
+Using the API, you can use a dictionary, that can be stored and loaded from anywhere you want (a web service, a database, a preference file, ...).
 
-Configuration can be modified any time while running.
+Using a configuration file, you can request the configuration to be auto-reloaded each time the file is modified:
+
+```
+LoggerFactory.sharedInstance.readConfiguration(fromPlistFile: "/some/file.plist", autoReload: true)
+```
+
+Configuration can be modified at run time.
 
 ## Provided appenders
 
