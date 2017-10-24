@@ -158,10 +158,26 @@ This appender will write log messages to a file, specified by its path. It will 
 This appender uses NSLogger (https://github.com/fpillet/NSLogger) to send log messages over the network.
 Not all capabilities of NSLogger are accessibles yet : only text messages can be logged.
 
-### The ASL Appender
+### The ASL appender
 The ASL appender sends log messages to the system logging service, provided by Apple. Your messages will we visible in the Console.app application if the ASL configuration has not been customized.
 
-This appender is a good choice for release versions of softwares.
+This appender is a good choice for release versions of softwares targetting exclusively systems that does not have the Unified Logging System.
+
+**Note:** ASL has been deprecated by Apple starting with MacOS 10.12. The unified logger appender should be used instead of ASL for those platforms.
+
+### The Unified Logging System appender
+The unified logging system is the replacement of ASL starting with MacOS 10.12. This logger will log messages to this facility. Your messages will be visible in the Console.app application.
+
+This appender is a good choice for release versions of software targetting 10.12 and latter.
+
+### The system appender
+This meta-appender will use the most appropriate system appender for the current system.
+
+* for MacOS < 10.12, it will use the ASLAppender
+* for MacOS >= 10.12, it will use the Unified Logging System appender.
+
+This appender is the best choice for release versions of software targetting multiple versions of the system (most common case).
+
 
 ## Provided formatters
 

@@ -33,7 +33,7 @@ class AppleUnifiedLoggerAppender : Appender {
   private var loggerToOSLogCache = [String: OSLog]()
   
   public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
-    guard let logType = SystemLoggerAppender.levelsMapping[level] else { return }
+    guard let logType = type(of: self).levelsMapping[level] else { return }
     let loggerName = info[LogInfoKeys.LoggerName] as? String ?? "-"
     let osLog = self.osLog(ForLoggerName: loggerName)
     os_log("%@", log: osLog, type: logType, log)

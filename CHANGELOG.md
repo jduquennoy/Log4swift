@@ -1,5 +1,10 @@
 # Log4swift changelog
 
+## 1.0.3
+- fixed compilation problem with Carthage
+- Added AppleUnifiedLoggerAppender
+- Added SystemAppender, that will select the best system-provided appender for the host system.
+
 ## 1.0.2
 
 - Added watchOS compatibility (Thanks Igor)
