@@ -28,7 +28,6 @@ public class ASLAppender : Appender {
   
   required public init(_ identifier: String) {
     super.init(identifier)
-    
   }
   
   public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {

@@ -10,7 +10,6 @@ import XCTest
 // do not import as @testable, we're testing subclassing from outside the module
 import Log4swift
 
-
 class DummyAppender: Log4swift.Appender {
   open override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     // no need to do anything, just an override
