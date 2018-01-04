@@ -18,8 +18,6 @@
 // limitations under the License.
 //
 
-import Cocoa
-
 /**
  The SystemAppender is a meta-appender, that will select the preferable appender depending on the system.
  - For MacOS 10.11, it will be an ASL appender.
