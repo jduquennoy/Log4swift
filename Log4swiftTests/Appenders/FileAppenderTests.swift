@@ -117,7 +117,7 @@ class FileAppenderTests: XCTestCase {
       
       // Validate
       let fileContent = try NSString(contentsOfFile: tempFilePath, encoding: String.Encoding.utf8.rawValue)
-      XCTAssert(fileContent.length >= logContent.characters.count * 2, "Content of log file should not be just the first ping")
+      XCTAssert(fileContent.length >= logContent.count * 2, "Content of log file should not be just the first ping")
     } catch let error {
       XCTAssert(false, "Error in test : \(error)")
     }
