@@ -119,7 +119,7 @@ Available markers are :
     fileprivate func parsePattern(_ pattern: String) throws -> [FormattingClosure] {
       parsedClosuresSequence = [FormattingClosure]()
       
-      for currentCharacter in pattern.characters
+      for currentCharacter in pattern
       {
         switch(parserStatus.machineState) {
         case .Text where currentCharacter == "%":
@@ -192,7 +192,7 @@ Available markers are :
       if let closureForMarker = self.closureForMarker(markerName, parameters: parameters) {
         parsedClosuresSequence.append({(message, info) in closureForMarker(parameters, message, info) })
       } else {
-        parserStatus.charactersAccumulator += "%\(markerName)".characters
+        parserStatus.charactersAccumulator += "%\(markerName)"
       }
     }
     

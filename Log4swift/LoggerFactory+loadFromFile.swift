@@ -86,7 +86,7 @@ extension LoggerFactory : FileObserverDelegate {
         do {
           let identifierA: String = try self.identifierFromConfigurationDictionary(a)
           let identifierB: String = try self.identifierFromConfigurationDictionary(b)
-          return identifierA.characters.count < identifierB.characters.count
+          return identifierA.count < identifierB.count
         } catch {
           return false
         }

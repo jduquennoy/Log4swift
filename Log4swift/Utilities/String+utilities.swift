@@ -58,7 +58,7 @@ extension String {
       return self
     }
     
-    if self.characters.count > abs(width) {
+    if self.count > abs(width) {
       if width < 0 {
 				paddedString = String(self.suffix(abs(width)))
       } else {
@@ -66,9 +66,9 @@ extension String {
       }
     }
 
-    if self.characters.count < abs(width) {
+    if self.count < abs(width) {
       if width < 0 {
-				paddedString = " ".padding(toLength: abs(width) - self.characters.count, withPad: " ", startingAt: 0) + self
+				paddedString = " ".padding(toLength: abs(width) - self.count, withPad: " ", startingAt: 0) + self
       } else {
         paddedString = self.padding(toLength: width, withPad: " ", startingAt: 0)
       }

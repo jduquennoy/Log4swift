@@ -677,7 +677,7 @@ class LoggerTests: XCTestCase {
     
     let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: expectation)
     thread.name = "someThreadName"
-    thread.stackSize = 16000
+    thread.stackSize = 4 * 4096
     thread.threadPriority = 0.75
     thread.start()
     
