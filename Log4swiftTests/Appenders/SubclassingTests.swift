@@ -12,6 +12,11 @@ import Log4swift
 
 
 class DummyAppender: Log4swift.Appender {
+
+  override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Log4swift.Formatter>) throws {
+    try super.update(withDictionary: dictionary, availableFormatters: availableFormatters)
+
+  }
   open override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     // no need to do anything, just an override
   }
