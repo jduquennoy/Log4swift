@@ -1,8 +1,17 @@
-osx_image: xcode8
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode9
+
 language: objective-c
+
+before_install:
+  - brew update
+  - brew upgrade carthage
 
 script:
   - xcodebuild build test -scheme log4swift-OSX
+  - carthage build --no-skip-current
 
 branches:
   only:

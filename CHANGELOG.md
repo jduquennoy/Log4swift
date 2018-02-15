@@ -1,5 +1,14 @@
 # Log4swift changelog
 
+## 1.0.4
+- Migrated to Swift 4 and xcode 9
+- Appender.update(withDictionary:, availableFormatters:) made open, to allow configuration from file of custom appender (Thanks Yurii)
+
+## 1.0.3
+- Fixed compilation problem with Carthage
+- Added AppleUnifiedLoggerAppender
+- Added SystemAppender, that will select the best system-provided appender for the host system.
+
 ## 1.0.2
 
 - Added watchOS compatibility (Thanks Igor)
