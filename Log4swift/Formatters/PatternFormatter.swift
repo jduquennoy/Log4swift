@@ -111,7 +111,9 @@ Available markers are :
         }
       }
     }
-    
+
+    private static let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
+
     private var parserStatus = ParserStatus()
     private var parsedClosuresSequence = [FormattingClosure]()
     
@@ -295,8 +297,6 @@ Available markers are :
       
       return generatedClosure
     }
-
-    internal static let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
   }
 }
 
