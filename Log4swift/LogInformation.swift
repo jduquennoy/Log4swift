@@ -30,6 +30,7 @@ public enum LogInfoKeys {
   case Timestamp
   case ThreadId
   case ThreadName
+  case ProcessId
 }
 
 /**

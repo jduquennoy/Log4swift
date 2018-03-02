@@ -96,17 +96,6 @@ class PatternFormatterTests: XCTestCase {
 	// Validate
 	XCTAssertEqual(formattedMessage, "[\(LogLevel.Warning)][nameOfTheLogger] Log message")
   }
-
-  func testFormatterAppliesProcessIdentifier() {
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%p %m")
-    let expectedPidHex = String(format: "%2X", ProcessInfo.processInfo.processIdentifier)
-
-    // Execute
-    let formattedMessage = formatter.format(message: "Log message", info: [:])
-
-    // Validate
-    XCTAssertEqual(formattedMessage, "\(expectedPidHex) Log message")
-  }
 	
   func testFormatterAppliesLoggerNameMarker() {
     let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%n")
@@ -670,5 +659,50 @@ class PatternFormatterTests: XCTestCase {
     
     // Validate
     XCTAssertEqual(formattedMessage, "test nameOfThread")
+  }
+
+  // MARK: Tests for process identifier marker
+
+  func testFormatterAppliesProcessIdMarker() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p")
+    let info: LogInfoDictionary = [.ProcessId: UInt64(0x1234567890ABCDEF)]
+
+    // Execute
+    let formattedMessage = formatter.format(message: "", info: info)
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 1234567890abcdef")
+  }
+
+  func testFormatterAppliesProcessIdMarkerWithCommonParametersPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'20'}")
+    let info: LogInfoDictionary = [.ProcessId: UInt64(0x1234567890ABCDEF)]
+
+    // Execute
+    let formattedMessage = formatter.format(message: "", info: info)
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 1234567890abcdef    ")
+  }
+
+  func testFormatterAppliesProcessIdMarkerWithCommonParametersNegativePadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'-20'}")
+    let info: LogInfoDictionary = [.ProcessId: UInt64(0x1234567890ABCDEF)]
+
+    // Execute
+    let formattedMessage = formatter.format(message: "", info: info)
+    // Validate
+    XCTAssertEqual(formattedMessage, "test     1234567890abcdef")
+  }
+
+  func testFormatterAppliesProcessIdMarkerWithCommonParametersZeroPadding() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'0'}")
+    let info: LogInfoDictionary = [.ProcessId: UInt64(0x1234567890ABCDEF)]
+
+    // Execute
+    let formattedMessage = formatter.format(message: "", info: info)
+
+    // Validate
+    XCTAssertEqual(formattedMessage, "test 1234567890abcdef")
   }
 }

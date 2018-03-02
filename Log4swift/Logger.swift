@@ -232,7 +232,8 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
         .ThreadId: currentThreadId(),
-        .ThreadName: currentThreadName()
+        .ThreadName: currentThreadName(),
+        .ProcessId: processId
       ]
       if let file = file {
         info[.FileName] = file
@@ -261,7 +262,8 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
         .LogLevel: level,
         .Timestamp: NSDate().timeIntervalSince1970,
         .ThreadId: currentThreadId(),
-        .ThreadName: currentThreadName()
+        .ThreadName: currentThreadName(),
+        .ProcessId: processId
       ]
       if let file = file {
         info[.FileName] = file
@@ -333,3 +335,5 @@ internal func currentThreadId() -> UInt64 {
   }
   return threadId
 }
+
+internal let processId = ProcessInfo.processInfo.processIdentifier

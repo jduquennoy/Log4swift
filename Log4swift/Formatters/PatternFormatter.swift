@@ -285,7 +285,11 @@ Available markers are :
         }
       case "p":
         generatedClosure = {(parameters, message, info) in
-          processCommonParameters(self.processIdentifier, parameters: parameters)
+          var processId = "-"
+          if let pid = info[.ProcessId] as? UInt64 {
+            processId = String(pid, radix: 16, uppercase: false)
+          }
+          return processCommonParameters(processId, parameters: parameters)
         }
       case "%":
         generatedClosure = {(parameters, message, info) in "%" }
@@ -295,10 +299,6 @@ Available markers are :
       
       return generatedClosure
     }
-
-    private lazy var processIdentifier: String = {
-      return String(format: "%2X", ProcessInfo.processInfo.processIdentifier)
-    }()
   }
 }
 
