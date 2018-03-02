@@ -661,8 +661,6 @@ class PatternFormatterTests: XCTestCase {
     XCTAssertEqual(formattedMessage, "test nameOfThread")
   }
 
-  // MARK: Tests for process identifier marker
-
   func testFormatterAppliesProcessIdMarker() {
 
     let expectedProcessId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
@@ -677,36 +675,46 @@ class PatternFormatterTests: XCTestCase {
 
   func testFormatterAppliesProcessIdMarkerWithCommonParametersPadding() {
 
+    let padding = 10
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "test %p{'padding':'\(padding)'}")
+
     let expectedProcessId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'10'}")
+    let expectedSpaces = String(repeating: " ", count: padding - expectedProcessId.count)
+    let expectedString = "test \(expectedProcessId)\(expectedSpaces)"
 
     // Execute
     let formattedMessage = formatter.format(message: "", info: [:])
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test \(expectedProcessId)     ")
+    XCTAssertEqual(formattedMessage, expectedString)
   }
 
   func testFormatterAppliesProcessIdMarkerWithCommonParametersNegativePadding() {
 
+    let padding = -10
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "test %p{'padding':'-10'}")
+
     let expectedProcessId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'-10'}")
+    let expectedSpaces = String(repeating: " ", count: abs(padding) - expectedProcessId.count)
+    let expectedString = "test \(expectedSpaces)\(expectedProcessId)"
 
     // Execute
     let formattedMessage = formatter.format(message: "", info: [:])
     // Validate
-    XCTAssertEqual(formattedMessage, "test      \(expectedProcessId)")
+    XCTAssertEqual(formattedMessage, expectedString)
   }
 
   func testFormatterAppliesProcessIdMarkerWithCommonParametersZeroPadding() {
 
+    let formatter = try! PatternFormatter(identifier: "testFormatter", pattern: "test %p{'padding':'0'}")
+
     let expectedProcessId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
-    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "test %p{'padding':'0'}")
+    let expectedString = "test \(expectedProcessId)"
 
     // Execute
     let formattedMessage = formatter.format(message: "", info: [:])
 
     // Validate
-    XCTAssertEqual(formattedMessage, "test \(expectedProcessId)")
+    XCTAssertEqual(formattedMessage, expectedString)
   }
 }

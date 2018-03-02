@@ -285,7 +285,7 @@ Available markers are :
         }
       case "p":
         generatedClosure = {(parameters, _, _) in
-          return processCommonParameters(self.processId, parameters: parameters)
+          return processCommonParameters(PatternParser.processId, parameters: parameters)
         }
       case "%":
         generatedClosure = {(parameters, message, info) in "%" }
@@ -296,7 +296,7 @@ Available markers are :
       return generatedClosure
     }
 
-    internal let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
+    internal static let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
   }
 }
 
