@@ -296,7 +296,7 @@ Available markers are :
       return generatedClosure
     }
 
-    lazy var processIdentifier: String = {
+    private lazy var processIdentifier: String = {
       return String(format: "%2X", ProcessInfo.processInfo.processIdentifier)
     }()
   }
