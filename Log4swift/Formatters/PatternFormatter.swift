@@ -284,12 +284,8 @@ Available markers are :
           processCommonParameters(message as String, parameters: parameters)
         }
       case "p":
-        generatedClosure = {(parameters, message, info) in
-          var processId = "-"
-          if let pid = info[.ProcessId] as? UInt64 {
-            processId = String(pid, radix: 16, uppercase: false)
-          }
-          return processCommonParameters(processId, parameters: parameters)
+        generatedClosure = {(parameters, _, _) in
+          return processCommonParameters(self.processId, parameters: parameters)
         }
       case "%":
         generatedClosure = {(parameters, message, info) in "%" }
@@ -299,6 +295,8 @@ Available markers are :
       
       return generatedClosure
     }
+
+    internal let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
   }
 }
 
