@@ -283,6 +283,10 @@ Available markers are :
         generatedClosure = {(parameters, message, info) in
           processCommonParameters(message as String, parameters: parameters)
         }
+      case "p":
+        generatedClosure = {(parameters, message, info) in
+          processCommonParameters(self.processIdentifier, parameters: parameters)
+        }
       case "%":
         generatedClosure = {(parameters, message, info) in "%" }
       default:
@@ -291,6 +295,10 @@ Available markers are :
       
       return generatedClosure
     }
+
+    lazy var processIdentifier: String = {
+      return String(format: "%2X", ProcessInfo.processInfo.processIdentifier)
+    }()
   }
 }
 
