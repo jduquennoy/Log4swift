@@ -111,7 +111,9 @@ Available markers are :
         }
       }
     }
-    
+
+    private static let processId = String(ProcessInfo.processInfo.processIdentifier, radix: 16, uppercase: false)
+
     private var parserStatus = ParserStatus()
     private var parsedClosuresSequence = [FormattingClosure]()
     
@@ -282,6 +284,10 @@ Available markers are :
       case "m":
         generatedClosure = {(parameters, message, info) in
           processCommonParameters(message as String, parameters: parameters)
+        }
+      case "p":
+        generatedClosure = {(parameters, _, _) in
+          return processCommonParameters(PatternParser.processId, parameters: parameters)
         }
       case "%":
         generatedClosure = {(parameters, message, info) in "%" }
