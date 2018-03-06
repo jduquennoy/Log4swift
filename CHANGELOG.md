@@ -3,6 +3,7 @@
 ## 1.0.4
 - Migrated to Swift 4 and xcode 9
 - Appender.update(withDictionary:, availableFormatters:) made open, to allow configuration from file of custom appender (Thanks Yurii)
+- Added 'p' maker for pattern formatter, that prints the ID of the current process in hexadecimal (Thanks Yurii)
 
 ## 1.0.3
 - Fixed compilation problem with Carthage

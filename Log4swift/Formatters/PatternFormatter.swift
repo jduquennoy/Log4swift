@@ -35,8 +35,9 @@ Available markers are :
 * F{'padding': 'padding value'} : the name of the file where the log was issued
 * f{'padding': 'padding value'} : the name of the file where the log was issued without the full path
 * M{'padding': 'padding value'} : the name of the function in which the log was issued
-* t{'padding': 'padding value'} : the id of the current thread as hexadecimal
+* t{'padding': 'padding value'} : the id of the current thread in hexadecimal
 * T{'padding': 'padding value'} : the name of the current thread or GCD queue
+* p{'padding': 'padding value'} : the id of the current process in hexadecimal
 * m{'padding': 'padding value'} : the message
 * % : the '%' character
 
