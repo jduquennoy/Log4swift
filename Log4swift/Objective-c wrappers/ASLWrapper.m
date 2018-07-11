@@ -50,13 +50,13 @@
 - (void)logMessage:(NSString *)log level:(int)level category:(NSString *)category {
   static char const *const levelStrings[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
   dispatch_sync(loggingQueue, ^{
-    if(logClient != NULL) {
+    if(self->logClient != NULL) {
       int aslLogLevel = [self _logLevelToAslLevel:level];
       aslmsg aslMessage = asl_new(ASL_TYPE_MSG);
       asl_set(aslMessage, ASL_KEY_FACILITY, [category UTF8String]);
       asl_set(aslMessage, ASL_KEY_LEVEL, levelStrings[aslLogLevel]);
       asl_set(aslMessage, ASL_KEY_MSG, [log UTF8String]);
-      asl_send(logClient, aslMessage);
+      asl_send(self->logClient, aslMessage);
       asl_free(aslMessage);
     }
     

@@ -134,12 +134,24 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
   
   private func findLogMessage(_ text: String) throws -> [SystemLogMessage] {
-    // log show --predicate "eventMessage = 'message'" --last "1m" --style json --info --debug
-    // escape ' with \
-    let protectedMessage = text.replacingOccurrences(of: "'", with: "\\'")
-    let jsonData = self.execCommand(command: "log", args: ["show", "--predicate", "eventMessage = '\(protectedMessage)'", "--last", "1m", "--style", "json", "--info", "--debug"])
-    let jsonDecoder = JSONDecoder()
-    let foundMessages = try jsonDecoder.decode(Array<SystemLogMessage>.self, from: jsonData)
+    // The log system is async, so the log might appear after a small delay.
+    // We loop with a small wait to work that around.
+    var triesLeft = 10
+    var foundMessages = [SystemLogMessage]()
+    
+    repeat {
+      // log show --predicate "eventMessage = 'message'" --last "1m" --style json --info --debug
+      // escape ' with \
+      let protectedMessage = text.replacingOccurrences(of: "'", with: "\\'")
+      let jsonData = self.execCommand(command: "log", args: ["show", "--predicate", "eventMessage = '\(protectedMessage)'", "--last", "1m", "--style", "json", "--info", "--debug"])
+      let jsonDecoder = JSONDecoder()
+      foundMessages = try jsonDecoder.decode(Array<SystemLogMessage>.self, from: jsonData)
+
+      if foundMessages.count == 0 {
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1)) // needed as the logging system is async
+      }
+      triesLeft -= 1
+    } while(triesLeft > 0 && foundMessages.isEmpty)
     
     return foundMessages
   }
@@ -164,7 +176,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
 struct SystemLogMessage: Decodable {
   let category: String
   let processImageUUID: String
-  let processUniqueID: UInt
+  let processUniqueID: UInt? // depending on the OS version, the process uniqueID might not appear (it does not on 10.13)
   let threadID: UInt
   let timestamp: String
   let traceID: Int
