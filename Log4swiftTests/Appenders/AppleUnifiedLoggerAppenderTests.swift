@@ -136,7 +136,8 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   private func findLogMessage(_ text: String) throws -> [SystemLogMessage] {
     // The log system is async, so the log might appear after a small delay.
     // We loop with a small wait to work that around.
-    var triesLeft = 10
+    // So this method can take several seconds to run, in the worst case (no log message found)
+    var triesLeft = 50
     var foundMessages = [SystemLogMessage]()
     
     repeat {
@@ -148,7 +149,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
       foundMessages = try jsonDecoder.decode(Array<SystemLogMessage>.self, from: jsonData)
 
       if foundMessages.count == 0 {
-        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1)) // needed as the logging system is async
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
       }
       triesLeft -= 1
     } while(triesLeft > 0 && foundMessages.isEmpty)
