@@ -8,7 +8,7 @@
 ## 1.0.3
 - Fixed compilation problem with Carthage
 - Added AppleUnifiedLoggerAppender
-- Added SystemAppender, that will select the best system-provided appender for the host system.
+- Added SystemAppender, that uses the best system-provided appender for the host system.
 
 ## 1.0.2
 

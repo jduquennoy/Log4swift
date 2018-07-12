@@ -20,7 +20,7 @@
 
 import os.log
 
-@available(iOS 10.0, macOS 10.12, *)
+@available(iOS 10.0, macOS 10.12, watchOS 3, *)
 class AppleUnifiedLoggerAppender : Appender {
   private static var levelsMapping = [
     LogLevel.Trace: OSLogType.debug,

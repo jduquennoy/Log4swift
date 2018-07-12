@@ -125,7 +125,6 @@
 		78389E491ECC26B0008898E7 /* Class+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78389E461ECC26B0008898E7 /* Class+utilities.swift */; };
 		D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */; };
 		D9B229E41B443B670001EE9A /* Array+utilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */; };
-		FFD4C9E51ECDE5E200708033 /* log4swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 02664C0D1B2CE96500B695DE /* log4swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,7 +209,6 @@
 		78389E461ECC26B0008898E7 /* Class+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Class+utilities.swift"; sourceTree = "<group>"; };
 		D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilities.swift"; sourceTree = "<group>"; };
 		D9B229E31B443B670001EE9A /* Array+utilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+utilitiesTests.swift"; sourceTree = "<group>"; };
-		FFB050781ECDBF9E008466C6 /* Log4swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Log4swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,13 +243,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5EF80A8D1B7A172400A5F07A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FFB050741ECDBF9E008466C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -332,7 +323,6 @@
 				02B61A631B56D1F100C683D8 /* log4swiftPerformanceTests.xctest */,
 				5EF80A911B7A172400A5F07A /* Log4swift.framework */,
 				5E3F86D81DC25E2F008F296C /* Log4swift.framework */,
-				FFB050781ECDBF9E008466C6 /* Log4swift.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -501,14 +491,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FFB050751ECDBF9E008466C6 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FFD4C9E51ECDE5E200708033 /* log4swift.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -602,24 +584,6 @@
 			productReference = 5EF80A911B7A172400A5F07A /* Log4swift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		FFB050771ECDBF9E008466C6 /* Log4swift-watchOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FFB0507F1ECDBF9E008466C6 /* Build configuration list for PBXNativeTarget "Log4swift-watchOS" */;
-			buildPhases = (
-				FFB050731ECDBF9E008466C6 /* Sources */,
-				FFB050741ECDBF9E008466C6 /* Frameworks */,
-				FFB050751ECDBF9E008466C6 /* Headers */,
-				FFB050761ECDBF9E008466C6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Log4swift-watchOS";
-			productName = Log4swift;
-			productReference = FFB050781ECDBF9E008466C6 /* Log4swift.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -646,10 +610,6 @@
 						CreatedOnToolsVersion = 6.3.2;
 						LastSwiftMigration = 0900;
 					};
-					FFB050771ECDBF9E008466C6 = {
-						CreatedOnToolsVersion = 8.3;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 02664C041B2CE96500B695DE /* Build configuration list for PBXProject "Log4swift" */;
@@ -669,7 +629,6 @@
 				5E3F86D71DC25E2F008F296C /* log4swift_tvOS */,
 				02664C131B2CE96500B695DE /* log4swiftTests */,
 				02B61A4B1B56D1F100C683D8 /* log4swiftPerformanceTests */,
-				FFB050771ECDBF9E008466C6 /* Log4swift-watchOS */,
 			);
 		};
 /* End PBXProject section */
@@ -706,13 +665,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5EF80A8F1B7A172400A5F07A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FFB050761ECDBF9E008466C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -853,13 +805,6 @@
 				5E3E720E1B7A186700EEE46B /* Array+utilities.swift in Sources */,
 				5E3E720F1B7A186700EEE46B /* ASLWrapper.m in Sources */,
 				0241A2D91C32ACD400A624CF /* FileObserver.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FFB050731ECDBF9E008466C6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1192,62 +1137,6 @@
 			};
 			name = Release;
 		};
-		FFB0507D1ECDBF9E008466C6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CODE_SIGN_IDENTITY = "";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.Log4swift;
-				PRODUCT_NAME = Log4swift;
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.2;
-			};
-			name = Debug;
-		};
-		FFB0507E1ECDBF9E008466C6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CODE_SIGN_IDENTITY = "";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.Log4swift;
-				PRODUCT_NAME = Log4swift;
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 3.2;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1301,15 +1190,6 @@
 			buildConfigurations = (
 				5EF80AA51B7A172500A5F07A /* Debug */,
 				5EF80AA61B7A172500A5F07A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FFB0507F1ECDBF9E008466C6 /* Build configuration list for PBXNativeTarget "Log4swift-watchOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FFB0507D1ECDBF9E008466C6 /* Debug */,
-				FFB0507E1ECDBF9E008466C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

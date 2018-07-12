@@ -13,31 +13,32 @@ Log4Swift is a logging library for swift projects, that will allow you to log in
 Its ultimate goal is to be the tool you need to make your logs as valuable as possible, both in your developpment environment and in production.
 
 ## Compatibility
-Current version requires Xcode 8.1 and swift 3. It works flowlessly with swift 4's compatibility mode.
+Current version requires Xcode 9 and swift 4.1.
 
-- A version for Xcode 9 and swift 4 is available in branch ([swift4-xcode9](https://github.com/jduquennoy/Log4swift/tree/swift4-xcode9))
-- For Xcode 8.0 / swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.0b5))
+- For swift 3, use version 1.0.2 ([tag v1.0.2](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.2))
+- For swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.0b5))
 
-It can be used in projects targetting either OS X (>= 10.8), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
+It can be used in projects targetting either OS X (>= 10.10), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
 
 ## How to use
 
 ### Manually
 Clone the repo on your machine, and compile the target that feets your need (OS X, iOS, ...). It will produce a library that you can use in your project.
+As long as the swift ABI is not stable, you will need to recompile the library if you change the version of the compiler used for your project. Because of that, you should rather consider one of the other methods (see bellow).
 
 ### CocoaPod
 Add those lines to your Podfile to embed this library in an iOS project (with the versions you want for the lib and the target):
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.0.1'
+pod 'Log4swift', '1.0.4'
 use_frameworks!
 ```
 And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.0.1'
+pod 'Log4swift', '1.0.4'
 use_frameworks!
 ```
 
@@ -45,7 +46,7 @@ use_frameworks!
 Add this line to your Cartfile (with the version you want):
 
 ```
-github "jduquennoy/Log4swift" ~> 1.0.2
+github "jduquennoy/Log4swift" ~> 1.0.4
 ```
 
 ## Features

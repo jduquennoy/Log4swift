@@ -46,7 +46,7 @@ class SystemAppender: Appender {
   internal let backendAppender: Appender?
   
   required init(_ identifier: String) {
-    if #available(iOS 10.0, macOS 10.12, *) {
+    if #available(iOS 10.0, macOS 10.12, watchOS 3, *) {
       self.backendAppender = AppleUnifiedLoggerAppender(identifier)
     } else if #available(iOS 9.0, macOS 10.9, *) {
       self.backendAppender = ASLAppender(identifier)
