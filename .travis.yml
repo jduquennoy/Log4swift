@@ -8,7 +8,9 @@ language: objective-c
 before_install:
   - brew update
   - brew upgrade carthage
-  - sudo log config --mode "level:debug"
+  - sudo log config --mode "level:off"
+  - sudo log config --mode "level:debug" --subsystem Log4swift.tests.systemLoggerAppender
+  - sudo log config --mode "level:debug" --subsystem -
 
 script:
   - xcodebuild build test -scheme log4swift-OSX

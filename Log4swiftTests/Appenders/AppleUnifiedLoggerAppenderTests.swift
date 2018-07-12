@@ -12,9 +12,10 @@ import Foundation
 
 @available(iOS 10.0, macOS 10.12, *)
 class AppleUnifiedLoggerAppenderTests: XCTestCase {
+  let testLoggerName = "Log4swift.tests.systemLoggerAppender"
 
   func testLogWithOffLevelDoesNotLog() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     appender.thresholdLevel = .Trace
@@ -27,7 +28,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
 
   func testLoggingTwiceWithTheSameLoggerNameLogsMessagesCorrectly() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     
@@ -54,7 +55,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
   
   func testLogDebugMessageAsDebug() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     
@@ -70,7 +71,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
 
   func testLogInfoMessageAsInfo() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     
@@ -86,7 +87,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
   
   func testLogWarningMessageAsDefault() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     
@@ -102,7 +103,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
   
   func testLogErrorMessageAsError() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test info message " + UUID().uuidString
     
@@ -118,7 +119,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   }
   
   func testLogFatalMessageAsFault() {
-    let infoDictionary = [LogInfoKeys.LoggerName: "Log4swift.tests.systemLoggerAppender"]
+    let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
     let logMessage = "Test fatal message " + UUID().uuidString
     
@@ -137,7 +138,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
     // The log system is async, so the log might appear after a small delay.
     // We loop with a small wait to work that around.
     // So this method can take several seconds to run, in the worst case (no log message found)
-    var triesLeft = 50
+    var triesLeft = 10
     var foundMessages = [SystemLogMessage]()
     
     repeat {
