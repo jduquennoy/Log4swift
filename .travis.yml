@@ -8,6 +8,7 @@ language: objective-c
 before_install:
   - brew update
   - brew upgrade carthage
+  - sudo log config --mode "level:debug"
 
 script:
   - xcodebuild build test -scheme log4swift-OSX
