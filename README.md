@@ -18,7 +18,7 @@ Current version requires Xcode 9 and swift 4.1.
 - For swift 3, use version 1.0.2 ([tag v1.0.2](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.2))
 - For swift 2.3, use version 1.0.0b5 ([tag v1.0.0b5](https://github.com/jduquennoy/Log4swift/releases/tag/v1.0.0b5))
 
-It can be used in projects targetting either OS X (>= 10.10), iOS (>= iOS 8), appleTV or watchOS (>= 2.0), and written either in swift or objective-C (or a mix of those two).
+It can be used in projects targetting either OS X (>= 10.10), iOS (>= iOS 8) or appleTV, and written either in swift or objective-C (or a mix of those two).
 
 ## How to use
 
