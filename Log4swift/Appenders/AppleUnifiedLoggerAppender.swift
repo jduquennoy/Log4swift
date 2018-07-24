@@ -38,7 +38,7 @@ public class AppleUnifiedLoggerAppender : Appender {
     guard let logType = type(of: self).levelsMapping[level] else { return }
     let loggerName = info[LogInfoKeys.LoggerName] as? String ?? "-"
     let osLog = self.osLog(ForLoggerName: loggerName)
-    os_log("%@", log: osLog, type: logType, log)
+    os_log("%{public}@", log: osLog, type: logType, log)
   }
   
   private func osLog(ForLoggerName loggerName: String) -> OSLog {
