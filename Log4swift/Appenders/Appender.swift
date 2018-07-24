@@ -31,7 +31,7 @@ This class is the base class, from which all appenders should inherit.
   }
   
   @objc let identifier: String
-  public var thresholdLevel = LogLevel.Debug
+  @objc public var thresholdLevel = LogLevel.Debug
   public var formatter: Formatter?
   
   @objc
