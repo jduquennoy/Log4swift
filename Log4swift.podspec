@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.author       = { "Jerome Duquennoy" => "jerome@duquennoy.fr" }
 
   s.ios.deployment_target = "8.0"
+  s.watchos.deployment_target = "2.0"
   s.osx.deployment_target = "10.10"
 
   s.source       = { :git => "https://github.com/jduquennoy/Log4swift.git", :tag => "v1.0.4" }
