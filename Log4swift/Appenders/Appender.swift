@@ -30,10 +30,11 @@ This class is the base class, from which all appenders should inherit.
     case FormatterId = "FormatterId"
   }
   
-  let identifier: String
+  @objc let identifier: String
   public var thresholdLevel = LogLevel.Debug
   public var formatter: Formatter?
   
+  @objc
   public required init(_ identifier: String) {
     self.identifier = identifier
   }
