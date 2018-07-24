@@ -26,6 +26,7 @@ This appender will send messages to ASL, the Apple System Log.
 public class ASLAppender : Appender {
   internal let aslClient = ASLWrapper ()
   
+  @objc
   required public init(_ identifier: String) {
     super.init(identifier)
   }

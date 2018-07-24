@@ -56,6 +56,7 @@ public class StdOutAppender: Appender {
   internal fileprivate(set) var textColors = [LogLevel: TTYColor]()
   internal fileprivate(set) var backgroundColors = [LogLevel: TTYColor]()
   
+  @objc
   public required init(_ identifier: String) {
     let xcodeColors = ProcessInfo().environment["XcodeColors"]
     let terminalType = ProcessInfo().environment["TERM"]

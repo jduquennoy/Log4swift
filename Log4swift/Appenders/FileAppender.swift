@@ -29,6 +29,7 @@ public class FileAppender : Appender {
     case FilePath = "FilePath"
   }
   
+  @objc
   public internal(set) var filePath : String {
     didSet {
       if let safeHandler = self.fileHandler {
@@ -42,6 +43,7 @@ public class FileAppender : Appender {
   private var fileHandler: FileHandle?
   private var didLogFailure = false
 
+  @objc
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil
     self.filePath = (filePath as NSString).expandingTildeInPath
