@@ -53,6 +53,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
 
   /// If asynchronous is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
   /// The order of the messages will be preserved in async mode.
+  @objc
   public var asynchronous: Bool {
     get {
       if let parent = self.parent {
@@ -71,6 +72,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   /// For example, if the threshold is Warning:
   /// * logs issued with a Debug or Info will be ignored
   /// * logs issued wiht a Warning, Error or Fatal level will be processed
+  @objc
   public var thresholdLevel: LogLevel {
     get {
       if let parent = self.parent {
@@ -86,6 +88,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   }
 
   /// The list of destination appenders for the log messages.
+  @objc
   public var appenders: [Appender] {
     get {
       if let parent = self.parent {
@@ -103,18 +106,21 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   
   /// Creates a new logger with the given identifier, log level and appenders.
   /// The identifier will not be modifiable, and should not be an empty string.
+  @objc
   public init(identifier: String, level: LogLevel = LogLevel.Debug, appenders: [Appender] = []) {
     self.identifier = identifier
     self.thresholdLevelStorage = level
     self.appendersStorage = appenders
   }
 
+  @objc
   convenience override init() {
     self.init(identifier: "", appenders: Logger.createDefaultAppenders())
   }
   
   /// Create a logger that is a child of the given logger.
   /// The created logger will follow the parent logger's configuration until it is manually modified.
+  @objc
   public convenience init(parentLogger: Logger, identifier: String) {
     self.init(identifier: identifier, level: parentLogger.thresholdLevel, appenders: [Appender]() + parentLogger.appenders)
     self.parent = parentLogger

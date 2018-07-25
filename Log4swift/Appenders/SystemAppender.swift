@@ -18,6 +18,8 @@
 // limitations under the License.
 //
 
+import Foundation
+
 /**
  The SystemAppender is a meta-appender, that will select the preferable appender depending on the system.
  - For MacOS 10.11, it will be an ASL appender.
@@ -25,8 +27,9 @@
  - ...
  This appender is the best suited one for production software that targets multiple platforms.
  */
-class SystemAppender: Appender {
-  override var thresholdLevel: LogLevel {
+@objc
+public class SystemAppender: Appender {
+  public override var thresholdLevel: LogLevel {
     get {
       return self.backendAppender?.thresholdLevel ?? .Off
     }
@@ -34,7 +37,7 @@ class SystemAppender: Appender {
       self.backendAppender?.thresholdLevel = newValue
     }
   }
-  override var formatter: Formatter? {
+  public override var formatter: Formatter? {
     get {
       return self.backendAppender?.formatter
     }
@@ -45,7 +48,8 @@ class SystemAppender: Appender {
   
   internal let backendAppender: Appender?
   
-  required init(_ identifier: String) {
+  @objc
+  public required init(_ identifier: String) {
     if #available(iOS 10.0, macOS 10.12, watchOS 3, *) {
       self.backendAppender = AppleUnifiedLoggerAppender(identifier)
     } else if #available(iOS 9.0, macOS 10.9, *) {
@@ -63,11 +67,11 @@ class SystemAppender: Appender {
     super.init(identifier)
   }
   
-  override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
+  public override func update(withDictionary dictionary: Dictionary<String, Any>, availableFormatters: Array<Formatter>) throws {
     try self.backendAppender?.update(withDictionary: dictionary, availableFormatters: availableFormatters)
   }
   
-  override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
+  public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     self.backendAppender?.performLog(log, level: level, info: info)
   }
 }
