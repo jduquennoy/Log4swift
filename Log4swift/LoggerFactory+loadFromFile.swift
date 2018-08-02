@@ -33,7 +33,7 @@ extension LoggerFactory : FileObserverDelegate {
   /// Load configuration file in plist format.
   /// - parameter filePath: the path to the file to load
   /// - parameter autoReload: true if the configuration file should be reloaded automatically when modified. If file does not exist, it will be loaded when created. Only one file can be auto-reloaded at a time. If a second file is marked as such, the first one will no longer be.
-  public func readConfiguration(fromPlistFile filePath: String, autoReload: Bool = false, reloadInterval: TimeInterval = 5.0) throws {
+  @objc public func readConfiguration(fromPlistFile filePath: String, autoReload: Bool = false, reloadInterval: TimeInterval = 5.0) throws {
     let expandedFilePath = (filePath as NSString).expandingTildeInPath
     let configurationNSDictionary = NSDictionary(contentsOfFile: expandedFilePath)
     if let configurationDictionary = configurationNSDictionary as? Dictionary<String, Any> {
@@ -46,7 +46,7 @@ extension LoggerFactory : FileObserverDelegate {
   }
   
   /// Reads a whole configuration from the given dictionary.
-  public func readConfiguration(fromDictionary configurationDictionary: Dictionary<String, Any>) throws {
+  @objc public func readConfiguration(fromDictionary configurationDictionary: Dictionary<String, Any>) throws {
     _ = try self.readConfigurationToTupple(fromDictionary: configurationDictionary)
   }
   
