@@ -29,10 +29,9 @@
   } else {
     NSLog(@"Successfully loaded dictionary");
   }
-}
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-  // Insert code here to tear down your application
+  
+  // test calls to some methods, to make sure they are still available
+  (void)[[FileAppender alloc] initWithIdentifier:@"dummyIdentifier" filePath:@"/non/existing/file/path"];
 }
 
 @end

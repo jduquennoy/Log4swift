@@ -200,6 +200,7 @@ class FileAppenderTests: XCTestCase {
     let dictionary = Dictionary<String, Any>()
     let appender = FileAppender("testAppender")
     
+    // Execute & Validate
 		XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
@@ -207,7 +208,7 @@ class FileAppenderTests: XCTestCase {
     let dictionary = Dictionary<String, Any>()
     let appender = FileAppender("testAppender")
     
-    // Execute & Analyze
+    // Execute & Validate
     XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters:[]) }
   }
   
@@ -218,7 +219,7 @@ class FileAppenderTests: XCTestCase {
 		// Execute
 		try! appender.update(withDictionary: dictionary, availableFormatters:[])
 		
-		// Analyze
+    // Validate
 		XCTAssertEqual(appender.filePath,  "/log/file/path.log")
 	}
 	
@@ -227,6 +228,7 @@ class FileAppenderTests: XCTestCase {
       Appender.DictionaryKey.FormatterId.rawValue: "not existing id"]
     let appender = FileAppender("testAppender")
     
+    // Execute & Validate
     XCTAssertThrows { try appender.update(withDictionary: dictionary, availableFormatters: []) }
   }
   
@@ -242,24 +244,6 @@ class FileAppenderTests: XCTestCase {
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier)
   }
-  
-  func testFileAppenderPerformanceWhenFileIsNotDeleted() {
-    do {
-      let tempFilePath = try self.createTemporaryFilePath(fileExtension: "log")
-      let fileAppender = FileAppender(identifier: "test.appender", filePath: tempFilePath)
-      defer {
-        unlink((tempFilePath as NSString).fileSystemRepresentation)
-      }
-      
-      measure { () -> Void in
-        for _ in 1...1000 {
-					fileAppender.log("This is a test log", level: LogLevel.Debug, info: LogInfoDictionary())
-        }
-      }
-    } catch let error {
-      XCTAssert(false, "Error in test : \(error)")
-    }
-  }
 
 	func testLoggingToImpossiblePathDoesNotCreateTheFileAndDoesNotRaiseError() {
 		let filePath = "/proc/impossibleLogFile.log"
@@ -268,8 +252,118 @@ class FileAppenderTests: XCTestCase {
 		// Execute
 		fileAppender.performLog("log", level: .Error, info: [:])
 		
-		// Analyze
+    // Validate
 		XCTAssertFalse(FileManager.default.fileExists(atPath: filePath))
 	}
 	
+  func testFileIsRotatedIfMaxFileSizeIsExceeded() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 10)
+    
+    let firstLog = "first log, exceeding max file size"
+    fileAppender.performLog(firstLog, level: .Error, info: LogInfoDictionary()) // set file to max size
+    
+    // Execute
+    let secondLog = "second log"
+    fileAppender.performLog(secondLog, level: .Error, info: LogInfoDictionary()) // set file to max size
+    
+    // Validate
+    let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
+    let logFileContent = try String(contentsOfFile: filePath)
+    XCTAssertEqual(rotatedFileContent, firstLog + "\n")
+    XCTAssertEqual(logFileContent, secondLog + "\n")
+  }
+
+  func testFileIsNotRotatedIfMaxFileSizeIsNotExceeded() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
+    
+    let logString = "small log !"
+    
+    // Execute
+    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
+    
+    // Validate
+    let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
+    let logFileContent = try String(contentsOfFile: filePath)
+    XCTAssertEqual(rotatedFileContent, "\(logString)\n\(logString)\n")
+    XCTAssertEqual(logFileContent, "\(logString)\n")
+
+  }
+
+  /////--------------------
+  func testFileIsRotatedIfMaxFileAgeIsExceeded() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileAge: 1)
+    let logMessage = "log message"
+
+    // Execute
+    fileAppender.performLog("\(logMessage) 1", level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog("\(logMessage) 2", level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog("\(logMessage) 3", level: .Error, info: LogInfoDictionary())
+    sleep(1)
+    fileAppender.performLog("\(logMessage) 4", level: .Error, info: LogInfoDictionary())
+
+    // Validate
+    let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
+    let logFileContent = try String(contentsOfFile: filePath)
+    XCTAssertEqual(rotatedFileContent, "\(logMessage) 1\n\(logMessage) 2\n\(logMessage) 3\n")
+    XCTAssertEqual(logFileContent, "\(logMessage) 4\n")
+  }
+  /////--------------------
+
+
+  func testMultipleRotationsWithinLimitDoesNotDeleteFiles() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
+    fileAppender.maxRotatedFiles = 10
+    
+    let logString = "log that exeeds max file size"
+    
+    // Execute
+    for logIndex in 1...5 {
+      fileAppender.performLog(logString + " \(logIndex)", level: .Error, info: LogInfoDictionary())
+    }
+
+    // Validate
+    for logFileIndex in (0...4).reversed() {
+      var currentFilePath = filePath
+      if logFileIndex > 0 {
+        currentFilePath += ".\(logFileIndex)"
+      }
+      let fileContent = try String(contentsOfFile: currentFilePath)
+      XCTAssertEqual(fileContent, "\(logString) \(5 - logFileIndex)\n")
+    }
+  }
+
+  func testMultipleRotationsOverLimitDeletesExeedingFiles() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
+    let maxRotatedFiles = 5
+    fileAppender.maxRotatedFiles = UInt(maxRotatedFiles)
+    
+    let logString = "log that exeeds max file size"
+    
+    // Execute
+    for logIndex in 1...10 {
+      fileAppender.performLog(logString + " \(logIndex)", level: .Error, info: LogInfoDictionary())
+    }
+    
+    // Validate
+    let fileManager = FileManager.default
+    for logFileIndex in (0...9).reversed() {
+      var currentFilePath = filePath
+      if logFileIndex > 0 {
+        currentFilePath += ".\(logFileIndex)"
+      }
+      if logFileIndex <= maxRotatedFiles {
+        let fileContent = try String(contentsOfFile: currentFilePath)
+        XCTAssertEqual(fileContent, "\(logString) \(10 - logFileIndex)\n")
+      } else {
+        XCTAssertFalse(fileManager.fileExists(atPath: currentFilePath))
+      }
+    }
+  }
 }
