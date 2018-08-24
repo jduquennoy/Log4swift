@@ -43,13 +43,11 @@ public class FileAppender : Appender {
     }
   }
   
-  /// The maximum size of the file in octets before rotation is triggered.
-  /// Nil or zero disables the file size trigger for rotation
+  /// The rotation policies to apply. The file will be rotated if at least
+  /// one of the registered policies requests it.
+  /// If none are registered, the file will never be rotated.
+  public var rotationPolicies = [FileAppenderRotationPolicy]()
   public var maxFileSize: UInt64?
-  
-  /// The maximum age of the file in seconds before rotation is triggered.
-  /// Nil or zero disables the file age trigger for rotation.
-  public var maxFileAge: TimeInterval?
   
   /// The maximum number of rotated log files kept.
   /// Files exceeding this limit will be deleted during rotation.
@@ -57,7 +55,6 @@ public class FileAppender : Appender {
   
   private var fileHandler: FileHandle?
   private var currentFileSize: UInt64?
-  private var currentFileCreationCreationDate: Date?
   private var didLogFailure = false
   private var loggingMutex = PThreadMutex()
 
@@ -65,7 +62,6 @@ public class FileAppender : Appender {
   public init(identifier: String, filePath: String) {
     self.fileHandler = nil
     self.currentFileSize = nil
-    self.currentFileCreationCreationDate = nil
     self.filePath = (filePath as NSString).expandingTildeInPath
 
     super.init(identifier)
@@ -78,10 +74,11 @@ public class FileAppender : Appender {
   /// Nil or zero disables the file size trigger for rotation. Default value is nil.
   /// - Parameter maxFileAge: the maximum age of the file in seconds before rotation is triggered.
   /// Nil or zero disables the file age trigger for rotation. Default value is nil.
-  public convenience init(identifier: String, filePath: String, maxFileSize: UInt64? = nil, maxFileAge: TimeInterval? = nil) {
+  public convenience init(identifier: String, filePath: String, rotationPolicies: [FileAppenderRotationPolicy]? = nil) {
     self.init(identifier: identifier, filePath: filePath)
-    self.maxFileAge = maxFileAge
-    self.maxFileSize = maxFileSize
+    if let rotationPolicies = rotationPolicies {
+      self.rotationPolicies.append(contentsOf: rotationPolicies)
+    }
   }
 
   public required convenience init(_ identifier: String) {
@@ -96,6 +93,23 @@ public class FileAppender : Appender {
     } else {
       self.filePath = "placeholder"
 			throw NSError.Log4swiftError(description: "Missing '\(DictionaryKey.FilePath.rawValue)' parameter for file appender '\(self.identifier)'")
+    }
+    if let maxFileAge = (dictionary[DictionaryKey.MaxFileAge.rawValue] as? Int) {
+      let existingRotationPolicy = self.rotationPolicies.find { ($0 as? DateRotationPolicy) != nil  } as? DateRotationPolicy
+      
+      if let existingRotationPolicy = existingRotationPolicy {
+        existingRotationPolicy.maxFileAge = TimeInterval(maxFileAge)
+      } else {
+        self.rotationPolicies.append(DateRotationPolicy(maxFileAge: TimeInterval(maxFileAge)))
+      }
+    }
+    if let maxFileSize = (dictionary[DictionaryKey.MaxFileSize.rawValue] as? Int) {
+      let existingRotationPolicy = self.rotationPolicies.find { ($0 as? SizeRotationPolicy) != nil  } as? SizeRotationPolicy
+      if let existingRotationPolicy = existingRotationPolicy {
+        existingRotationPolicy.maxFileSize = UInt64(maxFileSize)
+      } else {
+        self.rotationPolicies.append(SizeRotationPolicy(maxFileSize: UInt64(maxFileSize)))
+      }
     }
   }
   
@@ -116,7 +130,7 @@ public class FileAppender : Appender {
       }
       if let dataToLog = normalizedLog.data(using: String.Encoding.utf8, allowLossyConversion: true) {
         self.fileHandler?.write(dataToLog)
-        self.currentFileSize? += UInt64(dataToLog.count)
+        self.rotationPolicies.forEach { $0.appenderDidAppend(data: dataToLog)}
       }
     }
   }
@@ -133,16 +147,13 @@ public class FileAppender : Appender {
 				try fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
         
 				fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
-        self.currentFileCreationCreationDate = Date()
         self.currentFileSize = 0
       }
       if self.fileHandler == nil {
         self.fileHandler = FileHandle(forWritingAtPath: self.filePath)
         self.fileHandler?.seekToEndOfFile()
-        let fileAttributes = try fileManager.attributesOfItem(atPath: self.filePath)
-        self.currentFileSize = fileAttributes[FileAttributeKey.size] as? UInt64 ?? 0
-        self.currentFileCreationCreationDate = fileAttributes[FileAttributeKey.creationDate] as? Date ?? Date()
       }
+      self.rotationPolicies.forEach { $0.appenderDidOpenFile(atPath: self.filePath) }
       didLogFailure = false
       
     } catch (let error) {
@@ -156,7 +167,8 @@ public class FileAppender : Appender {
   }
   
   private func rotateFileIfNeeded() throws {
-    guard shouldFileRotateForAge() || shouldFileRotateForSize() else { return }
+    let shouldRotate = self.rotationPolicies.contains { $0.shouldRotate() }
+    guard shouldRotate else { return }
 
     self.fileHandler?.closeFile()
     self.fileHandler = nil
@@ -186,17 +198,4 @@ public class FileAppender : Appender {
       currentFileIndex -= 1
     }
   }
-  
-  private func shouldFileRotateForAge() -> Bool {
-    guard let maxFileAge = self.maxFileAge, let fileDate = self.currentFileCreationCreationDate else { return false }
-    
-    return Date().timeIntervalSince(fileDate) >= maxFileAge
-  }
-
-  private func shouldFileRotateForSize() -> Bool {
-    guard let maxFileSize = self.maxFileSize, let currentFileSize = self.currentFileSize else { return false }
-    
-    return currentFileSize >= maxFileSize
-  }
 }
-

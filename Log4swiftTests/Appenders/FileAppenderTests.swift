@@ -18,7 +18,6 @@
 // limitations under the License.
 //
 
-
 import XCTest
 @testable import Log4swift
 
@@ -187,7 +186,6 @@ class FileAppenderTests: XCTestCase {
       fileAppender.filePath = tempFilePath2
       fileAppender.log(logContent2, level: LogLevel.Debug, info: LogInfoDictionary())
       
-      
       // Validate
       let fileContent2 = try NSString(contentsOfFile: tempFilePath2, encoding: String.Encoding.utf8.rawValue)
       XCTAssertEqual(fileContent2 as String, logContent2 + "\n", "Content of second log file does not match expectation")
@@ -235,7 +233,7 @@ class FileAppenderTests: XCTestCase {
   func testUpdatingAppenderFomDictionaryWithExistingFormatterIdUsesIt() {
     let formatter = try! PatternFormatter(identifier: "formatterId", pattern: "test pattern")
     let dictionary = [FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
-      Appender.DictionaryKey.FormatterId.rawValue: "formatterId"]
+                      Appender.DictionaryKey.FormatterId.rawValue: "formatterId"]
     let appender = FileAppender("testAppender")
     
     // Execute
@@ -244,8 +242,76 @@ class FileAppenderTests: XCTestCase {
     // Validate
     XCTAssertEqual((appender.formatter?.identifier)!, formatter.identifier)
   }
+  
+  func testUpdatingAppenderFomDictionaryWithMaxSizeAddsASizeRotationPolicyIfNoneDeclared() {
+    let dictionary: [String: Any] = [
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      FileAppender.DictionaryKey.MaxFileSize.rawValue: 100]
+    let appender = FileAppender("testAppender")
+    
+    // Execute
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
+    
+    // Validate
+    XCTAssertEqual(appender.rotationPolicies.count, 1)
+    let rotationPolicy = appender.rotationPolicies.first as? SizeRotationPolicy
+    XCTAssertNotNil(rotationPolicy)
+    XCTAssertEqual(rotationPolicy?.maxFileSize, 100)
+  }
+  
+  func testUpdatingAppenderFomDictionaryWithMaxSizeUpdatesExistingSizeRotationPolicy() {
+    let dictionary: [String: Any] = [
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      FileAppender.DictionaryKey.MaxFileSize.rawValue: 100]
+    let rotationPolicy = SizeRotationPolicy(maxFileSize: 33)
+    let appender = FileAppender("testAppender")
+    appender.rotationPolicies = [rotationPolicy]
+    
+    // Execute
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
+    
+    // Validate
+    XCTAssertEqual(appender.rotationPolicies.count, 1)
+    let declaredRotationPolicy = appender.rotationPolicies.first as? SizeRotationPolicy
+    XCTAssertNotNil(declaredRotationPolicy)
+    XCTAssertEqual(declaredRotationPolicy?.maxFileSize, 100)
+  }
+  
+  func testUpdatingAppenderFomDictionaryWithMaxDateAddsADateRotationPolicyIfNoneDeclared() {
+    let dictionary: [String: Any] = [
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      FileAppender.DictionaryKey.MaxFileAge.rawValue: 100]
+    let appender = FileAppender("testAppender")
+    
+    // Execute
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
+    
+    // Validate
+    XCTAssertEqual(appender.rotationPolicies.count, 1)
+    let rotationPolicy = appender.rotationPolicies.first as? DateRotationPolicy
+    XCTAssertNotNil(rotationPolicy)
+    XCTAssertEqual(rotationPolicy?.maxFileAge, 100)
+  }
 
-	func testLoggingToImpossiblePathDoesNotCreateTheFileAndDoesNotRaiseError() {
+  func testUpdatingAppenderFomDictionaryWithMaxDateUpdatesExistingDateRotationPolicy() {
+    let dictionary: [String: Any] = [
+      FileAppender.DictionaryKey.FilePath.rawValue: "/log/file/path.log",
+      FileAppender.DictionaryKey.MaxFileAge.rawValue: 100]
+    let rotationPolicy = DateRotationPolicy(maxFileAge: 33)
+    let appender = FileAppender("testAppender")
+    appender.rotationPolicies = [rotationPolicy]
+    
+    // Execute
+    try! appender.update(withDictionary: dictionary, availableFormatters: [])
+    
+    // Validate
+    XCTAssertEqual(appender.rotationPolicies.count, 1)
+    let declaredRotationPolicy = appender.rotationPolicies.first as? DateRotationPolicy
+    XCTAssertNotNil(declaredRotationPolicy)
+    XCTAssertEqual(declaredRotationPolicy?.maxFileAge, 100)
+  }
+
+  func testLoggingToImpossiblePathDoesNotCreateTheFileAndDoesNotRaiseError() {
 		let filePath = "/proc/impossibleLogFile.log"
 		let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath)
 		
@@ -256,71 +322,99 @@ class FileAppenderTests: XCTestCase {
 		XCTAssertFalse(FileManager.default.fileExists(atPath: filePath))
 	}
 	
-  func testFileIsRotatedIfMaxFileSizeIsExceeded() throws {
+  func testFileIsRotatedIfAPolicyRequiresIt() throws {
     let filePath = try self.createTemporaryFilePath(fileExtension: "log")
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 10)
-    
-    let firstLog = "first log, exceeding max file size"
-    fileAppender.performLog(firstLog, level: .Error, info: LogInfoDictionary()) // set file to max size
-    
-    // Execute
-    let secondLog = "second log"
-    fileAppender.performLog(secondLog, level: .Error, info: LogInfoDictionary()) // set file to max size
-    
-    // Validate
-    let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
-    let logFileContent = try String(contentsOfFile: filePath)
-    XCTAssertEqual(rotatedFileContent, firstLog + "\n")
-    XCTAssertEqual(logFileContent, secondLog + "\n")
-  }
+    let testRotationPolicy1 = TestRotationPolicy()
+    let testRotationPolicy2 = TestRotationPolicy()
+    testRotationPolicy2.shouldRotateValue = false
 
-  func testFileIsNotRotatedIfMaxFileSizeIsNotExceeded() throws {
-    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
-    
-    let logString = "small log !"
-    
-    // Execute
-    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
-    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
-    fileAppender.performLog(logString, level: .Error, info: LogInfoDictionary())
-    
-    // Validate
-    let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
-    let logFileContent = try String(contentsOfFile: filePath)
-    XCTAssertEqual(rotatedFileContent, "\(logString)\n\(logString)\n")
-    XCTAssertEqual(logFileContent, "\(logString)\n")
-
-  }
-
-  /////--------------------
-  func testFileIsRotatedIfMaxFileAgeIsExceeded() throws {
-    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileAge: 1)
-    let logMessage = "log message"
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy1, testRotationPolicy2])
 
     // Execute
-    fileAppender.performLog("\(logMessage) 1", level: .Error, info: LogInfoDictionary())
-    fileAppender.performLog("\(logMessage) 2", level: .Error, info: LogInfoDictionary())
-    fileAppender.performLog("\(logMessage) 3", level: .Error, info: LogInfoDictionary())
-    sleep(1)
-    fileAppender.performLog("\(logMessage) 4", level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog("testLogBeforeRotation", level: .Error, info: LogInfoDictionary())
+    testRotationPolicy2.shouldRotateValue = true
+    fileAppender.performLog("testLogAfterRotation", level: .Error, info: LogInfoDictionary())
 
     // Validate
     let rotatedFileContent = try String(contentsOfFile: filePath + ".1")
     let logFileContent = try String(contentsOfFile: filePath)
-    XCTAssertEqual(rotatedFileContent, "\(logMessage) 1\n\(logMessage) 2\n\(logMessage) 3\n")
-    XCTAssertEqual(logFileContent, "\(logMessage) 4\n")
+    XCTAssertEqual(rotatedFileContent, "testLogBeforeRotation\n")
+    XCTAssertEqual(logFileContent, "testLogAfterRotation\n")
   }
-  /////--------------------
+  
+  func testFileIsNotRotatedIfNoPolicyRequiresIt() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let testRotationPolicy1 = TestRotationPolicy()
+    let testRotationPolicy2 = TestRotationPolicy()
+    testRotationPolicy2.shouldRotateValue = false
+    
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy1, testRotationPolicy2])
+    
+    // Execute
+    fileAppender.performLog("testLog1", level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog("testLog2", level: .Error, info: LogInfoDictionary())
 
+    // Validate
+    let fileManager = FileManager.default
+    let logFileContent = try String(contentsOfFile: filePath)
+    XCTAssertFalse(fileManager.fileExists(atPath: filePath + ".1"))
+    XCTAssertEqual(logFileContent, "testLog1\ntestLog2\n")
+  }
+  
+  func testFileIsNotRotatedIfNoPolicyIsDeclared() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath)
+    
+    // Execute
+    fileAppender.performLog("testLog1", level: .Error, info: LogInfoDictionary())
+    fileAppender.performLog("testLog2", level: .Error, info: LogInfoDictionary())
+    
+    // Validate
+    let fileManager = FileManager.default
+    let logFileContent = try String(contentsOfFile: filePath)
+    XCTAssertFalse(fileManager.fileExists(atPath: filePath + ".1"))
+      XCTAssertEqual(logFileContent, "testLog1\ntestLog2\n")
+  }
+  
+  func testRotationPolicyAreNotifiedWhenFileIsOpened() throws {
+    let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+    let testRotationPolicy1 = TestRotationPolicy()
+    let testRotationPolicy2 = TestRotationPolicy()
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy1, testRotationPolicy2])
+
+    // Execute
+    fileAppender.performLog("testLog1", level: .Error, info: LogInfoDictionary())
+
+    // Validate
+    XCTAssertEqual(testRotationPolicy1.openedFilePath, filePath)
+    XCTAssertEqual(testRotationPolicy2.openedFilePath, filePath)
+  }
+  
+  func testRotationPolicyAreNotifiedWhenLogIsPerformed() {
+    func testRotationPolicyAreNotifiedWhenFileIsOpened() throws {
+      let filePath = try self.createTemporaryFilePath(fileExtension: "log")
+      let testRotationPolicy1 = TestRotationPolicy()
+      let testRotationPolicy2 = TestRotationPolicy()
+      let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy1, testRotationPolicy2])
+      let loggedMessage = "testLog1"
+      
+      // Execute
+      fileAppender.performLog(loggedMessage, level: .Error, info: LogInfoDictionary())
+      
+      // Validate
+      XCTAssertEqual(testRotationPolicy1.appendedData, loggedMessage.data(using: .utf8))
+      XCTAssertEqual(testRotationPolicy2.appendedData, loggedMessage.data(using: .utf8))
+    }
+  }
 
   func testMultipleRotationsWithinLimitDoesNotDeleteFiles() throws {
     let filePath = try self.createTemporaryFilePath(fileExtension: "log")
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
+    let testRotationPolicy = TestRotationPolicy()
+    testRotationPolicy.shouldRotateValue = true
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy])
     fileAppender.maxRotatedFiles = 10
     
-    let logString = "log that exeeds max file size"
+    let logString = "Log message"
     
     // Execute
     for logIndex in 1...5 {
@@ -340,11 +434,13 @@ class FileAppenderTests: XCTestCase {
 
   func testMultipleRotationsOverLimitDeletesExeedingFiles() throws {
     let filePath = try self.createTemporaryFilePath(fileExtension: "log")
-    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, maxFileSize: 20)
+    let testRotationPolicy = TestRotationPolicy()
+    testRotationPolicy.shouldRotateValue = true
+    let fileAppender = FileAppender(identifier: "test.appender", filePath: filePath, rotationPolicies: [testRotationPolicy])
     let maxRotatedFiles = 5
     fileAppender.maxRotatedFiles = UInt(maxRotatedFiles)
     
-    let logString = "log that exeeds max file size"
+    let logString = "log message"
     
     // Execute
     for logIndex in 1...10 {
