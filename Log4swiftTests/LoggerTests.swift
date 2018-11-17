@@ -664,24 +664,20 @@ class LoggerTests: XCTestCase {
         
         threadId = currentThreadId()
         logMessage = appender.logMessages[0].message
-      
-        if let expectation = object as? XCTestExpectation {
-          expectation.fulfill()
-        }
       }
     }
     
-    let expectation = self.expectation(description: "logIssued")
-    
+
     let myInstance = MyThreadClass()
     
-    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: expectation)
+    let thread = Thread(target: myInstance, selector: #selector(myInstance.loggingMethod(_:)), object: nil)
     thread.name = "someThreadName"
     thread.stackSize = 4 * 4096
     thread.threadPriority = 0.75
     thread.start()
-    
-    waitForExpectations(timeout: 1.0, handler: nil)
+
+    // Using expectation causes a crash in that context, when running on xcode 10
+    usleep(500)
     
     let threadId = String(myInstance.threadId, radix: 16, uppercase: false)
     
@@ -724,3 +720,9 @@ class LoggerTests: XCTestCase {
   }
 
 }
+
+ class TestExpectation: XCTestExpectation {
+  deinit {
+    NSLog("######## deinit")
+  }
+ }
