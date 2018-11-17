@@ -21,4 +21,8 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+# Cocoapods
+Podfile.lock
+Pods
+
 Archives

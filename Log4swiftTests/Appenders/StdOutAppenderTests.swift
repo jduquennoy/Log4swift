@@ -21,6 +21,9 @@
 import XCTest
 @testable import Log4swift
 
+/// Tests of the stdout appender.
+/// In those tests, the output is not tested for strict equality for test robustness:
+/// we might receive other logs for the OS while tests are running.
 class StdOutAppenderTests: XCTestCase {
   let savedStdout = dup(fileno(stdout))
   let savedStderr = dup(fileno(stderr))
@@ -65,7 +68,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -78,7 +81,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -91,7 +94,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stderrContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stderrContent, "log value\n")
+      XCTAssertTrue(stderrContent.contains("log value\n"))
     }
   }
   
@@ -319,7 +322,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "\u{1B}[fg255,0,0;log value\u{1B}[;\n")
+      XCTAssertTrue(stdoutContent.contains("\u{1B}[fg255,0,0;log value\u{1B}[;\n"))
     }
   }
   
@@ -337,7 +340,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "\u{1B}[38;5;9mlog value\u{1B}[0m\n")
+      XCTAssertTrue(stdoutContent.contains("\u{1B}[38;5;9mlog value\u{1B}[0m\n"))
     }
   }
   
@@ -355,7 +358,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -373,7 +376,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -391,7 +394,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "\u{1B}[bg0,0,255;log value\u{1B}[;\n")
+      XCTAssertTrue(stdoutContent.contains("\u{1B}[bg0,0,255;log value\u{1B}[;\n"))
     }
   }
   
@@ -409,7 +412,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stdoutReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "\u{1B}[48;5;2mlog value\u{1B}[0m\n")
+      XCTAssertTrue(stdoutContent.contains("\u{1B}[48;5;2mlog value\u{1B}[0m\n"))
     }
   }
   
@@ -427,7 +430,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -445,7 +448,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n", "stdoutContent is '\(stdoutContent)'")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -464,7 +467,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   
@@ -483,7 +486,7 @@ class StdOutAppenderTests: XCTestCase {
     
     // Validate
     if let stdoutContent = getFileHandleContentAsString(self.stderrReadFileHandle) {
-      XCTAssertEqual(stdoutContent, "log value\n")
+      XCTAssertTrue(stdoutContent.contains("log value\n"))
     }
   }
   

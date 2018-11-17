@@ -27,7 +27,7 @@ The logger factory is responsible for
 * matching UTI identifiers to loggers
 */
 @objc public final class LoggerFactory: NSObject {
-  static public let sharedInstance = LoggerFactory()
+  @objc static public let sharedInstance = LoggerFactory()
   
   /// Errors that can be thrown by logger factory
   public enum LoggerError: Error {

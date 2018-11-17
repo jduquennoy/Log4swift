@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0201CDC421199725006E3608 /* MultithreadingUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0201CDC321199725006E3608 /* MultithreadingUtilities.swift */; };
+		0201CDC521199725006E3608 /* MultithreadingUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0201CDC321199725006E3608 /* MultithreadingUtilities.swift */; };
+		0201CDC621199725006E3608 /* MultithreadingUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0201CDC321199725006E3608 /* MultithreadingUtilities.swift */; };
+		0201CDC821199C8F006E3608 /* FileAppenderPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0201CDC721199C8F006E3608 /* FileAppenderPerformanceTests.swift */; };
 		021136B31B55A85A000954DF /* ValidCompleteConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */; };
 		021DCE491BE17C4F0026633E /* Logger-AsynchronicityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021DCE481BE17C4F0026633E /* Logger-AsynchronicityTests.swift */; };
 		0241A2D81C32ACD400A624CF /* FileObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0241A2D71C32ACD400A624CF /* FileObserver.swift */; };
@@ -28,6 +32,18 @@
 		026A43811B4DCF2700997862 /* LogInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026A43801B4DCF2700997862 /* LogInformation.swift */; };
 		0285F3BA1CC01FE200CA850D /* XCTestCase+fileAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE4EE31C370A4600030042 /* XCTestCase+fileAdditions.swift */; };
 		0291DB741BC443D2000B90FD /* String+utilitiesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0291DB731BC443D2000B90FD /* String+utilitiesTest.swift */; };
+		02A39163212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39162212B0F67007816A8 /* FileAppenderRotationPolicy.swift */; };
+		02A39164212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39162212B0F67007816A8 /* FileAppenderRotationPolicy.swift */; };
+		02A39165212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39162212B0F67007816A8 /* FileAppenderRotationPolicy.swift */; };
+		02A39167212B1141007816A8 /* DateRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39166212B1140007816A8 /* DateRotationPolicy.swift */; };
+		02A39168212B1141007816A8 /* DateRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39166212B1140007816A8 /* DateRotationPolicy.swift */; };
+		02A39169212B1141007816A8 /* DateRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39166212B1140007816A8 /* DateRotationPolicy.swift */; };
+		02A3916B212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A3916A212B1A97007816A8 /* SizeRotationPolicy.swift */; };
+		02A3916C212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A3916A212B1A97007816A8 /* SizeRotationPolicy.swift */; };
+		02A3916D212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A3916A212B1A97007816A8 /* SizeRotationPolicy.swift */; };
+		02A39172212B365D007816A8 /* TestRotationPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A3916E212B361D007816A8 /* TestRotationPolicy.swift */; };
+		02A3917821302B86007816A8 /* SizeRotationPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A39174212B48E6007816A8 /* SizeRotationPolicyTests.swift */; };
+		02A3917A21302E94007816A8 /* DateRotationPolicyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A3917921302E94007816A8 /* DateRotationPolicyTest.swift */; };
 		02B61A5D1B56D1F100C683D8 /* Log4swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02664C0A1B2CE96500B695DE /* Log4swift.framework */; };
 		02B61A5F1B56D1F100C683D8 /* ValidCompleteConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */; };
 		02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B8F61F1B30A1DD0077A8A6 /* FileAppender.swift */; };
@@ -145,6 +161,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0201CDC321199725006E3608 /* MultithreadingUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultithreadingUtilities.swift; sourceTree = "<group>"; };
+		0201CDC721199C8F006E3608 /* FileAppenderPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAppenderPerformanceTests.swift; sourceTree = "<group>"; };
 		021136B21B55A85A000954DF /* ValidCompleteConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ValidCompleteConfiguration.plist; sourceTree = "<group>"; };
 		021DCE481BE17C4F0026633E /* Logger-AsynchronicityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "Logger-AsynchronicityTests.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0237CF351B2E220F004D5B9F /* SimpleUsage-OSX.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "SimpleUsage-OSX.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -166,6 +184,12 @@
 		02664C3A1B2DC99300B695DE /* LoggerFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerFactoryTests.swift; sourceTree = "<group>"; };
 		026A43801B4DCF2700997862 /* LogInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInformation.swift; sourceTree = "<group>"; };
 		0291DB731BC443D2000B90FD /* String+utilitiesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+utilitiesTest.swift"; sourceTree = "<group>"; };
+		02A39162212B0F67007816A8 /* FileAppenderRotationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAppenderRotationPolicy.swift; sourceTree = "<group>"; };
+		02A39166212B1140007816A8 /* DateRotationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRotationPolicy.swift; sourceTree = "<group>"; };
+		02A3916A212B1A97007816A8 /* SizeRotationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeRotationPolicy.swift; sourceTree = "<group>"; };
+		02A3916E212B361D007816A8 /* TestRotationPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRotationPolicy.swift; sourceTree = "<group>"; };
+		02A39174212B48E6007816A8 /* SizeRotationPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeRotationPolicyTests.swift; sourceTree = "<group>"; };
+		02A3917921302E94007816A8 /* DateRotationPolicyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRotationPolicyTest.swift; sourceTree = "<group>"; };
 		02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PerformanceTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		02B61A631B56D1F100C683D8 /* log4swiftPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = log4swiftPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B61A641B56D1F200C683D8 /* log4swiftPerformanceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "log4swiftPerformanceTests-Info.plist"; sourceTree = "<group>"; };
@@ -290,6 +314,7 @@
 				D9322BF81B440E7D00C9F6D9 /* Array+utilities.swift */,
 				0241A2D71C32ACD400A624CF /* FileObserver.swift */,
 				78389E461ECC26B0008898E7 /* Class+utilities.swift */,
+				0201CDC321199725006E3608 /* MultithreadingUtilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -298,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				024FD79E1B2DE13300A8609C /* MemoryAppender.swift */,
+				02A3916E212B361D007816A8 /* TestRotationPolicy.swift */,
 			);
 			path = TestObjects;
 			sourceTree = "<group>";
@@ -340,6 +366,7 @@
 				5EA3F1561B5D2DEA00B7C420 /* Logger+objectiveC.swift */,
 				5E484E501B46843D00CA5C01 /* Errors.swift */,
 				02664C2F1B2DA69A00B695DE /* Appenders */,
+				02A39161212B0F04007816A8 /* RotationPolicy */,
 				5E17F3231B3328BA00E262F5 /* Formatters */,
 				024FD79A1B2DD3D700A8609C /* Utilities */,
 				5EFEFA941B69384500A28A53 /* Objective-c wrappers */,
@@ -359,6 +386,7 @@
 				021DCE481BE17C4F0026633E /* Logger-AsynchronicityTests.swift */,
 				5ED244E01B343A0400453B31 /* FunctionalTests.swift */,
 				02B8F6211B30B21B0077A8A6 /* Appenders */,
+				02A39173212B4885007816A8 /* RotationPolicy */,
 				5E17F3281B341B4900E262F5 /* Formatters */,
 				024FD79D1B2DE0F000A8609C /* TestObjects */,
 				024E2E021B3F414000457304 /* Utilities */,
@@ -382,12 +410,32 @@
 			path = Appenders;
 			sourceTree = "<group>";
 		};
+		02A39161212B0F04007816A8 /* RotationPolicy */ = {
+			isa = PBXGroup;
+			children = (
+				02A39162212B0F67007816A8 /* FileAppenderRotationPolicy.swift */,
+				02A39166212B1140007816A8 /* DateRotationPolicy.swift */,
+				02A3916A212B1A97007816A8 /* SizeRotationPolicy.swift */,
+			);
+			path = RotationPolicy;
+			sourceTree = "<group>";
+		};
+		02A39173212B4885007816A8 /* RotationPolicy */ = {
+			isa = PBXGroup;
+			children = (
+				02A39174212B48E6007816A8 /* SizeRotationPolicyTests.swift */,
+				02A3917921302E94007816A8 /* DateRotationPolicyTest.swift */,
+			);
+			path = RotationPolicy;
+			sourceTree = "<group>";
+		};
 		02B61A491B56D11A00C683D8 /* Log4swiftPerformanceTests */ = {
 			isa = PBXGroup;
 			children = (
 				02B61A4A1B56D16900C683D8 /* PerformanceTests.swift */,
 				5E06D56D1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift */,
 				02B61A641B56D1F200C683D8 /* log4swiftPerformanceTests-Info.plist */,
+				0201CDC721199C8F006E3608 /* FileAppenderPerformanceTests.swift */,
 			);
 			path = Log4swiftPerformanceTests;
 			sourceTree = "<group>";
@@ -680,9 +728,11 @@
 			files = (
 				02F4E86F1B3A0454004AB9EA /* LoggerClient.m in Sources */,
 				02D9A0CA1F9F2EF80086C5A5 /* AppleUnifiedLoggerAppender.swift in Sources */,
+				02A3916B212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */,
 				02664C311B2DA6A200B695DE /* Appender.swift in Sources */,
 				5E66F76A1B42C959009395CE /* Bool+utilities.swift in Sources */,
 				02664C271B2D92CB00B695DE /* LoggerFactory.swift in Sources */,
+				0201CDC421199725006E3608 /* MultithreadingUtilities.swift in Sources */,
 				5E484E511B46843D00CA5C01 /* Errors.swift in Sources */,
 				5ED244E51B34408600453B31 /* Formatter.swift in Sources */,
 				02664C251B2CEB2900B695DE /* Logger.swift in Sources */,
@@ -690,6 +740,8 @@
 				02D9A0D01F9FADD90086C5A5 /* SystemAppender.swift in Sources */,
 				02F4E8691B3A0354004AB9EA /* NSLoggerAppender.swift in Sources */,
 				02664C331B2DA70C00B695DE /* StdOutAppender.swift in Sources */,
+				02A39167212B1141007816A8 /* DateRotationPolicy.swift in Sources */,
+				02A39163212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */,
 				D9322BF91B440E7D00C9F6D9 /* Array+utilities.swift in Sources */,
 				5E4D39121B690DC40006961C /* NSLogAppender.swift in Sources */,
 				02B8F6201B30A1DD0077A8A6 /* FileAppender.swift in Sources */,
@@ -714,6 +766,8 @@
 				024E2E051B3F470500457304 /* XCTestCase+noThrow.swift in Sources */,
 				02D9A0D41F9FD30B0086C5A5 /* SystemAppenderTests.swift in Sources */,
 				02DE4EE21C3708F100030042 /* FileObserverTests.swift in Sources */,
+				02A3917821302B86007816A8 /* SizeRotationPolicyTests.swift in Sources */,
+				02A3917A21302E94007816A8 /* DateRotationPolicyTest.swift in Sources */,
 				0291DB741BC443D2000B90FD /* String+utilitiesTest.swift in Sources */,
 				02B8F6231B30B26A0077A8A6 /* FileAppenderTests.swift in Sources */,
 				02D9A0CD1F9F3A110086C5A5 /* AppleUnifiedLoggerAppenderTests.swift in Sources */,
@@ -729,6 +783,7 @@
 				021DCE491BE17C4F0026633E /* Logger-AsynchronicityTests.swift in Sources */,
 				5ED244E11B343A0400453B31 /* FunctionalTests.swift in Sources */,
 				02664C3B1B2DC99300B695DE /* LoggerFactoryTests.swift in Sources */,
+				02A39172212B365D007816A8 /* TestRotationPolicy.swift in Sources */,
 				02568DAE1B3631FD00EDDFFE /* StdOutAppenderTests.swift in Sources */,
 				02DE4EE41C370A4600030042 /* XCTestCase+fileAdditions.swift in Sources */,
 			);
@@ -739,6 +794,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0285F3BA1CC01FE200CA850D /* XCTestCase+fileAdditions.swift in Sources */,
+				0201CDC821199C8F006E3608 /* FileAppenderPerformanceTests.swift in Sources */,
 				5E06D56E1B98810E00273AC7 /* PatternFormatterPerformanceTests.swift in Sources */,
 				02C9E1581B56D40F0038AB0E /* PerformanceTests.swift in Sources */,
 			);
@@ -750,9 +806,11 @@
 			files = (
 				5E3F86F11DC25EED008F296C /* String+utilities.swift in Sources */,
 				02D9A0CE1F9F3C3B0086C5A5 /* AppleUnifiedLoggerAppender.swift in Sources */,
+				02A3916D212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */,
 				5E3F86E51DC25EDF008F296C /* Logger.swift in Sources */,
 				5E3F86E21DC25EDF008F296C /* LoggerFactory.swift in Sources */,
 				5E3F86E91DC25EE3008F296C /* Appender.swift in Sources */,
+				0201CDC621199725006E3608 /* MultithreadingUtilities.swift in Sources */,
 				5E3F86F01DC25EE8008F296C /* PatternFormatter.swift in Sources */,
 				5E3F86F41DC25EED008F296C /* FileObserver.swift in Sources */,
 				5E3F86E31DC25EDF008F296C /* LoggerFactory+loadFromFile.swift in Sources */,
@@ -760,6 +818,8 @@
 				02D9A0D21F9FADD90086C5A5 /* SystemAppender.swift in Sources */,
 				5E3F86E71DC25EDF008F296C /* Logger+objectiveC.swift in Sources */,
 				5E3F86EC1DC25EE3008F296C /* NSLoggerAppender.swift in Sources */,
+				02A39169212B1141007816A8 /* DateRotationPolicy.swift in Sources */,
+				02A39165212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */,
 				5E3F86EA1DC25EE3008F296C /* StdOutAppender.swift in Sources */,
 				5E3F86E81DC25EDF008F296C /* Errors.swift in Sources */,
 				5E3F86F31DC25EED008F296C /* Array+utilities.swift in Sources */,
@@ -782,9 +842,11 @@
 			files = (
 				5E3E71FC1B7A185400EEE46B /* LogLevel.swift in Sources */,
 				02D9A0CB1F9F2EF80086C5A5 /* AppleUnifiedLoggerAppender.swift in Sources */,
+				02A3916C212B1A97007816A8 /* SizeRotationPolicy.swift in Sources */,
 				5E3E71FD1B7A185400EEE46B /* Logger.swift in Sources */,
 				5E3E71FE1B7A185400EEE46B /* Logger+convenience.swift in Sources */,
 				5E3E72141B7A263100EEE46B /* LoggerClient.m in Sources */,
+				0201CDC521199725006E3608 /* MultithreadingUtilities.swift in Sources */,
 				5E3E71FF1B7A185400EEE46B /* Logger+objectiveC.swift in Sources */,
 				5E3E72001B7A185400EEE46B /* LoggerFactory.swift in Sources */,
 				5E3E72011B7A185400EEE46B /* LoggerFactory+loadFromFile.swift in Sources */,
@@ -792,6 +854,8 @@
 				02D9A0D11F9FADD90086C5A5 /* SystemAppender.swift in Sources */,
 				5E3E72031B7A185400EEE46B /* LogInformation.swift in Sources */,
 				5E3E72041B7A186700EEE46B /* Appender.swift in Sources */,
+				02A39168212B1141007816A8 /* DateRotationPolicy.swift in Sources */,
+				02A39164212B0F67007816A8 /* FileAppenderRotationPolicy.swift in Sources */,
 				5E3E72051B7A186700EEE46B /* StdOutAppender.swift in Sources */,
 				5E3E72061B7A186700EEE46B /* FileAppender.swift in Sources */,
 				5E3E72071B7A186700EEE46B /* NSLoggerAppender.swift in Sources */,
@@ -882,6 +946,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "log4swift-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -938,6 +1003,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "log4swift-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -958,7 +1024,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -978,7 +1043,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -990,7 +1054,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
 				PRODUCT_NAME = Log4swiftTests;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1002,7 +1065,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
 				PRODUCT_NAME = Log4swiftTests;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1014,7 +1076,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1026,7 +1087,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1050,7 +1110,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1075,7 +1134,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
@@ -1107,7 +1165,6 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1131,7 +1188,6 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

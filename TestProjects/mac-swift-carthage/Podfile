@@ -1,0 +1,6 @@
+platform :osx, '10.12'
+
+target 'Log4SwiftTestApp' do
+  use_frameworks!
+  pod 'Log4swift', :path => '../..'
+end

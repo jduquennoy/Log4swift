@@ -1,0 +1,7 @@
+# xcworkspaces for the test projects will be created by the different package managers on request, it should not be versioned.
+*.xcworkspace
+*.err
+*.log
+
+Cartfile.resolved
+Carthage
