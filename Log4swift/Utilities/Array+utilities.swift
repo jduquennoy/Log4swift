@@ -22,7 +22,7 @@ import Foundation
 
 extension Array {
   public func find(filter:(Array.Iterator.Element) -> Bool) -> Element? {
-		if let itemIndex = self.index(where: filter) {
+		if let itemIndex = self.firstIndex(where: filter) {
       return self[itemIndex]
     }
     return nil
