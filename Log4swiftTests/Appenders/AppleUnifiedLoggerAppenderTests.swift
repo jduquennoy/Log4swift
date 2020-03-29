@@ -10,6 +10,8 @@ import XCTest
 import Foundation
 @testable import Log4swift
 
+import os.log
+
 @available(iOS 10.0, macOS 10.12, *)
 class AppleUnifiedLoggerAppenderTests: XCTestCase {
   let testLoggerName = "Log4swift.tests.systemLoggerAppender"
@@ -26,17 +28,17 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
     let foundMessages = try! self.findLogMessage(logMessage)
     XCTAssertEqual(foundMessages.count, 0)
   }
-
-  func testLoggingTwiceWithTheSameLoggerNameLogsMessagesCorrectly() {
+  
+  func testLoggingTwiceWithTheSameLoggerNameLogsMessagesCorrectly() throws {
     let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
-    let logMessage = "Test info message " + UUID().uuidString
+    let logMessage = "Test info message" // " + UUID().uuidString
     
     // Execute
     appender.log(logMessage, level: LogLevel.Info, info: infoDictionary)
     appender.log(logMessage, level: LogLevel.Info, info: infoDictionary)
 
-    let foundMessages = try! self.findLogMessage(logMessage)
+    let foundMessages = try self.findLogMessage(logMessage)
     XCTAssertEqual(foundMessages.count, 2)
   }
 
@@ -138,14 +140,15 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
     // The log system is async, so the log might appear after a small delay.
     // We loop with a small wait to work that around.
     // So this method can take several seconds to run, in the worst case (no log message found)
-    var triesLeft = 10
+    var triesLeft = 1
     var foundMessages = [SystemLogMessage]()
-    
+    print("searching log '\(text)'")
     repeat {
       // log show --predicate "eventMessage = 'message'" --last "1m" --style json --info --debug
       // escape ' with \
       let protectedMessage = text.replacingOccurrences(of: "'", with: "\\'")
-      let jsonData = self.execCommand(command: "log", args: ["show", "--predicate", "eventMessage = '\(protectedMessage)'", "--last", "1m", "--style", "json", "--info", "--debug"])
+      print("cmd = log \(["show", "--predicate", "eventMessage == '\(protectedMessage)'", "--last", "1m", "--style", "json", "--info", "--debug"].joined(separator: " "))")
+      let jsonData = self.execCommand(command: "log", args: ["show", "--predicate", "eventMessage == '\(protectedMessage)'", "--last", "1m", "--style", "json", "--info", "--debug"])
       let jsonDecoder = JSONDecoder()
       foundMessages = try jsonDecoder.decode(Array<SystemLogMessage>.self, from: jsonData)
 

@@ -134,7 +134,7 @@ extension LoggerFactory : FileObserverDelegate {
     let identifier = try identifierFromConfigurationDictionary(dictionary)
     let appender: Appender
     if let className = dictionary[DictionaryKey.ClassName.rawValue] as? String {
-      if let appenderType = appenderForClassName(className) {
+      if let appenderType = AppendersRegistry.appenderForClassName(className) {
         appender = appenderType.init(identifier)
 				try appender.update(withDictionary: dictionary, availableFormatters: formatters)
       } else {
@@ -147,18 +147,6 @@ extension LoggerFactory : FileObserverDelegate {
     return appender
   }
   
-  private func appenderForClassName(_ className: String) -> Appender.Type? {
-    let classNameLowercased = className.lowercased()
-    
-    for appenderType in Appender.availableAppenderTypes {
-      if String(describing: appenderType).lowercased() == classNameLowercased  {
-        return appenderType
-      }
-    }
-    
-    return nil
-  }
-
   private func processLoggerDictionary(_ dictionary: Dictionary<String, Any>, appenders: Array<Appender>) throws -> Logger {
     let identifier = try identifierFromConfigurationDictionary(dictionary)
     let logger = self.getLogger(identifier)
@@ -183,9 +171,11 @@ extension LoggerFactory : FileObserverDelegate {
   }
   
   public func fileChanged(atPath: String) {
+    // In this method, we use NSLog to print message, as the configuration
+    // may not be useable at the time this method is called.
     do {
       NSLog("file \(atPath) changed, reloadging")
-			try self.readConfiguration(fromPlistFile: atPath)
+      try self.readConfiguration(fromPlistFile: atPath)
     } catch (let error){
       // We dont't want to throw here, as it might be a temporary error until next edit.
       // So We just print out the error to the console, with description.

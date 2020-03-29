@@ -231,7 +231,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     }
   }
   
-  func testAppendersClassesAreCaseInsensitive() {
+  func testAppendersClassesAreCaseInsensitive() throws {
     let fileAppenderDictionary = [LoggerFactory.DictionaryKey.ClassName.rawValue: "FileAPPender",
       LoggerFactory.DictionaryKey.Identifier.rawValue: "FileAppender",
       FileAppender.DictionaryKey.FilePath.rawValue: "/test/path"]
@@ -248,7 +248,7 @@ class LoggerFactoryLoadFromFileTests: XCTestCase {
     let dictionary = [LoggerFactory.DictionaryKey.Appenders.rawValue: [fileAppenderDictionary, nsloggerAppenderDictionary, stdoutAppenderDictionary, nslogAppenderDictionary, aslAppenderDictionary]]
     
     // Execute
-    let (_, appenders, _) = try! factory.readConfigurationToTupple(fromDictionary: dictionary)
+    let (_, appenders, _) = try factory.readConfigurationToTupple(fromDictionary: dictionary)
     
     XCTAssertEqual(appenders.count, 5)
     for currentAppender in appenders {

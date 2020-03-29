@@ -114,7 +114,7 @@ class StdOutAppenderTests: XCTestCase {
 
   func testUpdatingAppenderFromDictionaryWithInvalidThresholdThrowsError() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      StdOutAppender.DictionaryKey.ThresholdLevel.rawValue: "invalid level"]
+      Appender.DictionaryKey.ThresholdLevel.rawValue: "invalid level"]
     let appender = StdOutAppender("test appender")
 
     // Execute & validate
@@ -123,7 +123,7 @@ class StdOutAppenderTests: XCTestCase {
   
   func testUpdatingAppenderFromDictionaryWithThresholdUsesSpecifiedValue() {
     let dictionary = [LoggerFactory.DictionaryKey.Identifier.rawValue: "testAppender",
-      StdOutAppender.DictionaryKey.ThresholdLevel.rawValue: LogLevel.Info.description]
+      Appender.DictionaryKey.ThresholdLevel.rawValue: LogLevel.Info.description]
     let appender = StdOutAppender("test appender")
     appender.thresholdLevel = .Debug
     
