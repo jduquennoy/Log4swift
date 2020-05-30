@@ -55,7 +55,7 @@ internal final class PThreadMutex {
 
 internal extension PThreadMutex {
   /// Executes a closure as a critical section (not executable concurrently by different threads).
-  internal func sync<R>(execute: () throws -> R) rethrows -> R {
+  func sync<R>(execute: () throws -> R) rethrows -> R {
     self.unbalancedLock()
     defer { self.unbalancedUnlock() }
     return try execute()
