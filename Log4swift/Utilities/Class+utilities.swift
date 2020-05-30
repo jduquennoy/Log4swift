@@ -45,7 +45,7 @@ internal struct ClassInfo {
     var subclassList = [ClassInfo]()
     
     var count = UInt32(0)
-    let classList = objc_copyClassList(&count)!
+    let classList = UnsafePointer<AnyClass>(objc_copyClassList(&count))!
     
     for i in 0..<Int(count) {
       let classInfo = ClassInfo(classList[i])
@@ -53,6 +53,8 @@ internal struct ClassInfo {
         subclassList.append(classInfo)
       }
     }
+
+    free(UnsafeMutableRawPointer(mutating: classList))
     
     return subclassList
   }
