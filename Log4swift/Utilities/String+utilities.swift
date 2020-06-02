@@ -22,7 +22,7 @@ extension StringProtocol {
   /// Return a new string by removing everything after the last occurence of the provided marker and including the marker.  
   /// If the marker is not found, an empty string is returned.
   public func stringByRemovingLastComponent(withDelimiter delimiter: String) -> SubSequence? {
-    guard let markerIndex = self.reversed().index(of: Character(delimiter)) else { return nil }
+    guard let markerIndex = self.reversed().firstIndex(of: Character(delimiter)) else { return nil }
     let endIndex = self.index(markerIndex.base, offsetBy: -1)
 
     let result = self[self.startIndex..<endIndex]
