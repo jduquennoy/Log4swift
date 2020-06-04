@@ -32,7 +32,7 @@ class AppleUnifiedLoggerAppenderTests: XCTestCase {
   func testLoggingTwiceWithTheSameLoggerNameLogsMessagesCorrectly() throws {
     let infoDictionary = [LogInfoKeys.LoggerName: testLoggerName]
     let appender = AppleUnifiedLoggerAppender("testAppender")
-    let logMessage = "Test info message" // " + UUID().uuidString
+    let logMessage = "Test info message " + UUID().uuidString
     
     // Execute
     appender.log(logMessage, level: LogLevel.Info, info: infoDictionary)

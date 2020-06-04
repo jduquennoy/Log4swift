@@ -1092,7 +1092,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftPerfTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1105,7 +1105,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftTests;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.duquennoy.log4swiftPerfTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
