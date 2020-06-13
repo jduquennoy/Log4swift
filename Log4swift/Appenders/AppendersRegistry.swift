@@ -21,8 +21,7 @@ public struct AppendersRegistry {
       ASLAppender.self,
       SystemAppender.self
     ]
-    if #available(macOS 12.0, *),
-      #available(iOSApplicationExtension 10.0, *) {
+    if #available(macOS 10.12, iOSApplicationExtension 10.0, *) {
       appenders.append(AppleUnifiedLoggerAppender.self)
     }
     return appenders
