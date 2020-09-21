@@ -1,5 +1,11 @@
 # Log4swift changelog
 
+## 1.1.0
+Long due version !
+- Removed warnings for swift 5
+- Added rotation policy for log files, either based on date or file size
+- fixed a crash when compiling on some versions of Xcode (objc_copyClassList), and some randomly failing tests
+
 ## 1.0.4
 - Migrated to Swift 4 and xcode 9
 - Appender.update(withDictionary:, availableFormatters:) made open, to allow configuration from file of custom appender (Thanks Yurii)

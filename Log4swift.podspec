@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Log4swift"
-  s.version      = "1.0.4"
+  s.version      = "1.1.0"
   s.summary      = "A looging library written in swift."
 
   s.description  = <<-DESC
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = "2.0"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "https://github.com/jduquennoy/Log4swift.git", :tag => "v1.0.4" }
+  s.source       = { :git => "https://github.com/jduquennoy/Log4swift.git", :tag => "v1.1.0" }
 
   s.source_files = "Log4swift", "Log4swift/**/*.{swift,h,m}", "Third parties/**/*.{h,m}"
 
