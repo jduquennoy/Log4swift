@@ -50,6 +50,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
   private var thresholdLevelStorage: LogLevel
   private var appendersStorage: [Appender]
   private var asynchronousStorage = false
+  private var timeProviderStorage: (() -> Date)?
 
   /// If asynchronous is true, only the minimum of work will be done on the main thread, the rest will be deffered to a low priority background thread.
   /// The order of the messages will be preserved in async mode.
@@ -103,7 +104,30 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
   }
 
-  
+  /// Gets/sets external time provider for log messages.
+  /// If `nil` then default behavior `Date()` will be used.
+  ///
+  /// Allows to "mock" the time - could be useful in unit tests
+  /// which may run on some "virtual" time instead of real one.
+  ///
+  /// Child loggers inherit this value so it's possible to set it only once
+  /// (on the `rootLogger` for example) - entire sub-hierarchy of loggers will have it.
+  ///
+  @objc
+  public var timeProvider: (() -> Date)? {
+    get {
+      if let parent = self.parent {
+        return parent.timeProvider
+      } else {
+        return self.timeProviderStorage
+      }
+    }
+    set {
+      self.breakDependencyWithParent()
+      self.timeProviderStorage = newValue
+    }
+  }
+
   /// Creates a new logger with the given identifier, log level and appenders.
   /// The identifier will not be modifiable, and should not be an empty string.
   @objc
@@ -236,7 +260,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970,
+        .Timestamp: (self.timeProvider?() ?? Date()).timeIntervalSince1970,
         .ThreadId: currentThreadId(),
         .ThreadName: currentThreadName()
       ]
@@ -265,7 +289,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
       var info: LogInfoDictionary = [
         .LoggerName: self.identifier,
         .LogLevel: level,
-        .Timestamp: NSDate().timeIntervalSince1970,
+        .Timestamp: (self.timeProvider?() ?? Date()).timeIntervalSince1970,
         .ThreadId: currentThreadId(),
         .ThreadName: currentThreadName()
       ]
@@ -304,6 +328,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
     self.thresholdLevelStorage = parent.thresholdLevel
     self.appendersStorage = parent.appenders
+    self.timeProviderStorage = parent.timeProvider
     self.parent = nil
   }
 
