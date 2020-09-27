@@ -539,6 +539,18 @@ class LoggerTests: XCTestCase {
     XCTAssertTrue(sonIsAsynchronous)
   }
   
+  func testLoggerWithParentUsesParentTimeProvider() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()])
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger")
+
+    // Execute
+    let testDate = Date(timeIntervalSince1970: 42)
+    parentLogger.timeProvider = { return testDate }
+
+    // Validate
+    XCTAssertEqual(sonLogger.timeProvider(), testDate)
+  }
+
   func testChangingSonLoggerParameterBreakLinkWithParent() {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()])
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger")
@@ -565,7 +577,6 @@ class LoggerTests: XCTestCase {
     XCTAssertNil(sonLogger.parent)
   }
 
-  
   func testSettingSonLoggerAsyncStatusBreakLinkWithParent() {
     let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()])
     let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger")
@@ -578,6 +589,24 @@ class LoggerTests: XCTestCase {
     XCTAssertNil(sonLogger.parent)
     XCTAssertFalse(parentLogger.asynchronous)
     XCTAssertTrue(sonLogger.asynchronous)
+  }
+
+  func testSettingSonLoggerTimeProviderBreakLinkWithParent() {
+    let parentLogger = Logger(identifier: "parent.logger", level: .Info, appenders: [MemoryAppender()])
+    let sonLogger = Logger(parentLogger: parentLogger, identifier: "son.logger")
+    let testDate = (
+      Date(timeIntervalSince1970: 42),
+      Date(timeIntervalSince1970: 13)
+    )
+    parentLogger.timeProvider = { return testDate.0 }
+
+    // Execute
+    sonLogger.timeProvider = { return testDate.1 }
+
+    // Validate
+    XCTAssertNil(sonLogger.parent)
+    XCTAssertEqual(parentLogger.timeProvider(), testDate.0)
+    XCTAssertEqual(sonLogger.timeProvider(), testDate.1)
   }
   
   func testLoggedTimeIsTakenWhenLogIsRequested() {
@@ -599,7 +628,22 @@ class LoggerTests: XCTestCase {
     }
   }
 
-  
+  func testLoggedProvidedTime() {
+    let formatter = try! PatternFormatter(identifier:"testFormatter", pattern: "%D{'format':'ss.SSS'}")
+    let appender = MemoryAppender()
+    appender.thresholdLevel = .Debug
+    appender.formatter = formatter
+    let logger = Logger(identifier: "test.identifier", level: .Debug, appenders: [appender])
+
+    logger.timeProvider = { Date(timeIntervalSince1970: 42.147) }
+
+    // Execute
+    logger.debug("This is a debug message")
+
+    // Validate
+    XCTAssertEqual(appender.logMessages[0].message, "42.147")
+  }
+
   func testLoggingStringWithPercentAndNoParametersDoesNotCrash() {
     let appender = MemoryAppender()
     appender.thresholdLevel = .Debug
