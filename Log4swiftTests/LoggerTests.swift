@@ -548,7 +548,7 @@ class LoggerTests: XCTestCase {
     parentLogger.timeProvider = { return testDate }
 
     // Validate
-    XCTAssertEqual(sonLogger.timeProvider?(), testDate)
+    XCTAssertEqual(sonLogger.timeProvider(), testDate)
   }
 
   func testChangingSonLoggerParameterBreakLinkWithParent() {
@@ -605,8 +605,8 @@ class LoggerTests: XCTestCase {
 
     // Validate
     XCTAssertNil(sonLogger.parent)
-    XCTAssertEqual(parentLogger.timeProvider?(), testDate.0)
-    XCTAssertEqual(sonLogger.timeProvider?(), testDate.1)
+    XCTAssertEqual(parentLogger.timeProvider(), testDate.0)
+    XCTAssertEqual(sonLogger.timeProvider(), testDate.1)
   }
   
   func testLoggedTimeIsTakenWhenLogIsRequested() {
