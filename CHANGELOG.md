@@ -1,5 +1,8 @@
 # Log4swift changelog
 
+## 1.2.0
+Addeed an injectable timeProvider on loggers, to improve testability of code using Log4swift (Thanks Sergei)
+
 ## 1.1.0
 Long due version !
 - Removed warnings for swift 5

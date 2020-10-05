@@ -31,14 +31,14 @@ Add those lines to your Podfile to embed this library in an iOS project (with th
 
 ```
 platform :ios, '8'
-pod 'Log4swift', '1.1.0'
+pod 'Log4swift', '1.2.0'
 use_frameworks!
 ```
 And in an OS X project :
 
 ```
 platform :osx, '10.10'
-pod 'Log4swift', '1.1.0'
+pod 'Log4swift', '1.2.0'
 use_frameworks!
 ```
 
@@ -46,7 +46,7 @@ use_frameworks!
 Add this line to your Cartfile (with the version you want):
 
 ```
-github "jduquennoy/Log4swift" ~> 1.1.0
+github "jduquennoy/Log4swift" ~> 1.2.0
 ```
 
 ## Features
