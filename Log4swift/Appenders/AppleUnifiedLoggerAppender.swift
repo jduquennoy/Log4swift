@@ -33,6 +33,7 @@ public class AppleUnifiedLoggerAppender : Appender {
     LogLevel.Fatal: OSLogType.fault
   ]
   private var loggerToOSLogCache = [String: OSLog]()
+  private var loggingMutex = PThreadMutex()
   
   public override func performLog(_ log: String, level: LogLevel, info: LogInfoDictionary) {
     guard let logType = type(of: self).levelsMapping[level] else { return }
@@ -42,15 +43,17 @@ public class AppleUnifiedLoggerAppender : Appender {
   }
   
   private func osLog(ForLoggerName loggerName: String) -> OSLog {
-    let osLog: OSLog
-    if let osLogFromCache = self.loggerToOSLogCache[loggerName] {
-      osLog = osLogFromCache
-    } else {
-      let subsystem = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? "-"
-      osLog = OSLog(subsystem: subsystem, category: loggerName)
-      self.loggerToOSLogCache[loggerName] = osLog
+    loggingMutex.sync {
+      let osLog: OSLog
+      if let osLogFromCache = self.loggerToOSLogCache[loggerName] {
+        osLog = osLogFromCache
+      } else {
+        let subsystem = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? "-"
+        osLog = OSLog(subsystem: subsystem, category: loggerName)
+        self.loggerToOSLogCache[loggerName] = osLog
+      }
+      
+      return osLog
     }
-    
-    return osLog
   }
 }

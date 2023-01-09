@@ -328,6 +328,7 @@ A logger is identified by a UTI identifier, it defines a threshold level and a d
     }
     self.thresholdLevelStorage = parent.thresholdLevel
     self.appendersStorage = parent.appenders
+    self.asynchronousStorage = parent.asynchronousStorage
     self.timeProviderStorage = parent.timeProvider
     self.parent = nil
   }
